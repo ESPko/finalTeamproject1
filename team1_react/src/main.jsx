@@ -5,9 +5,11 @@ import App from './App.jsx'
 import Header from './layout/Header.jsx';
 import SideBar from './layout/SideBar.jsx';
 import Topline from './layout/Topline.jsx';
+import Login from './components/login/Login.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+      <Login />
     {/*<App />*/}
     <Header />
     <div className="d-flex">
