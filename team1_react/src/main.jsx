@@ -6,10 +6,14 @@ import Header from './layout/Header.jsx';
 import SideBar from './layout/SideBar.jsx';
 import Topline from './layout/Topline.jsx';
 import Login from './components/login/Login.jsx';
+import Login2 from './components/login/Login2.jsx';
+import Login3 from './components/login/Login3.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-      <Login />
+    <Login />
+    <Login2 />
+    <Login3 />
     {/*<App />*/}
     <Header />
     <div className="d-flex">
