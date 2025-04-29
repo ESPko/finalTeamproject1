@@ -8,6 +8,7 @@ import Topline from './layout/Topline.jsx';
 import Login from './components/login/Login.jsx';
 import Login2 from './components/login/Login2.jsx';
 import Login3 from './components/login/Login3.jsx';
+import EquipmentInformation from './page/EquipmentInformation.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -20,6 +21,7 @@ createRoot(document.getElementById('root')).render(
     <SideBar />
     {/*    비품 목록 페이지*/}
     <ProductList/>
+    <EquipmentInformation/>
     </div>
   </StrictMode>,
 )
