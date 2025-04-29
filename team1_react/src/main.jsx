@@ -16,10 +16,11 @@ createRoot(document.getElementById('root')).render(
     {/*<Login3 />*/}
     {/*<App />*/}
     <Header />
+
     <div className="d-flex">
     <SideBar />
     {/*    비품 목록 페이지*/}
-    <ProductList/>
+    {/*<ProductList/>*/}
     <EquipmentInformation/>
     </div>
   </StrictMode>,

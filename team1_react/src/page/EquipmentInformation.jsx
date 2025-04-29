@@ -8,13 +8,15 @@ function EquipmentInformation() {
   ];
 
   return (
-    <div style={{ padding: '0px 40px 80px 40px' }}>
-      <div className="bg-primary" style={{ width: '1500px', height: '82px' }}>
-        <div style={{ fontSize: '24px', lineHeight: '82px', paddingLeft: '20px' }}>제품</div>
+    <div className="px-10 pb-20">
+      <div className="bg-primary w-[1500px] h-[82px]">
+        <div className="text-[24px] leading-[82px] pl-5">제품</div>
       </div>
-      <div  style={{ width: '1500px', minHeight: '800px' }}>
+
+      <div className="w-[1500px]">
         {/* 검색창 */}
         <div className="flex items-center justify-between m-3">
+
           <div className="relative w-full max-w-md min-h-[36px] bg-white border border-[#cbccd3] rounded-md flex items-center transition-all duration-100">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <SearchIcon />
@@ -30,16 +32,18 @@ function EquipmentInformation() {
             <FiSettings className="h-5 w-5 text-gray-400 mr-2" />
             <span>컬럼 설정</span>
           </div>
+
         </div>
+        <div className="text-red-500">테스트</div>
 
         {/* 테이블 */}
         <div className="overflow-auto w-full pretty-scrollbar flex-auto m-3 text-center">
-          <table className="w-full table-fixed border-collapse ">
-            <thead className="bg-white border-top border-bottom ">
-            <tr className="bg-white sticky top-0 z-30 ">
+          <table className="w-full table-fixed border-collapse">
+            <thead className="bg-white  border-top border-b">
+            <tr className="bg-white sticky top-0 z-30">
 
-              <th className="sticky left-[16px] bg-white " style={{width:"80px"}}>사진</th>
-              <th className="sticky left-[96px] bg-white border-end " style={{width:"280px"}}>제품명</th>
+              <th className="sticky left-[16px] bg-white w-[80px]">사진</th>
+              <th className="sticky left-[96px] bg-white border-r w-[280px]">제품명</th>
               <th>카테고리</th>
               <th>구매가</th>
               <th>기본 위치 안전재고</th>
@@ -48,14 +52,13 @@ function EquipmentInformation() {
               <th>임시창고2</th>
             </tr>
             </thead>
-            <tbody >
+            <tbody>
             {products.map((product, idx) => (
-              <tr key={idx} className="border-bottom" >
-
+              <tr key={idx} className="border-b">
                 <td className="sticky left-[16px] bg-white">
                   <div className="bg-gray-200 w-9 h-9 rounded"></div>
                 </td>
-                <td className="sticky left-[96px] bg-white border-end  ">{product.name}</td>
+                <td className="sticky left-[96px] bg-white border-r-2">{product.name}</td>
                 <td>{product.category}</td>
                 <td>{product.price}</td>
                 <td>{product.safetyStock}</td>
@@ -67,6 +70,7 @@ function EquipmentInformation() {
             </tbody>
           </table>
         </div>
+
 
       </div>
     </div>
