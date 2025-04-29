@@ -16,18 +16,19 @@ import Login4 from './components/login/Login4.jsx';
 import Login5 from './components/login/Login5.jsx';
 import Login6 from './components/login/Login6.jsx';
 import Login7 from './components/login/Login7.jsx';
+import Test from './layout/Test.jsx';
 
 function App() {
 
   return (
     <>
 
-
+      <Test />
 
       <BrowserRouter>
         <Header />
         <Routes>
-          <Route path={'/'} element={<Login3 />} />
+          <Route path={'/'} element={<MainPage />} />
           <Route path={'/test1'} element={<Login4 />} />
           <Route path={'/test2'}>
             <Route index element={<Login5 />} />

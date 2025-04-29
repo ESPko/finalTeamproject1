@@ -14,11 +14,6 @@ import Login6 from './components/login/Login6.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-      <App />
-    <Header />
-    <div className="d-flex">
-    <SideBar />
-    <Topline/>
-    </div>
+    <App />
   </StrictMode>,
 )

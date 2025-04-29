@@ -8,6 +8,10 @@ body {
     height: 100vh;
 }
 
+a {
+    @apply text-white no-underline;
+}
+
 /* Fade In 효과 */
 @keyframes fadeIn {
     from {

@@ -32,7 +32,7 @@ export default function Login3() {
         {/* 테이프 */}
         <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2
                 bg-blue-900/70 text-white text-sm font-bold uppercase tracking-wide
-                px-8 py-2 rounded-sm shadow-md backdrop-blur-sm opacity-90
+                px-8 py-2 rounded-sm shadow-md backdrop-blur-sm opacity-90 border-b border-gray-200
                 rotate-[2deg] skew-x-[1deg]">
           MEMBER LOGIN
         </div>
