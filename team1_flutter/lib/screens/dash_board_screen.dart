@@ -25,11 +25,12 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
 
   // 이미지 리스트
   final List<String> _images = [
-    'https://via.placeholder.com/300x200/FF5733/FFFFFF?text=Image+1',
-    'https://via.placeholder.com/300x200/33FF57/FFFFFF?text=Image+2',
-    'https://via.placeholder.com/300x200/5733FF/FFFFFF?text=Image+3',
-    'https://via.placeholder.com/300x200/FF33F6/FFFFFF?text=Image+4',
-    'https://via.placeholder.com/300x200/F6FF33/FFFFFF?text=Image+5',
+    'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl-2.jpg',
+    // 'https://ugc-images.catchtable.co.kr/admin/marketing/banner/images/0b714938f3794513b74e0fde1a4b97f6',
+    'https://ugc-images.catchtable.co.kr/admin/marketing/banner/images/0c90f73bc4bf40129bd4879ddda294a8',
+    'https://ugc-images.catchtable.co.kr/admin/marketing/banner/images/858423244e094de085e938d456559968',
+    'https://ugc-images.catchtable.co.kr/admin/marketing/banner/images/583811ada1954b63b69de8138faddd93',
+    'https://ugc-images.catchtable.co.kr/admin/marketing/banner/images/596072b75a1c4caf8e7f4b98879501c3',
   ];
 
   // 타이머 설정
