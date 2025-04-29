@@ -2,13 +2,12 @@ import { Bell, Mail, Menu } from "lucide-react";
 
 const HeaderIcons = () => {
   const icons = [
-    { icon: <Menu size={20} className="text-white" />, count: 4, color: "bg-[#4bd4c5]" },
     { icon: <Mail size={20} className="text-white" />, count: 5, color: "bg-[#4bd4c5]" },
     { icon: <Bell size={20} className="text-white" />, count: 7, color: "bg-[#f4b63d]" },
   ];
 
   return (
-    <div className="flex gap-4 items-center">
+    <div className="flex gap-3 items-center">
       {icons.map((item, idx) => (
         <div
           key={idx}
