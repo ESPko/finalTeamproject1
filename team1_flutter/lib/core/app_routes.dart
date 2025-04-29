@@ -26,4 +26,8 @@ final Map<String, WidgetBuilder> appRoutes = {
 
   // 이력 조회 화면
   '/history': (context) => const HistoryScreen(), // 추가
+
+  '/dashboard': (context) => const DashBoardScreen(), // 추가,
+
+  '/stockcheck': (context) => const StockCheck(), // 추가,'
 };
