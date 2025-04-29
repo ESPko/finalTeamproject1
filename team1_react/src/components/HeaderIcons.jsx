@@ -2,9 +2,9 @@ import { Bell, Mail, Menu } from "lucide-react";
 
 const HeaderIcons = () => {
   const icons = [
-    { icon: <Menu size={20} />, count: 4, color: "bg-[#4bd4c5]" },
-    { icon: <Mail size={20} />, count: 5, color: "bg-[#4bd4c5]" },
-    { icon: <Bell size={20} />, count: 7, color: "bg-[#f4b63d]" },
+    { icon: <Menu size={20} className="text-white" />, count: 4, color: "bg-[#4bd4c5]" },
+    { icon: <Mail size={20} className="text-white" />, count: 5, color: "bg-[#4bd4c5]" },
+    { icon: <Bell size={20} className="text-white" />, count: 7, color: "bg-[#f4b63d]" },
   ];
 
   return (
@@ -12,7 +12,7 @@ const HeaderIcons = () => {
       {icons.map((item, idx) => (
         <div
           key={idx}
-          className="relative w-10 h-10 border border-white/30 rounded-md flex items-center justify-center"
+          className="relative w-10 h-10 border border-white/30 rounded-md flex items-center justify-center cursor-pointer"
         >
           {item.icon}
           <span
