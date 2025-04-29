@@ -34,12 +34,11 @@ function EquipmentInformation() {
           </div>
 
         </div>
-        <div className="text-red-500">테스트</div>
 
         {/* 테이블 */}
         <div className="overflow-auto w-full pretty-scrollbar flex-auto m-3 text-center">
           <table className="w-full table-fixed border-collapse">
-            <thead className="bg-white  border-top border-b">
+            <thead className="bg-white border-t-1 border-b-1">
             <tr className="bg-white sticky top-0 z-30">
 
               <th className="sticky left-[16px] bg-white w-[80px]">사진</th>
