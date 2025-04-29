@@ -1,0 +1,22 @@
+import { Calendar } from 'react-date-range'; // 얘가 캘린더 라이브러리
+import ko from 'date-fns/locale/ko';	     // 날짜 포맷 라이브러리 (한국어 기능을 임포트)
+import moment from 'moment';		     // 날짜 포맷 라이브러리
+출처: https://devbirdfeet.tistory.com/212 [새발개발자:티스토리]
+
+function Calendar ()
+{
+  const [showCalendar, setShowCalendar] = useState<boolean>(false);
+  const tomorrow = moment().add(1, 'd').toDate(); 	// 내일 날짜 기본값지정을 위해
+  const [date, setDate] = useState<Date>(tomorrow); 	// date 를 선언하고 기본값을 내일날짜로 지정
+  const onChangeDate = useCallback((date: Date): void | undefined => { // date 변경값을 받아오는 함수
+  if (!date) {return;} // 날짜값이 없을 때 예외처리
+  setDate(date); 	   // 날짜값이 들어오면 date 를 set해준다
+},[date]);
+  return (
+    <div>
+    
+    </div>
+  );
+}
+
+export default Calendar;

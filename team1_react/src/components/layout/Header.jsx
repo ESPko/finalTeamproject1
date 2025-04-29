@@ -1,34 +1,18 @@
-import { Link } from 'react-router-dom';
-
-function Header() {
+function Header ()
+{
   return (
-    <nav className={'navbar navbar-expand-sm navbar-dark bg-dark'}>
-      <div className={'container-fluid'}>
-        <Link className="navbar-brand" to="/">MyBlog</Link>
-
-        <ul className="navbar-nav me-auto mb-2 mb-sm-0">
-          <li className="nav-item">
-            <Link className="nav-link" to="/test1">test1</Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="/test2">test2</Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="/test2/test3">test3</Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="/test4">test4</Link>
-          </li>
-        </ul>
-
-        <div className={'ms-auto'}>
-          <button className={'btn btn-success'}>
-            <Link className="nav-link " to="/login">Login</Link>
-          </button>
-        </div>
-      </div>
-    </nav>
+    <header className={'w-100'} style={{
+      display: 'flex',
+      height: '70px',
+      borderBottom: '2px solid #f5f5f5',
+      padding: '0px 23px 0px 20px',
+      alignItems: 'center',
+    }}>
+      <div><h2 style={{ color: '#9370DB', fontSize: '30px' }}>BOXHERO</h2></div>
+      <div></div>
+    </header>
   );
 }
 
 export default Header;
+

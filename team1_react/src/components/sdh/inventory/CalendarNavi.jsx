@@ -1,0 +1,81 @@
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { addDays, format, subDays } from 'date-fns';
+import CalendarSdh from './CalendarSdh.jsx';
+
+function CalendarNavi ()
+{
+  const today = new Date();
+  const [startDate, setStartDate] = useState(() => subDays(today, 6));
+  const [endDate, setEndDate] = useState(today);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  
+  const wrapperRef = useRef(null);
+  
+  const shiftDateRange = useCallback((days) => {
+    setStartDate((prev) => addDays(prev, days));
+    setEndDate((prev) => addDays(prev, days));
+  }, []);
+  
+  const handleClickOutside = useCallback((e) => {
+    if (wrapperRef.current && !wrapperRef.current.contains(e.target))
+    {
+      setIsCalendarOpen(false);
+    }
+  }, []);
+  
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [handleClickOutside]);
+  
+  return (
+    <div className="relative" ref={wrapperRef}>
+      <div className="w-[260px] h-[40px] flex items-center border border-gray-300 rounded-md overflow-hidden text-sm bg-white">
+        
+        {/* 이전 버튼 */}
+        <button
+          onClick={() => shiftDateRange(-30)}
+          className="w-[38px] h-full flex items-center justify-center hover:bg-gray-100 border-r border-gray-300 text-gray-500"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        
+        {/* 날짜 표시 및 달력 토글 */}
+        <button
+          onClick={() => setIsCalendarOpen((prev) => !prev)}
+          className="flex-1 text-center text-[13px] font-medium cursor-pointer"
+        >
+          {`${format(startDate, 'yyyy-MM-dd')} - ${format(endDate, 'yyyy-MM-dd')}`}
+        </button>
+        
+        {/* 다음 버튼 */}
+        <button
+          onClick={() => shiftDateRange(30)}
+          className="w-[38px] h-full flex items-center justify-center hover:bg-gray-100 border-l border-gray-300 text-gray-500"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+      
+      {/* 캘린더 */}
+      {isCalendarOpen && (
+        <div className="absolute z-10 mt-2">
+          <CalendarSdh
+            startDate={startDate}
+            endDate={endDate}
+            onChange={(start, end) => {
+              setStartDate(start);
+              setEndDate(end);
+            }}
+          />
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default CalendarNavi;
