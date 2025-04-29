@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { Eye, EyeOff } from 'lucide-react';
+import Header from '../layout/Header.jsx';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login3() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // 비밀번호 보이기 상태
-  // const navigate = useNavigate(); // 페이지 이동용 훅
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const handleLogin = () => {
     setLoading(true);
@@ -23,10 +25,12 @@ export default function Login3() {
         setError("아이디 또는 비밀번호가 올바르지 않습니다.");
       }
     }, 2000);
+    navigate(`/`);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#fdf8ec] bg-[url('/a.jpg')] bg-repeat bg-cover">
+    <>
+      <div className="min-h-screen flex items-center justify-center bg-[#fdf8ec] bg-[url('/a.jpg')] bg-repeat bg-cover">
       {/* 로그인 박스 */}
       <div className="relative bg-white shadow-lg rounded-lg p-8 w-96">
         {/* 테이프 */}
@@ -125,5 +129,6 @@ export default function Login3() {
         </button>
       </div>
     </div>
+  </>
   );
 };
