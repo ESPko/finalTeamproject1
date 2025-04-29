@@ -17,7 +17,7 @@ createRoot(document.getElementById('root')).render(
     {/*<App />*/}
     <Header />
 
-    <div className="d-flex">
+    <div className="flex">
     <SideBar />
     {/*    비품 목록 페이지*/}
     {/*<ProductList/>*/}
