@@ -14,7 +14,7 @@ function productDetail({product}) {
             <p className="text-sm text-gray-500">적정 수랑: {product.standardStock}</p>
           </div>
           <div className="ml-auto p-3">
-            <p className="text-indigo-500 font-semibold">{product.amount}</p>
+            <p className={`${product.amount <product.standardStock ? 'text-red-500': 'text-indigo-500'} font-semibold`}>{product.amount}</p>
           </div>
         </div>
       </div>
@@ -27,7 +27,7 @@ function productDetail({product}) {
             <div className="flex items-center justify-between px-4 py-2">
               <p>{product.location}</p>
 
-                <p className="text-indigo-500">{product.amount} 개</p>
+                <p className={`${product.amount <product.standardStock ? 'text-red-500': 'text-indigo-500'}`}>{product.amount} 개</p>
             </div>
           </li>
         </ul>

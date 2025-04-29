@@ -4,6 +4,7 @@ function ProductListItem({products, onSelectedProduct}) {
 
   const totalAmount = products.reduce((sum,product) => sum + (product.amount ?? 0),0)
 
+
   return (
     <div className="border runded">
       <div className="flex justify-between items-center bg-gray-200 px-4 py-2">
@@ -30,7 +31,7 @@ function ProductListItem({products, onSelectedProduct}) {
                   <p className="text-sm text-gray-500">적정 재고: {product.standardStock}</p>
                 </div>
                 <div className="ml-auto p-2">
-                  <p className="text-indigo-500">{product.amount ??0}개</p>
+                  <p className={`${product.amount <product.standardStock ? 'text-red-500': 'text-indigo-500'}`}>{product.amount ??0}개</p>
                 </div>
               </div>
             </li>

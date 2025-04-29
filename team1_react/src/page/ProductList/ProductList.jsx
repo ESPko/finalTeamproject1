@@ -1,4 +1,4 @@
-import {Dropdown, DropdownToggle} from "react-bootstrap";
+
 import { useState } from 'react';
 import ProductListItem from './ProductListItem.jsx';
 import ProductDetail from './ProductDetail.jsx';
