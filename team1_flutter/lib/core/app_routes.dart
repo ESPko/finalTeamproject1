@@ -5,7 +5,8 @@ import '../screens/item_list_screen.dart';
 import '../screens/login_screen.dart'; // 추가
 import '../screens/main_screen.dart'; // 추가
 import '../screens/search_filter_screen.dart'; // 추가
-import '../screens/history_screen.dart'; // 추가
+import '../screens/history_screen.dart';
+import '../screens/stock_check.dart'; // 추가
 
 // 앱의 라우트를 관리하는 Map
 final Map<String, WidgetBuilder> appRoutes = {
@@ -28,4 +29,6 @@ final Map<String, WidgetBuilder> appRoutes = {
   '/history': (context) => const HistoryScreen(), // 추가
 
   '/dashboard': (context) => const DashBoardScreen(), // 추가,
+
+  '/stockcheck': (context) => const StockCheck(), // 추가,'
 };
