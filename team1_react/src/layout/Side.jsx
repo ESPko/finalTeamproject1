@@ -1,7 +1,16 @@
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 
+const menuItems = [
+  { label: "재고", path: "/test1" },
+  { label: "입고", path: "/test2" },
+  { label: "출고", path: "/test3" },
+  { label: "거래처", path: "/test4" },
+  { label: "직원", path: "/test5" },
+  { label: "알림", path: "/test6" },
+];
 
 function Side() {
+  const location = useLocation();
   return (
     <div className="flex flex-1 overflow-hidden">
       {/* Sidebar */}
@@ -15,37 +24,25 @@ function Side() {
           <div className="text-white font-semibold">재고해조</div>
         </div>
         <nav className="flex-1">
-          <ul className="space-y-1">
-            <li>
-              <Link to="/test1" className="block py-2.5 px-6 text-[#a9c5d8] hover:bg-[#40445c] hover:text-white">
-                재고
-              </Link>
-            </li>
-            <li>
-              <Link to="/test2" className="block py-2.5 px-6 text-[#a9c5d8] hover:bg-[#40445c] hover:text-white">
-                입고
-              </Link>
-            </li>
-            <li>
-              <Link to="/test3" className="block py-2.5 px-6 text-[#a9c5d8] hover:bg-[#40445c] hover:text-white">
-               출고
-              </Link>
-            </li>
-            <li>
-              <Link to="/test4" className="block py-2.5 px-6 text-[#a9c5d8] hover:bg-[#40445c] hover:text-white">
-                거래처
-              </Link>
-            </li>
-            <li>
-              <Link to="/test4" className="block py-2.5 px-6 text-[#a9c5d8] hover:bg-[#40445c] hover:text-white">
-                직원
-              </Link>
-            </li>
-            <li>
-              <Link to="/test4" className="block py-2.5 px-6 text-[#a9c5d8] hover:bg-[#40445c] hover:text-white">
-                알림
-              </Link>
-            </li>
+          <ul className="space-y-1 p-0">
+            {menuItems.map(({ label, path }) => {
+              const isActive = location.pathname === path;
+
+              return (
+                <li key={label}>
+                  <Link
+                    to={path}
+                    className={`block py-2.5 px-6 font-semibold ${
+                      isActive
+                        ? "bg-[#48c9b0] text-white rounded-sm"
+                        : "text-white hover:bg-[#40445c] hover:text-white"
+                    }`}
+                  >
+                    {label}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </nav>
       </aside>
