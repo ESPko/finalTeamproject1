@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:test2/screens/qr_scanner_screen.dart';
-import '../screens/home_screen.dart';
+import '../screens/dash_board_screen.dart';
 import '../screens/item_list_screen.dart';
 import '../screens/login_screen.dart'; // 추가
 import '../screens/main_screen.dart'; // 추가
@@ -26,4 +26,6 @@ final Map<String, WidgetBuilder> appRoutes = {
 
   // 이력 조회 화면
   '/history': (context) => const HistoryScreen(), // 추가
+
+  '/dashboard': (context) => const DashBoardScreen(), // 추가,
 };

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:velocity_x/velocity_x.dart'; // VelocityX 패키지 사용 (UI 스타일링에 용이)
 import '../models/item.dart';
 import '../services/api_service.dart';
 import '../widgets/item_tile.dart';
@@ -85,14 +84,17 @@ class _ItemListScreenState extends State<ItemListScreen> {
                         refreshItems(); // 돌아오면 새로고침
                       }
                     },
-                    child: VxBox(
-                      child: ItemTile(item: item), // 실제 표시되는 아이템 타일
-                    )
-                        .padding(EdgeInsets.all(16)) // 카드 안쪽 여백
-                        .border(color: Colors.grey.shade200) // 테두리 색상
-                        .rounded // 모서리를 둥글게
-                        .white // 배경색 흰색
-                        .make(), // VxBox 적용
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12), // 모서리를 둥글게
+                      ),
+                      elevation: 4, // 그림자 효과
+                      margin: const EdgeInsets.symmetric(vertical: 8), // 카드 간격 설정
+                      child: Padding(
+                        padding: const EdgeInsets.all(16), // 카드 안쪽 여백
+                        child: ItemTile(item: item), // 실제 표시되는 아이템 타일
+                      ),
+                    ),
                   );
                 },
               );
