@@ -12,6 +12,8 @@ import TestPage3 from './page/TestPage3.jsx';
 import TestPage4 from './page/TestPage4.jsx';
 import TestPage5 from './page/TestPage5.jsx';
 import TestPage6 from './page/TestPage6.jsx';
+import ProductList from './page/ProductList/ProductList.jsx';
+import EquipmentInformation from './page/EquipmentInformation.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -19,12 +21,14 @@ createRoot(document.getElementById('root')).render(
       <Routes>
         <Route path="/" element={<App />}>
           <Route index element={<MainPage />} />
-          <Route path={'/test1'} element={<TestPage1 />} />
+          <Route path={'/test1'} element={<EquipmentInformation />} />
           <Route path={'/test2'} element={<TestPage2 />} />
           <Route path={'/test3'} element={<TestPage3 />} />
           <Route path={'/test4'} element={<TestPage4 />} />
           <Route path={'/test5'} element={<TestPage5 />} />
           <Route path={'/test6'} element={<TestPage6 />} />
+
+
         </Route>
         <Route path="/login" element={<Login4 />} />
         <Route path="*" element={<ErrorPage />} />
