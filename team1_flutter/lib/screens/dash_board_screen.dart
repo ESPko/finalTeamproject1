@@ -10,18 +10,6 @@ class DashBoardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: InventoryMainPage(), // 상태를 관리하는 InventoryMainPage 호출
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: '홈',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
-            label: '알림',
-          ),
-        ],
-      ),
     );
   }
 }
@@ -142,8 +130,8 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text('출고', style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold)),
-                    Text('내역', style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold)),
+                    Text('QR', style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold)),
+                    Text('Scan', style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold)),
                   ],
                 ),
               ),
@@ -357,51 +345,52 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
     );
   }
 
-  // 4. 출고 내역 & 재고 알림 버튼
-  Widget _buildProductActionsButton() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end, // 오른쪽 정렬
-        children: [
-          ElevatedButton(
-            onPressed: () {
-              // 출고 내역 버튼 클릭 시 행동 추가
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
-              shape: CircleBorder(), // 원형 버튼
-              padding: EdgeInsets.all(24),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text('출고', style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold)),
-                Text('내역', style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold)),
-              ],
-            ),
-          ),
-          SizedBox(width: 16), // 버튼 사이 간격
-          ElevatedButton(
-            onPressed: () {
-              // 재고 알림 버튼 클릭 시 행동 추가
-              Navigator.pushNamed(context, '/stockcheck'); // 네비게이션 처리
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.orange, // 다른 색상으로 구분 (파란색과 대비되게)
-              shape: CircleBorder(),
-              padding: EdgeInsets.all(24),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text('재고', style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold)),
-                Text('알림', style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold)),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // // 4. 출고 내역 & 재고 알림 버튼
+  // Widget _buildProductActionsButton() {
+  //   return Padding(
+  //     padding: const EdgeInsets.only(top: 16),
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.end, // 오른쪽 정렬
+  //       children: [
+  //         ElevatedButton(
+  //           onPressed: () {
+  //             Navigator.pushNamed(context, '/scan'); // 네비게이션 처리
+  //             // 출고 내역 버튼 클릭 시 행동 추가
+  //           },
+  //           style: ElevatedButton.styleFrom(
+  //             backgroundColor: Colors.blue,
+  //             shape: CircleBorder(), // 원형 버튼
+  //             padding: EdgeInsets.all(24),
+  //           ),
+  //           child: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: [
+  //               Text('QR', style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold)),
+  //               Text('스캔', style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold)),
+  //             ],
+  //           ),
+  //         ),
+  //         SizedBox(width: 16), // 버튼 사이 간격
+  //         ElevatedButton(
+  //           onPressed: () {
+  //             // 재고 알림 버튼 클릭 시 행동 추가
+  //             Navigator.pushNamed(context, '/stockcheck'); // 네비게이션 처리
+  //           },
+  //           style: ElevatedButton.styleFrom(
+  //             backgroundColor: Colors.orange, // 다른 색상으로 구분 (파란색과 대비되게)
+  //             shape: CircleBorder(),
+  //             padding: EdgeInsets.all(24),
+  //           ),
+  //           child: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: [
+  //               Text('재고', style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold)),
+  //               Text('알림', style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold)),
+  //             ],
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }
