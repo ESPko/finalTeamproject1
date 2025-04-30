@@ -22,7 +22,7 @@ function AddMemberModal({isOpen, onClose, onAdd}) {
       <div className="bg-white rounded-lg w-[500px] p-6">
         <h2 className="font-bold mb-2">직원 추가</h2>
 
-        <div className="mb-4">
+        <div className="mb-4 mt-5">
           <label className="font-semibold mb-2">직급</label>
           <div className="flex gap-4">
             {['부장','구매팀장','사원'].map((roleOption) => (
@@ -88,7 +88,7 @@ function AddMemberModal({isOpen, onClose, onAdd}) {
         </div>
 
         <div className="flex justify-end gap-2">
-          <button onClick={onClose} className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400">취소</button>
+          <button onClick={onClose} className="px-4 py-2 rounded border bg-white hover:bg-gray-400">취소</button>
           <button onClick={ModalSubmit} className="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600">추가</button>
 
         </div>
