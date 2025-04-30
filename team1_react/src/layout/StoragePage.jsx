@@ -18,7 +18,7 @@ function TestPage1() {
             </div>
 
             {/* 입력 필드 */}
-            <div className="flex items-center border-b-1 border-b-gray-300 h-[52px] justify-content-around">
+            <div className="flex items-center border-b border-b-gray-300 h-[52px] justify-around">
               <div className="w-[1020px] pl-[30px] pr-2 p-4">
                 <input
                   type="text"
@@ -26,7 +26,7 @@ function TestPage1() {
                   className="w-[500px] h-[36px] border border-gray-300 rounded px-3 py-2 text-sm"
                 />
               </div>
-              <div className="w-[180px] text-center text-gray-400">-</div>
+              <div className="w-[180px] pl-[50px] text-gray-400">-</div>
               <div className="w-[148px]">
                 <input
                   type="number"
@@ -82,7 +82,7 @@ function TestPage1() {
 
             {/* 완료 버튼 */}
             <div className="pt-2">
-              <button className="w-[86px] h-[36px] border border-gray-300 rounded font-semibold text-gray-600 hover:bg-gray-100 shadow-sm">
+              <button className="w-[86px] h-[36px] border border-gray-300 rounded-sm font-semibold text-gray-600 hover:bg-gray-100 shadow-sm">
                 입고 완료
               </button>
             </div>
