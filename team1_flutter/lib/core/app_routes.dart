@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:test2/screens/dash_board_screen.dart';
 import 'package:test2/screens/qr_scanner_screen.dart';
-import '../screens/dash_board_screen.dart';
+import 'package:test2/screens/stock_check.dart';
 import '../screens/item_list_screen.dart';
 import '../screens/login_screen.dart'; // 추가
 import '../screens/main_screen.dart'; // 추가
 import '../screens/search_filter_screen.dart'; // 추가
-import '../screens/history_screen.dart';
-import '../screens/stock_check.dart'; // 추가
+import '../screens/history_screen.dart'; // 추가
 
 // 앱의 라우트를 관리하는 Map
 final Map<String, WidgetBuilder> appRoutes = {
