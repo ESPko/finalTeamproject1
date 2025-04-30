@@ -1,8 +1,9 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 
 const SearchInput = () => {
   const [inputValue, setInputValue] = useState('');
   const [tags, setTags] = useState([]);
+  const inputRef = useRef(null);
   
   const handleKeyDown = useCallback((e) => {
     const trimmed = inputValue.trim();
@@ -12,28 +13,40 @@ const SearchInput = () => {
       e.preventDefault();
       if (trimmed && !tags.includes(trimmed))
       {
-        setTags(prev => [...prev, trimmed]);
+        setTags((prev) => [...prev, trimmed]);
         setInputValue('');
       }
     }
     else if (e.key === 'Backspace' && !inputValue && tags.length > 0)
     {
       e.preventDefault();
-      setTags(prev => prev.slice(0, -1));
+      setTags((prev) => prev.slice(0, -1));
     }
   }, [inputValue, tags]);
   
   const handleRemoveTag = useCallback((tagToRemove) => {
-    setTags(prev => prev.filter(tag => tag !== tagToRemove));
+    setTags((prev) => prev.filter((tag) => tag !== tagToRemove));
   }, []);
   
   const handleClearAll = useCallback(() => {
     setTags([]);
     setInputValue('');
+    inputRef.current?.focus(); // Clear 후에도 포커스 유지
   }, []);
   
+  const handleDivClick = (e) => {
+    // 클릭한 요소가 X 또는 × 버튼이 아니면 인풋에 포커스를 준다.
+    if (!e.target.closest('button'))
+    {
+      inputRef.current?.focus();
+    }
+  };
+  
   return (
-    <div className="relative w-[400px] min-h-[40px] flex items-center border border-gray-300 rounded-md bg-white px-3 py-2 text-sm text-gray-400 flex-wrap">
+    <div
+      className="relative w-[400px] min-h-[40px] flex items-center border border-gray-300 rounded-md bg-white px-3 py-2 text-sm text-gray-400 flex-wrap focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500 outline-none"
+      onClick={handleDivClick}
+    >
       {/* 돋보기 아이콘 */}
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -69,6 +82,7 @@ const SearchInput = () => {
       
       {/* 입력창 */}
       <input
+        ref={inputRef}
         type="text"
         placeholder={tags.length === 0 ? '이름 검색' : ''}
         className="flex-1 min-w-[60px] bg-transparent outline-none text-sm text-gray-600 placeholder-gray-400"
@@ -84,7 +98,7 @@ const SearchInput = () => {
           className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 text-[20px] w-6 h-6"
           aria-label="Clear all tags"
         >
-          ×
+          X
         </button>
       )}
     </div>

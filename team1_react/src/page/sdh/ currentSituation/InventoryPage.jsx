@@ -1,6 +1,6 @@
-import SideBar from '../../components/layout/SideBar.jsx';
-import Header from '../../components/layout/Header.jsx';
-import Navigation from '../../components/sdh/inventory/Navigation.jsx';
+import SideBar from '../../../components/layout/SideBar.jsx';
+import Header from '../../../components/layout/Header.jsx';
+import Navigation from '../../../components/sdh/navi/Navigation.jsx';
 
 function InventoryPage ()
 {
