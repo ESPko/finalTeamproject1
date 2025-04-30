@@ -5,10 +5,10 @@ import 'package:test2/screens/item_list_screen.dart';
 import 'package:test2/screens/login_screen.dart';
 import 'package:test2/screens/qr_scanner_screen.dart';
 import 'package:test2/screens/search_filter_screen.dart';
+import 'package:test2/screens/dash_board_screen.dart'; // DashBoardScreen 임포트 추가
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
-
 
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -19,11 +19,11 @@ class _MainScreenState extends State<MainScreen> {
 
   // 네비게이션 바에 표시될 화면들
   final List<Widget> _screens = [
-    ItemListScreen(),  // 아이템리스트 (메인)
+    DashBoardScreen(),  // DashBoard 화면 추가
     SearchFilterScreen(),  // 검색/필터
     QRScannerScreen(),  // QR 스캔
-    HistoryScreen(),  // 이력
-    LoginScreen(),  // 프로필/설정
+    HistoryScreen(),    // 이력
+    LoginScreen(),      // 프로필/설정
   ];
 
   @override
@@ -56,23 +56,23 @@ class _MainScreenState extends State<MainScreen> {
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.dashboard),
-              label: '대시보드',
+              label: 'DashBoard',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.search),
-              label: '검색',
+              label: 'Search',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.qr_code_scanner),
-              label: '스캔',
+              label: 'Scanning',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.history),
-              label: '이력',
+              label: 'History',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
-              label: '프로필',
+              label: 'Login',
             ),
           ],
         ),
