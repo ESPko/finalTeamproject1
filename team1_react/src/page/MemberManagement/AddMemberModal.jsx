@@ -42,6 +42,7 @@ function AddMemberModal({isOpen, onClose, onAdd}) {
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          placeholder={'이름을 입력하세요'}
           className="w-full border rounded px-3 py-2"/>
         </div>
 
@@ -52,6 +53,7 @@ function AddMemberModal({isOpen, onClose, onAdd}) {
             type="text"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
+            placeholder={'전화번호를 입력하세요'}
             className="w-full border rounded px-3 py-2"/>
         </div>
 
@@ -61,6 +63,7 @@ function AddMemberModal({isOpen, onClose, onAdd}) {
             type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            placeholder={'이메일을 입력하세요'}
             className="w-full border rounded px-3 py-2"/>
         </div>
         </div>
@@ -71,6 +74,7 @@ function AddMemberModal({isOpen, onClose, onAdd}) {
             type="text"
             value={addr}
             onChange={(e) => setAddr(e.target.value)}
+            placeholder={'주소를 입력하세요'}
             className="w-full border rounded px-3 py-2"/>
         </div>
 
@@ -79,6 +83,7 @@ function AddMemberModal({isOpen, onClose, onAdd}) {
           <textarea
             value={memo}
             onChange={(e) => setMemo(e.target.value)}
+            placeholder={'기타사항을 입력하세요'}
             className="w-full border rounded px-3 py-2" rows="3"/>
         </div>
 
