@@ -76,7 +76,7 @@ function EquipmentInformation() {
           </button>
         }
       >
-        <div className="w-[1500px]">
+        <div >
           {/* 검색창 */}
           <div className="flex items-center justify-between m-3">
 

@@ -11,6 +11,7 @@ import ProductList from './page/ProductList/ProductList.jsx';
 
 import ProductAdd from './page/ProductList/ProductAdd.jsx';
 import { BrowserRouter, Routes, Route  } from 'react-router-dom';
+import LocationInfo from './page/location/LocationInfo.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -26,6 +27,7 @@ createRoot(document.getElementById('root')).render(
     {/*    비품 목록 페이지*/}
     {/*<ProductList/>*/}
     <EquipmentInformation/>
+    {/*  <LocationInfo/>*/}
     </div>
 
   </StrictMode>,
