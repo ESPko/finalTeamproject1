@@ -1,10 +1,17 @@
-function Topline() {
+
+function Topline({ title, actions, children }) {
   return (
-    <div style={{ padding: '0px 40px 80px 40px' }}>
-      <div className="bg-primary" style={{ width: '1500px', height: '82px' }}>
-        <div style={{ fontSize: '24px' }}>입고</div>
+    <div className="px-10 pb-20">
+      {/* 헤더 영역 */}
+      <div className="bg-blue-400 w-[1500px] h-[82px] flex items-center justify-between px-6">
+        <div className="text-2xl font-semibold text-white">{title}</div>
+        {actions && <div>{actions}</div>}
       </div>
-      <div className="bg-danger" style={{ width: '1500px'}}>내용</div>
+
+      {/* 본문 콘텐츠 */}
+      <div className="bg-danger w-[1500px]">
+        {children}
+      </div>
     </div>
   );
 }
