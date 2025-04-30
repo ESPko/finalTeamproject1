@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:test2/screens/history_screen.dart';
 import 'package:test2/screens/item_list_screen.dart';
 import 'package:test2/screens/login_screen.dart';
-import 'package:test2/screens/qr_scanner_screen.dart';
 import 'package:test2/screens/search_filter_screen.dart';
 import 'package:test2/screens/dash_board_screen.dart'; // DashBoardScreen 임포트 추가
 
@@ -21,7 +20,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _screens = [
     DashBoardScreen(),  // DashBoard 화면 추가
     SearchFilterScreen(),  // 검색/필터
-    QRScannerScreen(),  // QR 스캔
+    ItemListScreen(),   // 아이템 리스트(),  // QR 스캔
     HistoryScreen(),    // 이력
     LoginScreen(),      // 프로필/설정
   ];
@@ -63,8 +62,8 @@ class _MainScreenState extends State<MainScreen> {
               label: 'Search',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.qr_code_scanner),
-              label: 'Scanning',
+              icon: Icon(Icons.list),
+              label: 'ItemList',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.history),
