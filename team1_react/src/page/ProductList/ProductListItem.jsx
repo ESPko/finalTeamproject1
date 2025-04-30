@@ -1,5 +1,3 @@
-import ProductDetail from './ProductDetail.jsx';
-
 function ProductListItem({products, onSelectedProduct}) {
 
   const totalAmount = products.reduce((sum,product) => sum + (product.amount ?? 0),0)

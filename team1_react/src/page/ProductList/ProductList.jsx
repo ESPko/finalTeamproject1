@@ -1,9 +1,9 @@
 
 import { useState } from 'react';
 import ProductListItem from './ProductListItem.jsx';
-import ProductDetail from './ProductDetail.jsx';
 import NoResultProduct from './NoResultProduct.jsx';
 import 'bootstrap-icons/font/bootstrap-icons.css'
+import ProductListDetail from './ProductListDetail.jsx';
 
 function ProductList() {
   const [search, setSearch] = useState(``)
@@ -34,6 +34,7 @@ function ProductList() {
     const filtered = products.filter(product => product.name.toLowerCase().includes(search.toLowerCase()) &&
       (selectedWarehouse === '모든 창고' || product.location === selectedWarehouse));
     setFilteredProducts(filtered)
+    setSelectedProduct(null)
   }
 
   // 창고선택시 변경
@@ -43,6 +44,7 @@ function ProductList() {
     const filtered = products.filter(product => (warehouse === '모든 창고' || product.location === warehouse) && product.name.toLowerCase().includes(search.toLowerCase())
     )
     setFilteredProducts(filtered)
+    setSelectedProduct(null)
   }
 
   return (
@@ -119,7 +121,7 @@ function ProductList() {
 
           <div className="w-1/2 mt-12 p-3">
             {/* 상세 보기 */}
-            <ProductDetail product={selectedProduct} />
+            <ProductListDetail product={selectedProduct} />
           </div>
         </div>
       </div>
