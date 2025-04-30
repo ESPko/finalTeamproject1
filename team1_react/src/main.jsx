@@ -8,6 +8,7 @@ import Login2 from './components/login/Login2.jsx';
 import Login3 from './components/login/Login3.jsx';
 import EquipmentInformation from './page/EquipmentInformation.jsx';
 import ProductList from './page/ProductList/ProductList.jsx';
+import MemberManagement from './page/MemberManagement/MemberManagement.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -19,7 +20,9 @@ createRoot(document.getElementById('root')).render(
     <div className="d-flex">
     <SideBar />
     {/*    비품 목록 페이지*/}
-    <ProductList/>
+    {/*<ProductList/>*/}
+    {/*    직원 관리 페이지*/}
+        <MemberManagement/>
     {/*<EquipmentInformation/>*/}
     </div>
   </StrictMode>,
