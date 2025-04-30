@@ -31,7 +31,7 @@ function ProductList() {
 
   // 검색
   const searchProduct = () =>{
-    const filtered = products.filter(product => product.name.includes(search) &&
+    const filtered = products.filter(product => product.name.toLowerCase().includes(search.toLowerCase()) &&
       (selectedWarehouse === '모든 창고' || product.location === selectedWarehouse));
     setFilteredProducts(filtered)
   }
@@ -40,7 +40,7 @@ function ProductList() {
   const warehouseSelect = (warehouse) => {
     setSelectedWarehouse(warehouse);
 
-    const filtered = products.filter(product => (warehouse === '모든 창고' || product.location === warehouse) && product.name.includes(search)
+    const filtered = products.filter(product => (warehouse === '모든 창고' || product.location === warehouse) && product.name.toLowerCase().includes(search.toLowerCase())
     )
     setFilteredProducts(filtered)
   }
