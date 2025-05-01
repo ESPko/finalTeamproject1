@@ -14,6 +14,7 @@ import TestPage5 from './page/TestPage5.jsx';
 import TestPage6 from './page/TestPage6.jsx';
 import ProductList from './page/ProductList/ProductList.jsx';
 import EquipmentInformation from './page/EquipmentInformation.jsx';
+import MemberManagement from './page/MemberManagement/MemberManagement.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -33,6 +34,14 @@ createRoot(document.getElementById('root')).render(
         <Route path="/login" element={<Login4 />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
+      <Header />
+      {/*<div className="d-flex">*/}
+      {/*  <SideBar />*/}
+      {/*  /!*    비품 목록 페이지*!/*/}
+      {/*  /!*<ProductList/>*!/*/}
+      {/*  /!*    직원 관리 페이지*!/*/}
+      {/*  <MemberManagement/>*/}
+
 
     </BrowserRouter>
   </StrictMode>

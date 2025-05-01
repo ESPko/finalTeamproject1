@@ -1,83 +1,43 @@
-import ProductDetail from './ProductDetail.jsx';
+function ProductListItem({products, onSelectedProduct}) {
 
-function ProductListItem() {
+  const totalAmount = products.reduce((sum,product) => sum + (product.amount ?? 0),0)
+
+
   return (
-    <div className={'border'}>
-    <div className={'d-flex'}>
-      <ul style={{width:'100%'}}>
-        <li>
-          <div className={'d-flex mt-3'}>
-            <img src="src/productImg/pencil.png" width={'50px'} height={'50px'} className={'me-3'}/>
+    <div className="border runded">
+      <div className="flex justify-between items-center bg-gray-200 px-4 pt-1">
+        <p className="font-bold">{products.length} 개 품목</p>
+        <p className="font-bold">총 {totalAmount} 개</p>
+      </div>
+      <ul className="w-full">
+          {products.map((product) =>(
 
-            <div className={'d-grid'}>
-              <p>비품 1</p>
-              <p>적정 수랑</p>
-            </div>
-            <div className={'ms-auto p-3'}>
-            <p style={{ color: '#7b68ee' }}>0개</p>
-            </div>
-          </div>
-        </li>
+            <li key={product.id} className="mt-3">
+              <div className="flex items-center">
+                <img
+                  src="src/productImg/pencil.png"
+                  alt="product"
+                  className="w-[50px] h-[50px] mr-5"
+                />
 
-        <li>
-          <div className={'d-flex mt-3'}>
-            <img src="src/productImg/pencil.png" width={'50px'} height={'50px'} className={'me-3'}/>
+                <div className="flex flex-col">
+                  <button
+                    className="text-black hover:underline text-left"
+                    onClick={() => onSelectedProduct(product)}>
+                    {product.name}
+                  </button>
+                  <p className="text-sm text-gray-500">적정 재고: {product.standardStock}</p>
+                </div>
+                <div className="ml-auto p-2">
+                  <p className={`${product.amount <product.standardStock ? 'text-red-500': 'text-indigo-500'} font-bold` }>{product.amount ??0}개</p>
+                </div>
+              </div>
+            </li>
+          ))}
 
-            <div className={'d-grid'}>
-              <p>비품 2</p>
-              <p>적정 수랑</p>
-            </div>
-            <div className={'ms-auto p-3'}>
-              <p style={{ color: '#7b68ee' }}>0개</p>
-            </div>
-          </div>
-        </li>
+        </ul>
+      </div>
 
-        <li>
-          <div className={'d-flex mt-3'}>
-            <img src="src/productImg/pencil.png" width={'50px'} height={'50px'} className={'me-3'}/>
-
-            <div className={'d-grid'}>
-              <p>비품 3</p>
-              <p>적정 수랑</p>
-            </div>
-            <div className={'ms-auto p-3'}>
-              <p style={{ color: '#7b68ee' }}>0개</p>
-            </div>
-          </div>
-        </li>
-
-        <li>
-          <div className={'d-flex mt-3'}>
-            <img src="src/productImg/pencil.png" width={'50px'} height={'50px'} className={'me-3'}/>
-
-            <div className={'d-grid'}>
-              <p>비품 4</p>
-              <p>적정 수랑</p>
-            </div>
-            <div className={'ms-auto p-3'}>
-              <p style={{ color: '#7b68ee' }}>0개</p>
-            </div>
-          </div>
-        </li>
-
-        <li>
-          <div className={'d-flex mt-3'}>
-            <img src="src/productImg/pencil.png" width={'50px'} height={'50px'} className={'me-3'}/>
-
-            <div className={'d-grid'}>
-              <p>비품 5</p>
-              <p>적정 수랑</p>
-            </div>
-            <div className={'ms-auto p-3'}>
-              <p style={{ color: '#7b68ee' }}>0개</p>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </div>
-
-    </div>
   );
 }
 
