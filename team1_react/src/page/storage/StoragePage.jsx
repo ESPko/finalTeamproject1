@@ -50,24 +50,22 @@ function TestPage1() {
             {/* 위치 */}
             <div className={'w-[305px] h-[36px] flex justify-between'}>
               <label className="block font-semibold">위치*</label>
-              <select className="w-[220px] border border-gray-300 rounded text-sm text-gray-400">
-                <option>선택하세요</option>
-              </select>
+              <div className="w-[220px] border border-gray-300 rounded text-sm text-gray-400">
+              </div>
             </div>
 
             {/* 입고처 */}
             <div className={'w-[305px] h-[36px] flex justify-between mt-[12px]'}>
               <label className="block font-semibold ">입고처</label>
-              <select className="w-[220px] border border-gray-300 rounded text-sm text-gray-400">
-                <option>선택하세요</option>
-              </select>
+              <div className="w-[220px] border border-gray-300 rounded text-sm text-gray-400">
+              </div>
             </div>
 
             {/* 날짜 */}
             <div className={'w-[305px] h-[36px] flex justify-between mt-[12px]'}>
               <label className="block font-semibold">날짜</label>
-              <button
-                className="w-[220px] border border-gray-300 rounded text-sm text-start pl-[5px] bg-gray-100 text-gray-400">현재
+              <button type={'button'}
+                className="w-[220px] border border-gray-300 rounded text-sm text-start pl-[5px] bg-gray-100 text-gray-400 hover:bg-gray-200 shadow">현재
               </button>
             </div>
 
