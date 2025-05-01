@@ -32,6 +32,15 @@ function CalendarSdh ({ startDate, endDate, onChange })
   
   return (
     <div className="flex rounded-lg shadow-md overflow-hidden border border-gray-300 bg-white">
+      {/* 왼쪽: 빠른 범위 */}
+      <div className="border-r border-gray-200">
+        <DefinedRange
+          onChange={handleChange}
+          ranges={state}
+        />
+      </div>
+      
+      {/* 오른쪽: 달력 선택 */}
       <div>
         <DateRange
           editableDateInputs={true}
@@ -39,13 +48,6 @@ function CalendarSdh ({ startDate, endDate, onChange })
           moveRangeOnFirstSelection={false}
           ranges={state}
           locale={ko}
-        />
-      </div>
-      
-      <div className="border-r border-gray-200">
-        <DefinedRange
-          onChange={handleChange}
-          ranges={state}
         />
       </div>
     </div>

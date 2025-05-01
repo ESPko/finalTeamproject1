@@ -7,23 +7,22 @@ function InventoryPage ()
   return (
     <>
       <Header />
-      <div className="d-flex" style={{ minWidth: '820px' }}>
+      <div className="flex min-w-[820px]">
         <SideBar />
         <div>
-          <div style={{ padding: '0px 40px 80px 40px' }}>
-            <div className="w-100" style={{ height: '82px' }}>
-              <div style={{ fontSize: '24px' }}>입출고요약</div>
+          <div className="px-10 pb-20">
+            <div className="w-full h-[82px]">
+              <div className="text-2xl">입출고요약</div>
             </div>
             <Navigation />
           </div>
-          <div className="container" style={{ minWidth: '820px', paddingLeft: '40px' }}>
-            <p>Lorem ipsum dolor sit amet, consectetur
-               adipisicing elit. Culpa
-               doloremque est illum labore libero
-               placeat, ut voluptas voluptatibus. Aperiam
-               dicta error iure nemo unde.
-               Aliquid at eveniet illum ipsa
-               recusandae.</p>
+          <div className="min-w-[820px] pl-10">
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Culpa
+              doloremque est illum labore libero placeat, ut voluptas
+              voluptatibus. Aperiam dicta error iure nemo unde. Aliquid at
+              eveniet illum ipsa recusandae.
+            </p>
           </div>
         </div>
       </div>

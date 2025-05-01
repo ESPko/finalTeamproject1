@@ -29,13 +29,13 @@ function CalendarNavi ()
   }, [handleClickOutside]);
   
   return (
-    <div className="relative" ref={wrapperRef}>
-      <div className="w-[260px] h-[40px] flex items-center border border-gray-300 rounded-md overflow-hidden text-sm bg-white">
+    <div ref={wrapperRef} className="relative">
+      <div className="flex items-center w-[260px] h-10 rounded-md border border-gray-300 overflow-hidden bg-white text-sm">
         
         {/* 이전 버튼 */}
         <button
           onClick={() => shiftDateRange(-30)}
-          className="w-[38px] h-full flex items-center justify-center hover:bg-gray-100 border-r border-gray-300 text-gray-500"
+          className="flex items-center justify-center w-[38px] h-full border-r border-gray-300 text-gray-500 hover:bg-gray-100"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -53,7 +53,7 @@ function CalendarNavi ()
         {/* 다음 버튼 */}
         <button
           onClick={() => shiftDateRange(30)}
-          className="w-[38px] h-full flex items-center justify-center hover:bg-gray-100 border-l border-gray-300 text-gray-500"
+          className="flex items-center justify-center w-[38px] h-full border-l border-gray-300 text-gray-500 hover:bg-gray-100"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />

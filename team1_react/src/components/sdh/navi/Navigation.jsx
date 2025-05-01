@@ -6,7 +6,7 @@ import Correspondent from './Correspondent.jsx';
 function Navigation ()
 {
   return (
-    <div className="py-[14px] flex items-center flex-wrap gap-[8px]">
+    <div className="flex flex-wrap items-center gap-2 py-3.5">
       <CalendarNavi />
       <SearchInput />
       <Location />
