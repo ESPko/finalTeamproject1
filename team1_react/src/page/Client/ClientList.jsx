@@ -42,6 +42,8 @@ function ClientList() {
 
 
   return (
+    <main className=" flex-1 p-6 overflow-y-auto ">
+      <div className="bg-white rounded shadow p-4 h-full min-w-[840px] overflow-auto" style={{ padding: '0px 40px 80px 40px' }}>
     <div>
       <Topline
         title="거래처"
@@ -140,6 +142,8 @@ function ClientList() {
         <ClientDetail client={selectedClient} />
       </Modal>
     </div>
+      </div>
+    </main>
   );
 }
 
