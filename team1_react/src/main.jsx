@@ -1,7 +1,7 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import './index.css';
+import App from './App.jsx';
 import Login4 from './components/login/Login4.jsx';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ErrorPage from './page/ErrorPage.jsx';
@@ -15,9 +15,14 @@ import TestPage6 from './page/TestPage6.jsx';
 import MemberManagement from './page/MemberManagement/MemberManagement.jsx';
 import EquipmentInformation from './page/ProductList/EquipmentInformation.jsx';
 import ProductList from './page/ProductList/ProductList.jsx';
-import ApprovalPage from './layout/ApprovalPage.jsx';
-import StoragePage from './layout/StoragePage.jsx';
+import ApprovalPage from './page/approve/ApprovalPage.jsx';
+import StoragePage from './page/storage/StoragePage.jsx';
 import LocationDetail from './page/location/LocationDetail.jsx';
+import Side from './layout/Side.jsx';
+import SideBar from './layout/SideBar.jsx';
+import Side2 from './layout/Side2.jsx';
+import Header2 from './layout/Header2.jsx';
+import SafeStockPage from './page/safeStock/SafeStockPage.jsx';
 
 
 createRoot(document.getElementById('root')).render(
@@ -32,21 +37,21 @@ createRoot(document.getElementById('root')).render(
           <Route path={'/test4'} element={<TestPage4 />} />
           <Route path={'/test5'} element={<TestPage5 />} />
           <Route path={'/test6'} element={<TestPage6 />} />
-
-
         </Route>
         <Route path="/login" element={<Login4 />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
-      <EquipmentInformation/>
-        <ProductList/>
-        <MemberManagement/>
-      <ApprovalPage/>
-      <StoragePage/>
 
-
+      <EquipmentInformation />
+      <ProductList />
+      <MemberManagement />
+      <ApprovalPage />
+      <StoragePage />
+      <Header2 />
+      <Side2/>
+      <SafeStockPage />
 
 
     </BrowserRouter>
-  </StrictMode>
-)
+  </StrictMode>,
+);
