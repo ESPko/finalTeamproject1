@@ -14,7 +14,7 @@ import TestPage5 from './page/TestPage5.jsx';
 import TestPage6 from './page/TestPage6.jsx';
 import MemberManagement from './page/MemberManagement/MemberManagement.jsx';
 import EquipmentInformation from './page/ProductList/EquipmentInformation.jsx';
-import ProductList from './page/ProductList/ProductList.jsx';
+import ProductSearch from './page/ProductList/ProductSearch.jsx';
 import ApprovalPage from './layout/ApprovalPage.jsx';
 import StoragePage from './layout/StoragePage.jsx';
 import LocationDetail from './page/location/LocationDetail.jsx';
@@ -30,7 +30,7 @@ createRoot(document.getElementById('root')).render(
           <Route path={'/test2'} element={<TestPage2 />} />
           <Route path={'/test3'} element={<TestPage3 />} />
           <Route path={'/test4'} element={<TestPage4 />} />
-          <Route path={'/test5'} element={<TestPage5 />} />
+          <Route path={'/test5'} element={<MemberManagement />} />
           <Route path={'/test6'} element={<TestPage6 />} />
 
 
@@ -39,7 +39,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="*" element={<ErrorPage />} />
       </Routes>
       <EquipmentInformation/>
-        <ProductList/>
+        <ProductSearch/>
         <MemberManagement/>
       <ApprovalPage/>
       <StoragePage/>

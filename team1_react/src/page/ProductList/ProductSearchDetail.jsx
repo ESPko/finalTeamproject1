@@ -1,4 +1,4 @@
-function productListDetail({product}) {
+function productSearchDetail({product}) {
 
   if (!product) return null;
 
@@ -36,4 +36,4 @@ function productListDetail({product}) {
   );
 }
 
-export default productListDetail;
+export default productSearchDetail;

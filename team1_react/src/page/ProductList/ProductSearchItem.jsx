@@ -1,4 +1,4 @@
-function ProductListItem({products, onSelectedProduct}) {
+function ProductSearchItem({products, onSelectedProduct}) {
 
   const totalAmount = products.reduce((sum,product) => sum + (product.amount ?? 0),0)
 
@@ -17,7 +17,7 @@ function ProductListItem({products, onSelectedProduct}) {
                 <img
                   src="src/productImg/pencil.png"
                   alt="product"
-                  className="w-[50px] h-[50px] mr-5"
+                  className="w-[50px] h-[50px] mr-5 ml-2 mb-2"
                 />
 
                 <div className="flex flex-col">
@@ -41,4 +41,4 @@ function ProductListItem({products, onSelectedProduct}) {
   );
 }
 
-export default ProductListItem;
+export default ProductSearchItem;
