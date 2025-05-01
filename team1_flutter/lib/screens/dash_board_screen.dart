@@ -120,7 +120,6 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/scan'); // 네비게이션 처리
                   // 출고 내역 버튼 클릭 시 행동 추가
                 },
                 style: ElevatedButton.styleFrom(

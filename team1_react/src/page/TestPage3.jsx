@@ -1,8 +1,8 @@
+import ApprovalPage from '../layout/ApprovalPage.jsx';
+
 function TestPage1() {
   return (
-    <>
-      <h1>TestPage3</h1>
-    </>
+    <ApprovalPage />
   );
 }
 
