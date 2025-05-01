@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import ProductListItem from './ProductListItem.jsx';
 import NoResultProduct from './NoResultProduct.jsx';
-import 'bootstrap-icons/font/bootstrap-icons.css'
 import ProductListDetail from './ProductListDetail.jsx';
 
 function ProductList() {

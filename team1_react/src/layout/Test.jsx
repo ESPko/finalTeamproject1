@@ -28,7 +28,7 @@ function Test() {
           </div>
           <nav className="flex-1 space-y-1">
             {[
-              "재고",
+              "비품",
               "입고",
               "출고",
               "거래처",
