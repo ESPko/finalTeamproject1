@@ -68,13 +68,13 @@ function MemberManagement() {
 
           {employees.map(emp => {
             return (
-              <div key={emp.id} className="grid grid-cols-[250px_250px_250px_1fr] items-center py-2 border border-gray-500">
+              <div key={emp.id} className="grid grid-cols-[250px_250px_250px_1fr] items-center py-2 border border-gray-300">
                 <div className="ml-3">{emp.name}</div>
 
                 <div>
                   <select
                     value={emp.department}
-                    onChange={e => changeDepartment(emp.id, e.target.value)} className="border rounded px-2 py-1">
+                    onChange={e => changeDepartment(emp.id, e.target.value)} className="border border-gray-300 rounded px-2 py-1">
                     {departmentOption.map(department => (
                       <option key={department} value={department}>{department}</option>
                     ))}
@@ -84,7 +84,7 @@ function MemberManagement() {
                 <div>
                   <select
                     value={emp.role}
-                    onChange={e => changeRole(emp.id, e.target.value)} className="border rounded px-2 py-1">
+                    onChange={e => changeRole(emp.id, e.target.value)} className="border border-gray-300 rounded px-2 py-1">
                     {roleOption.map(role => (
                       <option key={role} value={role}>{role}</option>
                     ))}

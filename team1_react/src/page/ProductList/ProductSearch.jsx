@@ -93,7 +93,7 @@ function ProductSearch() {
                   value={search}
                   onChange={changSearch}
                   placeholder="찾으시는 비품의 이름을 입력하세요"
-                  className="flex-grow border px-4 py-2 rounded-l outline-none"
+                  className="flex-grow border border-gray-300 px-4 py-2 rounded-l outline-none"
                 />
                 <button
                   onClick={searchProduct}

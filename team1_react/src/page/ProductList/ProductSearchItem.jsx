@@ -4,20 +4,20 @@ function ProductSearchItem({products, onSelectedProduct}) {
 
 
   return (
-    <div className="border runded">
+    <div className="border border-gray-300 runded">
       <div className="flex justify-between items-center bg-gray-200 px-4 pt-1">
         <p className="font-bold">{products.length} 개 품목</p>
         <p className="font-bold">총 {totalAmount} 개</p>
       </div>
-      <ul className="w-full">
+      <ul className="w-full ">
           {products.map((product) =>(
 
-            <li key={product.id} className="mt-3">
-              <div className="flex items-center">
+            <li key={product.id} className="border border-gray-300">
+              <div className="flex items-center ">
                 <img
                   src="src/productImg/pencil.png"
                   alt="product"
-                  className="w-[50px] h-[50px] mr-5 ml-2 mb-2"
+                  className="w-[50px] h-[50px] mr-5 ml-2 mb-2 mt-2"
                 />
 
                 <div className="flex flex-col">
