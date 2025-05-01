@@ -1,3 +1,5 @@
+import ApprovalListPage from './ApprovalListPage.jsx';
+
 function ApprovalPage() {
   return (
       <main className=" flex-1 p-6 overflow-y-auto">
@@ -16,7 +18,7 @@ function ApprovalPage() {
             </div>
           </div>
           <div className="text-[14px] mt-[20px] text-gray-700">
-            <div className="p-4 grid border-b border-b-gray-300 pb-2 font-semibold h-[52px] grid-cols-12">
+            <div className="items-center grid border-b border-b-gray-300 pb-2 font-semibold h-[52px] grid-cols-12">
               <div className={'col-span-1'}>날짜</div>
               <div className={'col-span-3'}>제품명</div>
               <div className={'col-span-2'}>위치</div>
@@ -25,15 +27,7 @@ function ApprovalPage() {
               <div className={'col-span-1'}>승인 여부</div>
               <div className={'col-span-1'}></div>
             </div>
-            <div className={'h-[62px] grid grid-cols-12'}>
-              <div className={'col-span-1'}>날짜</div>
-              <div className={'col-span-3'}>제품명</div>
-              <div className={'col-span-2'}>위치</div>
-              <div className={'col-span-2'}>가격</div>
-              <div className={'col-span-2'}>신청자</div>
-              <div className={'col-span-1'}>승인 여부</div>
-              <div className={'col-span-1'}></div>
-            </div>
+            <ApprovalListPage />
           </div>
         </div>
       </main>
