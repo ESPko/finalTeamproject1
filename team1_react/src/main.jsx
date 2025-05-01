@@ -18,6 +18,7 @@ import ProductList from './page/ProductList/ProductList.jsx';
 import ApprovalPage from './layout/ApprovalPage.jsx';
 import StoragePage from './layout/StoragePage.jsx';
 import LocationDetail from './page/location/LocationDetail.jsx';
+import LocationInfo from './page/location/LocationInfo.jsx';
 
 
 createRoot(document.getElementById('root')).render(
@@ -39,6 +40,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="*" element={<ErrorPage />} />
       </Routes>
       <EquipmentInformation/>
+      <LocationInfo/>
         <ProductList/>
         <MemberManagement/>
       <ApprovalPage/>

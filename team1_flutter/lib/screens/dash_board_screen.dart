@@ -30,11 +30,11 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
 
   // 배너 이미지 리스트
   final List<String> _images = [
-    'assets/images/banner1.webp',
-    'assets/images/banner2.webp',
-    'assets/images/banner3.webp',
-    'assets/images/banner4.webp',
-    'assets/images/banner5.webp',
+    'assets/images/banner1.jpg',
+    'assets/images/banner2.jpg',
+    'assets/images/banner3.jpg',
+    'assets/images/banner4.jpg',
+    'assets/images/banner5.jpg',
   ];
 
   Timer? _timer; // 캐러셀 자동 넘김 타이머
@@ -62,7 +62,7 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
 
   // 3초마다 자동으로 페이지 전환
   void _startAutoCarousel() {
-    _timer = Timer.periodic(Duration(seconds: 3), (timer) {
+    _timer = Timer.periodic(Duration(seconds: 6), (timer) {
       if (_currentPage < _images.length - 1) {
         _currentPage++;
       } else {
@@ -162,25 +162,28 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
 
   // 1. 캐러셀 위젯
   Widget _buildCarousel() {
-    return Container(
-      height: 200, // 높이 고정
-      child: PageView.builder(
-        controller: _carouselController,
-        itemCount: _images.length,
-        itemBuilder: (context, index) {
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(16), // 모서리 둥글게
-            child: Image.asset(
-              _images[index],
-              fit: BoxFit.cover, // 이미지 꽉 채우기
-            ),
-          );
-        },
-        onPageChanged: (index) {
-          setState(() {
-            _currentPage = index; // 페이지 변경시 상태 업데이트
-          });
-        },
+    return Padding(
+      padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top), // 상태바만큼 공백
+      child: Container(
+        height: 210,
+        child: PageView.builder(
+          controller: _carouselController,
+          itemCount: _images.length,
+          itemBuilder: (context, index) {
+            return ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Image.asset(
+                _images[index],
+                fit: BoxFit.cover,
+              ),
+            );
+          },
+          onPageChanged: (index) {
+            setState(() {
+              _currentPage = index;
+            });
+          },
+        ),
       ),
     );
   }
