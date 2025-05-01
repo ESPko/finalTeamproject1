@@ -16,6 +16,7 @@ import ProductList from './page/ProductList/ProductList.jsx';
 import EquipmentInformation from './page/EquipmentInformation.jsx';
 import MemberManagement from './page/MemberManagement/MemberManagement.jsx';
 
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
