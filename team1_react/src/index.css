@@ -1,6 +1,9 @@
 @import "tailwindcss";
-@import "tailwindcss/preflight";
-@import "tailwindcss/utilities";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/*@import "tailwindcss/preflight";*/
+/*@import "tailwindcss/utilities";*/
 
 body {
     width: 100vw;
