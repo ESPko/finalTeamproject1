@@ -60,30 +60,19 @@ function ProductSearch() {
             <div className="flex justify-between items-center gap-4 mb-6">
 
               {/* 창고 위치 선택 드롭다운 메뉴 */}
-              <div className="relative">
-                <button
-                  onClick={() => setDropdownMenu(!dropdownMenu)}
-                  className="bg-gray-100 hover:bg-gray-200 text-black px-4 py-2 rounded"
-                >
-                  {selectedWarehouse}
-                </button>
-                {dropdownMenu && (
-                  <ul className="absolute mt-2 px-1 bg-white border rounded">
-                    {['모든 창고', '창고 1', '창고 2', '창고 3', '창고 4'].map((name) => (
-                      <li key={name}>
-                        <button
-                          onClick={() => {
-                            warehouseSelect(name);
-                            setDropdownMenu(false);
-                          }}
-                          className="w-full text-left py-2 p-2 hover:bg-gray-100"
-                        >
-                          {name}
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                )}
+              <div className="mb-4">
+                <label className="font-semibold mb-2 block">창고 선택</label>
+                <select
+                  value={selectedWarehouse}
+                  onChange={(e) => {
+                    setSelectedWarehouse(e.target.value)
+                    warehouseSelect(e.target.value)
+                  }}
+                  className="w-full border border-gray-300 rounded px-3 py-2">
+                  {['모든 창고', '창고 1','창고 2','창고 3','창고 4',].map((name) => (
+                    <option key={name} value={name}>{name}</option>
+                  ))}
+                </select>
               </div>
 
               {/* 검색창 */}
