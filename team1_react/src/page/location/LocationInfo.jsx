@@ -26,8 +26,8 @@ function LocationInfo() {
   const [selectedLocation, setSelectedLocation] = useState(null);
 
   return (
-    <main className=" flex-1 p-6 overflow-y-auto ">
-      <div className="bg-white rounded shadow p-4 h-full min-w-[840px] overflow-auto" style={{ padding: '0px 40px 80px 40px' }}>
+    <div className=" flex-1 p-6 overflow-y-auto ">
+      <div className="bg-white rounded shadow p-4 h-full min-w-[100px] overflow-auto" style={{ padding: '0px 40px 80px 40px' }}>
     <div>
       <Topline
         title="위치"
@@ -119,7 +119,7 @@ function LocationInfo() {
 
     </div>
       </div>
-    </main>
+    </div>
   );
 }
 
