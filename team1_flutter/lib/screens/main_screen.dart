@@ -21,7 +21,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _screens = [
     DashBoardScreen(),  // DashBoard 화면 추가
     SearchFilterScreen(),  // 검색/필터
-    ItemListScreen(),   // 아이템 리스트(),  // QR 스캔
+    // ItemListScreen(),   // 아이템 리스트(),  // QR 스캔
     HistoryScreen(),    // 이력
     LoginScreen(),      // 프로필/설정
   ];
@@ -56,23 +56,23 @@ class _MainScreenState extends State<MainScreen> {
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.dashboard),
-              label: 'DashBoard',
+              label: '대시보드',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.search),
-              label: 'Search',
+              label: '비품검색',
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.list),
-              label: 'ItemList',
-            ),
+            // BottomNavigationBarItem(
+            //   icon: Icon(Icons.list),
+            //   label: '비품목록',
+            // ),
             BottomNavigationBarItem(
               icon: Icon(Icons.history),
-              label: 'History',
+              label: '출고기록',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
-              label: 'Login',
+              label: '로그인',
             ),
           ],
         ),

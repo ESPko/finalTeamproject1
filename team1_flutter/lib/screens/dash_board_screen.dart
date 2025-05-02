@@ -60,9 +60,9 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
     super.dispose();
   }
 
-  // 3초마다 자동으로 페이지 전환
+  // 5초마다 자동으로 페이지 전환
   void _startAutoCarousel() {
-    _timer = Timer.periodic(Duration(seconds: 6), (timer) {
+    _timer = Timer.periodic(Duration(seconds: 5), (timer) {
       if (_currentPage < _images.length - 1) {
         _currentPage++;
       } else {
@@ -160,21 +160,25 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
     );
   }
 
-  // 1. 캐러셀 위젯
+// 1. 캐러셀 위젯
   Widget _buildCarousel() {
     return Padding(
-      padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top), // 상태바만큼 공백
+      padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
       child: Container(
-        height: 210,
+        height: 220, // 갤24 기준 160이면 적당함, 플러터 크롬웹 기준 220
         child: PageView.builder(
           controller: _carouselController,
           itemCount: _images.length,
           itemBuilder: (context, index) {
-            return ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: Image.asset(
-                _images[index],
-                fit: BoxFit.cover,
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 0), // 좌우 여백 추가 (옵션)
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Image.asset(
+                  _images[index],
+                  fit: BoxFit.fitWidth, // 또는 BoxFit.fill / fitWidth 등
+                  width: double.infinity,
+                ),
               ),
             );
           },
@@ -187,6 +191,9 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
       ),
     );
   }
+
+
+
 
   // 2. 오늘 날짜 및 요약 카드
   Widget _buildSummaryCard() {
