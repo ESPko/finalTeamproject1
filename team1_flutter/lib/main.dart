@@ -13,6 +13,7 @@ class InventoryApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: AppTheme.lightTheme,
+      debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: appRoutes, // 정의된 라우트 맵 사용
     );

@@ -102,7 +102,7 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
     return Padding(
       padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
       child: Container(
-        height: 220, // 갤24 기준 160이면 적당함, 플러터 크롬웹 기준 220
+        height: 200, // 갤24 기준 160이면 적당함, 플러터 크롬웹 기준 220
         child: PageView.builder(
           controller: _carouselController,
           itemCount: _images.length,
@@ -113,7 +113,8 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
                 borderRadius: BorderRadius.circular(20),
                 child: Image.network(
                   _images[index],
-                  fit: BoxFit.fitWidth,
+                  fit: BoxFit.fill,
+                  height: double.infinity,
                   width: double.infinity,
                   loadingBuilder: (context, child, loadingProgress) {
                     if (loadingProgress == null) return child;
@@ -135,6 +136,7 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
       ),
     );
   }
+
 
   // 2. 오늘 날짜 및 요약 카드
   Widget _buildSummaryCard() {
