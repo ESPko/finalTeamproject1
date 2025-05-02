@@ -30,11 +30,11 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
 
   // 배너 이미지 리스트
   final List<String> _images = [
-    'assets/images/banner1.jpg',
-    'assets/images/banner2.jpg',
-    'assets/images/banner3.jpg',
-    'assets/images/banner4.jpg',
-    'assets/images/banner5.jpg',
+    'assets/images/banner1.webp',
+    'assets/images/banner2.webp',
+    'assets/images/banner3.webp',
+    'assets/images/banner4.webp',
+    'assets/images/banner5.webp',
   ];
 
   Timer? _timer; // 캐러셀 자동 넘김 타이머
@@ -60,9 +60,9 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
     super.dispose();
   }
 
-  // 5초마다 자동으로 페이지 전환
+  // 3초마다 자동으로 페이지 전환
   void _startAutoCarousel() {
-    _timer = Timer.periodic(Duration(seconds: 5), (timer) {
+    _timer = Timer.periodic(Duration(seconds: 3), (timer) {
       if (_currentPage < _images.length - 1) {
         _currentPage++;
       } else {
@@ -120,6 +120,7 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
             children: [
               ElevatedButton(
                 onPressed: () {
+                  Navigator.pushNamed(context, '/scan'); // 네비게이션 처리
                   // 출고 내역 버튼 클릭 시 행동 추가
                 },
                 style: ElevatedButton.styleFrom(
@@ -160,40 +161,30 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
     );
   }
 
-// 1. 캐러셀 위젯
+  // 1. 캐러셀 위젯
   Widget _buildCarousel() {
-    return Padding(
-      padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-      child: Container(
-        height: 220, // 갤24 기준 160이면 적당함, 플러터 크롬웹 기준 220
-        child: PageView.builder(
-          controller: _carouselController,
-          itemCount: _images.length,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 0), // 좌우 여백 추가 (옵션)
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image.asset(
-                  _images[index],
-                  fit: BoxFit.fitWidth, // 또는 BoxFit.fill / fitWidth 등
-                  width: double.infinity,
-                ),
-              ),
-            );
-          },
-          onPageChanged: (index) {
-            setState(() {
-              _currentPage = index;
-            });
-          },
-        ),
+    return Container(
+      height: 200, // 높이 고정
+      child: PageView.builder(
+        controller: _carouselController,
+        itemCount: _images.length,
+        itemBuilder: (context, index) {
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(16), // 모서리 둥글게
+            child: Image.asset(
+              _images[index],
+              fit: BoxFit.cover, // 이미지 꽉 채우기
+            ),
+          );
+        },
+        onPageChanged: (index) {
+          setState(() {
+            _currentPage = index; // 페이지 변경시 상태 업데이트
+          });
+        },
       ),
     );
   }
-
-
-
 
   // 2. 오늘 날짜 및 요약 카드
   Widget _buildSummaryCard() {

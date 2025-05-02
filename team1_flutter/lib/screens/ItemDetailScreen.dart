@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import '../models/item.dart';
 import '../services/api_service.dart';
@@ -35,20 +34,19 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      // 뒤로 가기 시 커스텀 동작 정의
       onWillPop: () async {
-        Navigator.pop(context); // 현재 화면 닫고 이전 화면으로 이동
-        return false; // 기본 동작 무시
+        Navigator.pop(context);
+        return false;
       },
       child: Scaffold(
         appBar: AppBar(
           title: const Text('아이템 상세'),
         ),
         body: FutureBuilder<Item>(
-          future: futureItem, // 서버로부터 아이템 정보를 기다림
+          future: futureItem,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator()); // 로딩 중
+              return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               debugPrint('에러 발생: ${snapshot.error}');
               return Center(child: Text('에러 발생: ${snapshot.error}'));
@@ -56,28 +54,27 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
               return const Center(child: Text('아이템을 찾을 수 없습니다.'));
             } else {
               final item = snapshot.data!;
-              _quantityController.text = item.quantity.toString(); // 현재 수량 표시
 
               return SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _infoBlock(context, '아이템 이름', item.name), // 아이템 이름
+                    _infoBlock(context, '아이템 이름', item.name),
                     const SizedBox(height: 20),
-                    _infoBlock(context, '현재 수량', '${item.quantity}'), // 현재 수량
+                    _infoBlock(context, '현재 수량', '${item.quantity}'),
                     const SizedBox(height: 20),
 
-                    Text('수량 수정', style: Theme.of(context).textTheme.labelLarge),
+                    Text('차감할 수량', style: Theme.of(context).textTheme.labelLarge),
                     const SizedBox(height: 8),
                     TextField(
                       controller: _quantityController,
-                      keyboardType: TextInputType.number, // 숫자 전용 키패드
+                      keyboardType: TextInputType.number,
                       decoration: const InputDecoration(
-                        labelText: '새 수량',
+                        labelText: '차감할 수량 입력',
                       ),
                       inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly, // 숫자만 입력 가능
+                        FilteringTextInputFormatter.digitsOnly,
                       ],
                     ),
 
@@ -86,7 +83,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () => _handleUpdateQuantity(item),
-                        child: const Text('수량 수정'),
+                        child: const Text('수량 차감'),
                       ),
                     )
                   ],
@@ -99,7 +96,6 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
     );
   }
 
-  // 아이템 정보를 화면에 블록 형태로 표시하는 위젯
   Widget _infoBlock(BuildContext context, String title, String value) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,18 +107,27 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
     );
   }
 
-  // 수량 수정 버튼을 눌렀을 때 실행되는 함수
   void _handleUpdateQuantity(Item item) async {
-    final newQuantity = int.tryParse(_quantityController.text);
-    if (newQuantity != null && newQuantity >= 0) {
-      try {
-        // API 호출로 수량 업데이트
-        final updatedItem = await ApiService().updateItemQuantity(item.id.toString(), newQuantity);
+    final input = int.tryParse(_quantityController.text);
 
-        Navigator.pop(context, updatedItem); // 수정된 아이템 정보를 전달하며 뒤로 이동
+    if (input != null && input > 0) {
+      if (input > item.quantity) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('차감 수량이 현재 수량보다 많습니다.')),
+        );
+        return;
+      }
+
+      try {
+        final updatedItem = await ApiService().dispatchItem(
+          item.id.toString(),
+          input,
+        );
+
+        Navigator.pop(context, updatedItem);
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('수량이 변경되었습니다.')),
+          const SnackBar(content: Text('수량이 차감되었습니다.')),
         );
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -130,9 +135,8 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
         );
       }
     } else {
-      // 유효하지 않은 값 입력 시
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('유효한 수량을 입력해주세요.')),
+        const SnackBar(content: Text('1 이상의 유효한 수량을 입력해주세요.')),
       );
     }
   }

@@ -9,7 +9,6 @@ import 'package:test2/screens/dash_board_screen.dart'; // DashBoardScreen 임포
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
 
-
   @override
   _MainScreenState createState() => _MainScreenState();
 }
@@ -21,7 +20,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _screens = [
     DashBoardScreen(),  // DashBoard 화면 추가
     SearchFilterScreen(),  // 검색/필터
-    // ItemListScreen(),   // 아이템 리스트(),  // QR 스캔
+    ItemListScreen(),   // 아이템 리스트(),  // QR 스캔
     HistoryScreen(),    // 이력
     LoginScreen(),      // 프로필/설정
   ];
@@ -56,23 +55,23 @@ class _MainScreenState extends State<MainScreen> {
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.dashboard),
-              label: '대시보드',
+              label: 'DashBoard',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.search),
-              label: '비품검색',
+              label: 'Search',
             ),
-            // BottomNavigationBarItem(
-            //   icon: Icon(Icons.list),
-            //   label: '비품목록',
-            // ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.list),
+              label: 'ItemList',
+            ),
             BottomNavigationBarItem(
               icon: Icon(Icons.history),
-              label: '출고기록',
+              label: 'History',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
-              label: '로그인',
+              label: 'Login',
             ),
           ],
         ),

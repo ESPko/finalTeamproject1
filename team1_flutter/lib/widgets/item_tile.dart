@@ -60,10 +60,10 @@ class ItemTile extends StatelessWidget {
               ),
               const SizedBox(width: 10), // 아이콘과 QR 사이 여백
               // QR 코드 생성기
-              QrImageView(
-                data: 'http://10.100.203.16:8080/api/items/${item.id}/dispatch', // QR에 인코딩될 URL
-                version: QrVersions.auto, // 자동 버전 설정
-                size: 80.0, // QR 코드 크기 → 변경 예시 아래 참고
+    QrImageView(
+    data: 'http://10.100.203.16:8080/api/items/${item.id}/dispatch-quantity', // <- 수정된 경로
+    version: QrVersions.auto,
+    size: 80.0,
               ),
             ],
           ),
