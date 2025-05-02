@@ -25,11 +25,11 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
   int _currentPage = 0;
 
   final List<String> _images = [
-    'assets/images/banner1.webp',
-    'assets/images/banner2.webp',
-    'assets/images/banner3.webp',
-    'assets/images/banner4.webp',
-    'assets/images/banner5.webp',
+    'assets/images/banner1.jpg',
+    'assets/images/banner2.jpg',
+    'assets/images/banner3.jpg',
+    'assets/images/banner4.jpg',
+    'assets/images/banner5.jpg',
   ];
 
   Timer? _timer;
@@ -99,13 +99,13 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
   // 1. 캐러셀 위젯
   Widget _buildCarousel() {
     return Container(
-      height: 200,
+      height: 220,
       child: PageView.builder(
         controller: _carouselController,
         itemCount: _images.length,
         itemBuilder: (context, index) {
           return ClipRRect(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(20),
             child: Image.asset(
               _images[index],
               fit: BoxFit.cover,
