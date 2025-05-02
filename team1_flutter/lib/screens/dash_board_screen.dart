@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // 날짜 포맷용 패키지
+import 'package:intl/intl.dart';
+import 'package:test2/screens/stock_check.dart'; // 날짜 포맷용 패키지
 
 // 대시보드 메인 화면
 class DashBoardScreen extends StatelessWidget {
@@ -30,12 +31,13 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
 
   // 배너 이미지 리스트
   final List<String> _images = [
-    'assets/images/banner1.jpg',
-    'assets/images/banner2.jpg',
-    'assets/images/banner3.jpg',
-    'assets/images/banner4.jpg',
-    'assets/images/banner5.jpg',
+    'https://i.postimg.cc/rmb6kNDj/banner1.jpg',
+    'https://i.postimg.cc/J7D0BT51/banner2.jpg',
+    'https://i.postimg.cc/MX2hcZbj/banner3.jpg',
+    'https://i.postimg.cc/cC8p4tYS/banner4.jpg',
+    'https://i.postimg.cc/2js6d40n/banner5.jpg',
   ];
+
 
   Timer? _timer; // 캐러셀 자동 넘김 타이머
 
@@ -138,7 +140,10 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
               SizedBox(width: 16), // 버튼 사이 간격
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/stockcheck'); // 네비게이션 처리
+                  // 버튼을 눌렀을 때 'StockCheck' 화면을 보여주는 방식
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => StockCheck()),);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orange, // 다른 색상으로 구분 (파란색과 대비되게)
@@ -171,13 +176,20 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
           itemCount: _images.length,
           itemBuilder: (context, index) {
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 0), // 좌우 여백 추가 (옵션)
+              padding: const EdgeInsets.symmetric(horizontal: 0),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
-                child: Image.asset(
+                child: Image.network(
                   _images[index],
-                  fit: BoxFit.fitWidth, // 또는 BoxFit.fill / fitWidth 등
+                  fit: BoxFit.fitWidth,
                   width: double.infinity,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(child: CircularProgressIndicator());
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return Center(child: Icon(Icons.error));
+                  },
                 ),
               ),
             );
