@@ -1,10 +1,10 @@
-function productListDetail({product}) {
+function productSearchDetail({product}) {
 
   if (!product) return null;
 
   return (
     <div >
-      <div className="border rounded ">
+      <div className="border border-gray-300 rounded ">
         <div className="flex items-center m-3">
           <img src="src/productImg/pencil.png"
               className="w-[50px] h-[50px] mr-3"/>
@@ -18,7 +18,7 @@ function productListDetail({product}) {
           </div>
         </div>
       </div>
-      <div className="border rounded">
+      <div className="border border-gray-300 rounded">
         <div className="bg-gray-200 px-4 p-0.5">
           <p className="text-base font-bold">재고 위치</p>
         </div>
@@ -36,4 +36,4 @@ function productListDetail({product}) {
   );
 }
 
-export default productListDetail;
+export default productSearchDetail;
