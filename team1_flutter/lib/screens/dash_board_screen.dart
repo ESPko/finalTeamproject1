@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:test2/screens/qr_scanner_screen.dart';
 import 'package:test2/screens/stock_check.dart'; // 날짜 포맷용 패키지
 
 // 대시보드 메인 화면
@@ -10,6 +11,9 @@ class DashBoardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+        title: Text('아이템매니아'),
+    elevation: 0,),
       body: InventoryMainPage(), // 상태를 관리하는 InventoryMainPage 호출
     );
   }
@@ -121,7 +125,9 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  // 출고 내역 버튼 클릭 시 행동 추가
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => QRScannerScreen()),);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
@@ -180,7 +186,8 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
                 borderRadius: BorderRadius.circular(20),
                 child: Image.network(
                   _images[index],
-                  fit: BoxFit.fitWidth,
+                  fit: BoxFit.cover,
+                  height: double.infinity,
                   width: double.infinity,
                   loadingBuilder: (context, child, loadingProgress) {
                     if (loadingProgress == null) return child;
