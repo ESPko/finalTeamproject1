@@ -75,13 +75,13 @@ function EquipmentInformation() {
       <div className="bg-white rounded shadow p-4 h-full min-w-[100px] overflow-auto" style={{ padding: '0px 40px 80px 40px' }}>
     <div>
       <Topline
-        title="제품"
+        title="비품"
         actions={
           <button
             onClick={() => setIsModalOpen(true)}
             className="bg-blue-600 text-white px-4 py-2 rounded"
           >
-            제품 추가
+            비품 추가
           </button>
         }
       >
@@ -95,7 +95,7 @@ function EquipmentInformation() {
               </div>
               <input
                 type="text"
-                placeholder="이름, 바코드, 속성 검색"
+                placeholder="비품명, 속성 검색"
                 className="pl-10 pr-4 py-2 w-full focus:outline-none"
               />
             </div>
@@ -140,19 +140,19 @@ function EquipmentInformation() {
 
 
           {/* 테이블 */}
-          <div className="overflow-auto w-full pretty-scrollbar flex-auto m-3 mt-4 text-center">
-            <table className="w-full table-auto border-collapse">
+          <div className="overflow-auto w-max pretty-scrollbar flex-auto m-3 mt-4 text-center">
+            <table className="w-full table-flex border-collapse ">
               <thead className="bg-white">
               <tr className="bg-white sticky top-0 z-30 border-b">
-                <th className="sticky bg-white w-[80px]">사진</th>
-                <th className="sticky bg-white border-r w-[150px] border-gray-300">제품명</th>
-                {visibleColumns.category && <th>카테고리</th>}
-                {visibleColumns.vendorName && <th>매입회사</th>}
-                {visibleColumns.price && <th>매입가</th>}
-                {visibleColumns.orderDate && <th>매입 날짜</th>}
-                {visibleColumns.safetyStock && <th>적정 재고</th>}
-                {visibleColumns.totalQuantity && <th>현재 재고</th>}
-                {visibleColumns.tempWarehouse && <th>창고 위치</th>}
+                <th className=" bg-white w-[120px]">사진</th>
+                <th className=" bg-white border-r w-[200px] border-gray-300">비품명</th>
+                {visibleColumns.category && <th className="w-[180px]">카테고리</th>}
+                {visibleColumns.vendorName && <th className="w-[190px]">매입회사</th>}
+                {visibleColumns.price && <th className="w-[150px]">매입가</th>}
+                {visibleColumns.orderDate && <th className="w-[200px]">매입 날짜</th>}
+                {visibleColumns.safetyStock && <th className="w-[130px]">적정 재고</th>}
+                {visibleColumns.totalQuantity && <th className="w-[130px]">현재 재고</th>}
+                {visibleColumns.tempWarehouse && <th className="w-[180px]">창고 위치</th>}
 
               </tr>
               </thead>
@@ -161,17 +161,17 @@ function EquipmentInformation() {
                 <tr key={idx}
                     onClick={() => handleRowClick(product)}
                     className="border-b border-gray-200">
-                  <td className="sticky w-[80px] bg-white flex justify-center items-center py-2">
+                  <td className=" w-[120px] bg-white flex justify-center items-center py-2">
                     <div className="bg-gray-200 w-[60px] h-[60px] rounded" />
                   </td>
-                  <td className="sticky bg-white border-r border-gray-300">{product.name}</td>
-                  {visibleColumns.category && <td>{product.category}</td>}
-                  {visibleColumns.vendorName && <td>{product.vendorName}</td>}
-                  {visibleColumns.price && <td>{product.price}</td>}
-                  {visibleColumns.orderDate && <td>{product.orderDate}</td>}
-                  {visibleColumns.safetyStock && <td>{product.safetyStock}</td>}
-                  {visibleColumns.totalQuantity && <td>{product.totalQuantity}</td>}
-                  {visibleColumns.tempWarehouse && <td>{product.tempWarehouse}</td>}
+                  <td className=" w-[200px] bg-white border-r border-gray-300">{product.name}</td>
+                  {visibleColumns.category && <td className="w-[180px]">{product.category}</td>}
+                  {visibleColumns.vendorName && <td className="w-[190px]">{product.vendorName}</td>}
+                  {visibleColumns.price && <td className="w-[150px]">{product.price}</td>}
+                  {visibleColumns.orderDate && <td className="w-[200px]">{product.orderDate}</td>}
+                  {visibleColumns.safetyStock && <td className="w-[130px]">{product.safetyStock}</td>}
+                  {visibleColumns.totalQuantity && <td className="w-[130px]">{product.totalQuantity}</td>}
+                  {visibleColumns.tempWarehouse && <td className="w-[180px]">{product.tempWarehouse}</td>}
                 </tr>
               ))}
               </tbody>

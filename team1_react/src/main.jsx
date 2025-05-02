@@ -27,9 +27,9 @@ createRoot(document.getElementById('root')).render(
     <SideBar />
     {/*    비품 목록 페이지*/}
     {/*<ProductList/>*/}
-    {/*<EquipmentInformation/>*/}
+    <EquipmentInformation/>
     {/*  <LocationInfo/>*/}
-      <ClientList/>
+    {/*  <ClientList/>*/}
     </div>
 
   </StrictMode>,
