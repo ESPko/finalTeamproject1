@@ -1,7 +1,7 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import './index.css';
+import App from './App.jsx';
 import Login4 from './components/login/Login4.jsx';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ErrorPage from './page/ErrorPage.jsx';
@@ -21,6 +21,7 @@ import ClientList from './page/Client/ClientList.jsx';
 import InventoryPage from './page/sdh/ currentSituation/InventoryPage';
 import ApprovalPage from './components/layout/ApprovalPage.jsx';
 import StoragePage from './components/layout/StoragePage.jsx';
+import TestPage from './page/sdh/test/TestPage.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -31,24 +32,15 @@ createRoot(document.getElementById('root')).render(
           <Route path={'/test1'} element={<EquipmentInformation />} />
           <Route path={'/test2'} element={<TestPage2 />} />
           <Route path={'/test3'} element={<TestPage3 />} />
-          <Route path={'/test4'} element={<TestPage4 />} />
+          <Route path={'/test4'} element={<InventoryPage />} />
           <Route path={'/test5'} element={<MemberManagement />} />
-          <Route path={'/test6'} element={<TestPage6 />} />
-
+          <Route path={'/test6'} element={<TestPage />} />
+        
         </Route>
-
+        
         <Route path="/login" element={<Login4 />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
-      <EquipmentInformation/>
-      <LocationInfo/>
-        <ProductSearch/>
-        <MemberManagement/>
-      <ApprovalPage/>
-      <StoragePage/>
-      <ClientList/>
-      <InventoryPage/>
-      {/*<QrTestPage />*/}
     </BrowserRouter>
-  </StrictMode>
-)
+  </StrictMode>,
+);

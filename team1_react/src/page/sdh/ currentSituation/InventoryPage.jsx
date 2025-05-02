@@ -6,9 +6,7 @@ function InventoryPage ()
 {
   return (
     <>
-      <Header />
       <div className="flex min-w-[820px]">
-        <SideBar />
         <div>
           <div className="px-10 pb-20">
             <div className="w-full h-[82px]">
