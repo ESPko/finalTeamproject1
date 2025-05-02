@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-// 대시보드 메인 화면
 class StockCheck extends StatelessWidget {
   const StockCheck({Key? key}) : super(key: key);
 
@@ -24,12 +23,13 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
   final PageController _carouselController = PageController();
   int _currentPage = 0;
 
+  // 배너 이미지 URL 리스트
   final List<String> _images = [
-    'assets/images/banner1.webp',
-    'assets/images/banner2.webp',
-    'assets/images/banner3.webp',
-    'assets/images/banner4.webp',
-    'assets/images/banner5.webp',
+    'https://i.postimg.cc/rmb6kNDj/banner1.jpg',
+    'https://i.postimg.cc/J7D0BT51/banner2.jpg',
+    'https://i.postimg.cc/MX2hcZbj/banner3.jpg',
+    'https://i.postimg.cc/cC8p4tYS/banner4.jpg',
+    'https://i.postimg.cc/2js6d40n/banner5.jpg',
   ];
 
   Timer? _timer;
@@ -98,25 +98,39 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
 
   // 1. 캐러셀 위젯
   Widget _buildCarousel() {
-    return Container(
-      height: 200,
-      child: PageView.builder(
-        controller: _carouselController,
-        itemCount: _images.length,
-        itemBuilder: (context, index) {
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: Image.asset(
-              _images[index],
-              fit: BoxFit.cover,
-            ),
-          );
-        },
-        onPageChanged: (index) {
-          setState(() {
-            _currentPage = index;
-          });
-        },
+    return Padding(
+      padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+      child: Container(
+        height: 220, // 갤24 기준 160이면 적당함, 플러터 크롬웹 기준 220
+        child: PageView.builder(
+          controller: _carouselController,
+          itemCount: _images.length,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Image.network(
+                  _images[index],
+                  fit: BoxFit.fitWidth,
+                  width: double.infinity,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(child: CircularProgressIndicator());
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return Center(child: Icon(Icons.error));
+                  },
+                ),
+              ),
+            );
+          },
+          onPageChanged: (index) {
+            setState(() {
+              _currentPage = index;
+            });
+          },
+        ),
       ),
     );
   }
