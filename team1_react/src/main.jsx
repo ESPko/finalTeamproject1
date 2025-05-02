@@ -21,6 +21,14 @@ import ClientList from './page/Client/ClientList.jsx';
 import InventoryPage from './page/sdh/ currentSituation/InventoryPage';
 import ApprovalPage from './components/layout/ApprovalPage.jsx';
 import StoragePage from './components/layout/StoragePage.jsx';
+import ProductList from './page/ProductList/ProductList.jsx';
+import ApprovalPage from './page/approve/ApprovalPage.jsx';
+import StoragePage from './page/storage/StoragePage.jsx';
+import Side2 from './theme/Side2.jsx';
+import Header2 from './theme/Header2.jsx';
+import SafeStockPage from './page/safeStock/SafeStockPage.jsx';
+import LocationInfo from './page/location/LocationInfo.jsx';
+
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -46,6 +54,15 @@ createRoot(document.getElementById('root')).render(
         <Route path="/login" element={<Login4 />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
+      <EquipmentInformation/>
+        <ProductList/>
+        <MemberManagement/>
+      <ApprovalPage/>
+      <StoragePage/>
+
+
+
+
     </BrowserRouter>
   </StrictMode>
 )

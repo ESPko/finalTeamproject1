@@ -1,4 +1,4 @@
-import Header from '../layout/Header.jsx';
+import Header from '../theme/Header.jsx';
 
 function ErrorPage() {
   return (
