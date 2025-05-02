@@ -16,18 +16,27 @@ function SafeStockPage() {
           </div>
         </div>
         <div className="text-[14px] mt-[20px] text-gray-700">
-          <div className="items-center grid border-b text-black border-b-gray-300 h-[52px]">
+          <div className="items-center flex-row flex h-[52px]">
+            <div className={'h-2 w-2 bg-red-500 rounded-lg mr-3'}></div>
             <div>재고 부족</div>
+          </div>
+          <div className={'h-[52px] items-center grid grid-cols-12 border-b border-b-gray-300'}>
+            <div className={'col-span-3'}>비품명</div>
+            <div className={'col-span-2'}>위치</div>
+            <div className={'col-span-2'}>기본 안전 재고</div>
+            <div className={'col-span-2'}>현재 재고</div>
+            <div className={'col-span-2'}>부족 재고</div>
+            <div className={'col-span-1'}></div>
           </div>
           <div className={'h-[52px] items-center grid grid-cols-12 border-b border-b-gray-100'}>
             <div className={'col-span-3 flex items-center'}>
               <div className={'w-[36px] h-[36px] mr-[20px] rounded bg-gray-300'}></div>
               <div>비품명</div>
             </div>
-            <div className={'col-span-2'}>위치</div>
-            <div className={'col-span-2'}>기본 안전 재고</div>
-            <div className={'col-span-2'}>현재 재고</div>
-            <div className={'col-span-2'}>부족 재고</div>
+            <div className={'col-span-2'}>창고1</div>
+            <div className={'col-span-2 text-blue-300 font-semibold'}>10</div>
+            <div className={'col-span-2 font-semibold'}>2</div>
+            <div className={'col-span-2 text-red-400 font-semibold'}>-3</div>
             <div className={'col-span-1'}>
               <button type={'button'} className={'border shadow border-gray-300 rounded-sm w-[44px] h-[36px] mr-1 hover:bg-gray-300'}>신청</button>
             </div>

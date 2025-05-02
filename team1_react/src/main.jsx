@@ -17,9 +17,6 @@ import EquipmentInformation from './page/ProductList/EquipmentInformation.jsx';
 import ProductList from './page/ProductList/ProductList.jsx';
 import ApprovalPage from './page/approve/ApprovalPage.jsx';
 import StoragePage from './page/storage/StoragePage.jsx';
-import LocationDetail from './page/location/LocationDetail.jsx';
-import Side from './layout/Side.jsx';
-import SideBar from './layout/SideBar.jsx';
 import Side2 from './layout/Side2.jsx';
 import Header2 from './layout/Header2.jsx';
 import SafeStockPage from './page/safeStock/SafeStockPage.jsx';
@@ -47,10 +44,9 @@ createRoot(document.getElementById('root')).render(
       <MemberManagement />
       <ApprovalPage />
       <StoragePage />
+      <SafeStockPage />
       <Header2 />
       <Side2/>
-      <SafeStockPage />
-
 
     </BrowserRouter>
   </StrictMode>,
