@@ -1,4 +1,4 @@
-import Side from '../../layout/Side.jsx';
+import Side from '../../theme/Side.jsx';
 
 function MainPage() {
   return (

@@ -17,9 +17,10 @@ import EquipmentInformation from './page/ProductList/EquipmentInformation.jsx';
 import ProductList from './page/ProductList/ProductList.jsx';
 import ApprovalPage from './page/approve/ApprovalPage.jsx';
 import StoragePage from './page/storage/StoragePage.jsx';
-import Side2 from './layout/Side2.jsx';
-import Header2 from './layout/Header2.jsx';
+import Side2 from './theme/Side2.jsx';
+import Header2 from './theme/Header2.jsx';
 import SafeStockPage from './page/safeStock/SafeStockPage.jsx';
+import LocationInfo from './page/location/LocationInfo.jsx';
 
 
 createRoot(document.getElementById('root')).render(
@@ -34,6 +35,12 @@ createRoot(document.getElementById('root')).render(
           <Route path={'/test4'} element={<TestPage4 />} />
           <Route path={'/test5'} element={<TestPage5 />} />
           <Route path={'/test6'} element={<TestPage6 />} />
+          <Route path={'/stock'} element={<SafeStockPage />} />
+          <Route path={'/storage'} element={<StoragePage />} />
+          <Route path={'/approve'} element={<ApprovalPage />} />
+          <Route path={'/location'} element={<LocationInfo />} />
+          <Route path={'/member'} element={<MemberManagement />} />
+          <Route path={'/product'} element={<ProductList />} />
         </Route>
         <Route path="/login" element={<Login4 />} />
         <Route path="*" element={<ErrorPage />} />
