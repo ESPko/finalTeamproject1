@@ -4,6 +4,7 @@ import ProductSearchItem from './ProductSearchItem.jsx';
 import NoResultProduct from './NoResultProduct.jsx';
 import ProductListDetail from './ProductSearchDetail.jsx';
 import Topline from '../../components/layout/Topline.jsx';
+import { SearchIcon } from 'lucide-react';
 
 function ProductSearch() {
   const [search, setSearch] = useState(``)
@@ -23,7 +24,7 @@ function ProductSearch() {
 
   const [selectedWarehouse, setSelectedWarehouse] =useState('위치 선택')
 
-  const [dropdownMenu, setDropdownMenu] = useState(false)
+  // const [dropdownMenu, setDropdownMenu] = useState(false)
 
   const changSearch = (e) =>{
     setSearch(e.target.value);
@@ -48,6 +49,8 @@ function ProductSearch() {
   }
 
   return (
+    <div className=" flex-1 p-6 overflow-y-auto">
+      <div className="bg-white rounded shadow p-4 min-x-[100vh]  min-h-[80vh] " style={{ padding: '0px 40px 80px 40px' }} >
     <div>
       <Topline title="비품 검색"
       actions={
@@ -88,7 +91,8 @@ function ProductSearch() {
                   onClick={searchProduct}
                   className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-r"
                 >
-                  <img src="src/productImg/search.png" width={'27px'}/>
+                  {/*<img src="src/productImg/search.png" width={'27px'}/>*/}
+                  <SearchIcon />
                 </button>
               </div>
             </div>
@@ -117,6 +121,8 @@ function ProductSearch() {
 
 
       </Topline>
+    </div>
+      </div>
     </div>
   );
 }
