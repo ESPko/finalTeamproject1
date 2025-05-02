@@ -12,9 +12,11 @@ import TestPage3 from './page/TestPage3.jsx';
 import TestPage4 from './page/TestPage4.jsx';
 import TestPage5 from './page/TestPage5.jsx';
 import TestPage6 from './page/TestPage6.jsx';
+import AxiosTest from './components/AxiosTest.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+    <AxiosTest />
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />}>

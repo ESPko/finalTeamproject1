@@ -1,6 +1,6 @@
 package bitc.fullstack503.team1_server.controller;
 
-import bitc.fullstack503.team1_server.dto.EmployeeDTO;
+import bitc.fullstack503.team1_server.dto.UserDTO;
 import bitc.fullstack503.team1_server.service.AxiosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,10 +20,10 @@ public class AxiosTestController {
     }
 
     // 파라미터가 없는 GET 방식 통신 (전체 검색)
-    @GetMapping("/employee")
+    @GetMapping("/user")
     public Object selectEmployeeList() throws Exception {
 
-        List<EmployeeDTO> employeeList = axiosService.selectEmployeeList();
+        List<UserDTO> employeeList = axiosService.selectEmployeeList();
 
         return employeeList;
     }

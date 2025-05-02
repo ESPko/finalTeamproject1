@@ -2,7 +2,7 @@ import axios from "axios";
 
 function AxiosTest() {
     const sendDataTest = () => {
-        axios.get("http://localhost:8080/employee")
+        axios.get("http://localhost:8080/user")
         .then(res => {
             console.log('axios를 사용한 비동기 통신에 성공')
             console.log(res.data)
