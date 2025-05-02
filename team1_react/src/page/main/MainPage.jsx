@@ -1,4 +1,3 @@
-import Side from '../../layout/Side.jsx';
 
 function MainPage() {
   return (

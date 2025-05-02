@@ -15,12 +15,12 @@ import TestPage6 from './page/TestPage6.jsx';
 import MemberManagement from './page/MemberManagement/MemberManagement.jsx';
 import EquipmentInformation from './page/ProductList/EquipmentInformation.jsx';
 import ProductSearch from './page/ProductList/ProductSearch.jsx';
-import ApprovalPage from './layout/ApprovalPage.jsx';
-import StoragePage from './layout/StoragePage.jsx';
 import LocationDetail from './page/location/LocationDetail.jsx';
 import LocationInfo from './page/location/LocationInfo.jsx';
 import ClientList from './page/Client/ClientList.jsx';
 import InventoryPage from './page/sdh/ currentSituation/InventoryPage';
+import ApprovalPage from './components/layout/ApprovalPage.jsx';
+import StoragePage from './components/layout/StoragePage.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -36,6 +36,7 @@ createRoot(document.getElementById('root')).render(
           <Route path={'/test6'} element={<TestPage6 />} />
 
         </Route>
+
         <Route path="/login" element={<Login4 />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
@@ -46,8 +47,8 @@ createRoot(document.getElementById('root')).render(
       <ApprovalPage/>
       <StoragePage/>
       <ClientList/>
+      <InventoryPage/>
+      {/*<QrTestPage />*/}
     </BrowserRouter>
-    <InventoryPage/>
-    {/*<QrTestPage />*/}
   </StrictMode>
 )

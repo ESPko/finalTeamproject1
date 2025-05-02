@@ -1,5 +1,5 @@
 import Header from './components/layout/Header.jsx';
-import Side from './layout/Side.jsx';
+import Side from './components/layout/Side.jsx';
 
 function App() {
 

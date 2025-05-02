@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import Topline from '../../layout/Topline.jsx';
 import Modal from '../../Modal/Modal.jsx';
 import LocationAdd from '../location/LocationAdd.jsx';
 import LocationDetail from '../location/LocationDetail.jsx';
-import SearchIcon from '../../icon/SearchIcon.jsx';
 import { FiSettings } from 'react-icons/fi';
 import ClientAdd from './ClientAdd.jsx';
 import ClientDetail from './ClientDetail.jsx';
+import Topline from '../../components/layout/Topline.jsx';
+import { SearchIcon } from 'lucide-react';
 
 function ClientList() {
 

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import ProductSearchItem from './ProductSearchItem.jsx';
 import NoResultProduct from './NoResultProduct.jsx';
 import ProductListDetail from './ProductSearchDetail.jsx';
-import Topline from '../../layout/Topline.jsx';
+import Topline from '../../components/layout/Topline.jsx';
 
 function ProductSearch() {
   const [search, setSearch] = useState(``)

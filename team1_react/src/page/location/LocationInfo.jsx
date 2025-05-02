@@ -1,8 +1,8 @@
-import Topline from '../../layout/Topline.jsx';
 import { useState } from 'react';
 import Modal from '../../Modal/Modal.jsx';
 import LocationAdd from './LocationAdd.jsx';
 import LocationDetail from './LocationDetail.jsx';
+import Topline from '../../components/layout/Topline.jsx';
 
 function LocationInfo() {
 

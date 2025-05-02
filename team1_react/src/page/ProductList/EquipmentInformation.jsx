@@ -1,10 +1,10 @@
-import SearchIcon from '../../icon/SearchIcon.jsx';
 import { FiSettings } from 'react-icons/fi';
 import { useState } from 'react';
 import ProductAdd from './ProductAdd';
 import Modal from '../../Modal/Modal.jsx';
-import Topline from '../../layout/Topline.jsx';
 import EquipmentDetail from './EquipmentDetail.jsx';
+import Topline from '../../components/layout/Topline.jsx';
+import { SearchIcon } from 'lucide-react';
 
 
 function EquipmentInformation() {
