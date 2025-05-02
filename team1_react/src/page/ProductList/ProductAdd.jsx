@@ -56,9 +56,9 @@ function ProductAdd() {
               <div className="w-24 h-24 bg-sky-500/50 rounded-full flex items-center justify-center text-2xl text-gray-400">
                 📷
               </div>
-              <button className="bg-green-500 text-white px-3 py-2 rounded">
-                QR 생성
-              </button>
+              {/*<button className="bg-green-500 text-white px-3 py-2 rounded">*/}
+              {/*  QR 생성*/}
+              {/*</button>*/}
             </div>
           </div>
 
@@ -119,16 +119,16 @@ function ProductAdd() {
 
 
           {/*매입가*/}
-          <div className="flex items-center w-full max-w-md">
-            <label className="w-20 text-sm font-medium text-gray-700 whitespace-nowrap">
-              매입 수량
-            </label>
-            <input
-              type="text"
-              className="flex-1 border rounded px-3 py-2"
-              placeholder=" 매입 수량"
-            />
-          </div>
+          {/*<div className="flex items-center w-full max-w-md">*/}
+          {/*  <label className="w-20 text-sm font-medium text-gray-700 whitespace-nowrap">*/}
+          {/*    매입 수량*/}
+          {/*  </label>*/}
+          {/*  <input*/}
+          {/*    type="text"*/}
+          {/*    className="flex-1 border rounded px-3 py-2"*/}
+          {/*    placeholder=" 매입 수량"*/}
+          {/*  />*/}
+          {/*</div>*/}
 
         </div>
       </section>

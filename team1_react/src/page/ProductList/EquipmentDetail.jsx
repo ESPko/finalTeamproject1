@@ -7,8 +7,7 @@ function EquipmentDetail({ product }) {
   const [price, setPrice] = useState(product.price);
   const [safetyStock, setSafetyStock] = useState(product.safetyStock);
   const [totalQuantity, setTotalQuantity] = useState(product.totalQuantity);
-  const [tempWarehouse1, setTempWarehouse1] = useState(product.tempWarehouse1);
-  const [tempWarehouse2, setTempWarehouse2] = useState(product.tempWarehouse2);
+  const [tempWarehouse, setTempWarehouse1] = useState(product.tempWarehouse);
   const [vendorName, setVendorName] = useState(product.vendorName);
   const [orderDate, setOrderDate] = useState(product.orderDate);
 
@@ -123,28 +122,16 @@ function EquipmentDetail({ product }) {
               {/* 위치1 */}
               <div className="flex items-center w-full max-w-md">
                 <label className="w-20 text-sm font-medium text-gray-700 whitespace-nowrap">
-                  임시창고1
+                  창고위치
                 </label>
                 <input
                   type="text"
                   className="flex-1 border rounded px-3 py-2"
-                  value={tempWarehouse1}
+                  value={tempWarehouse}
                   onChange={(e) => setTempWarehouse1(e.target.value)}
                 />
               </div>
 
-              {/* 위치2 */}
-              <div className="flex items-center w-full max-w-md">
-                <label className="w-20 text-sm font-medium text-gray-700 whitespace-nowrap">
-                  임시창고2
-                </label>
-                <input
-                  type="text"
-                  className="flex-1 border rounded px-3 py-2"
-                  value={tempWarehouse2}
-                  onChange={(e) => setTempWarehouse2(e.target.value)}
-                />
-              </div>
 
             </div>
           </section>

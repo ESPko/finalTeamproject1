@@ -1,39 +1,8 @@
-import React, { useState } from 'react';
 
 function ClientAdd() {
-  const [selected, setSelected] = useState("입고처");
 
   return (
     <div className="space-y-6">
-        {/* 종류 */}
-      <div className="flex flex-col space-y-2">
-        <label className="block font-medium mb-2">종류</label>
-        <div className="flex items-center space-x-6">
-          <label className="flex items-center space-x-2 cursor-pointer">
-            <input
-              type="radio"
-              name="type"
-              value="입고처"
-              checked={selected === "입고처"}
-              onChange={(e) => setSelected(e.target.value)}
-              className="form-radio text-blue-600"
-            />
-            <span className="text-sm text-gray-800">입고처</span>
-          </label>
-          <label className="flex items-center space-x-2 cursor-pointer">
-            <input
-              type="radio"
-              name="type"
-              value="출고처"
-              checked={selected === "출고처"}
-              onChange={(e) => setSelected(e.target.value)}
-              className="form-radio text-blue-600"
-            />
-            <span className="text-sm text-gray-800">출고처</span>
-          </label>
-        </div>
-      </div>
-
         {/* 이름 */}
         <div>
           <label className="block font-medium mb-1">

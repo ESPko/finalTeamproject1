@@ -9,14 +9,90 @@ function LocationInfo() {
   const locationInfo = [
     {
       localName: '임시창고1',
+      localAddress: '사상구',
       localMemo: '-',
       localTotalCount: '2',
     },
     {
       localName: '임시창고2',
+      localAddress: '수영구',
       localMemo: '-',
       localTotalCount: '8',
     },
+    {
+      localName: '임시창고2',
+      localAddress: '수영구',
+      localMemo: '-',
+      localTotalCount: '8',
+    },
+    {
+      localName: '임시창고2',
+      localAddress: '수영구',
+      localMemo: '-',
+      localTotalCount: '8',
+    },
+    {
+      localName: '임시창고2',
+      localAddress: '수영구',
+      localMemo: '-',
+      localTotalCount: '8',
+    },
+    {
+      localName: '임시창고2',
+      localAddress: '수영구',
+      localMemo: '-',
+      localTotalCount: '8',
+    },
+    {
+      localName: '임시창고2',
+      localAddress: '수영구',
+      localMemo: '-',
+      localTotalCount: '8',
+    },
+    {
+      localName: '임시창고2',
+      localAddress: '수영구',
+      localMemo: '-',
+      localTotalCount: '8',
+    },
+    {
+      localName: '임시창고2',
+      localAddress: '수영구',
+      localMemo: '-',
+      localTotalCount: '8',
+    },
+    {
+      localName: '임시창고2',
+      localAddress: '수영구',
+      localMemo: '-',
+      localTotalCount: '8',
+    },
+    {
+      localName: '임시창고2',
+      localAddress: '수영구',
+      localMemo: '-',
+      localTotalCount: '8',
+    },
+    {
+      localName: '임시창고2',
+      localAddress: '수영구',
+      localMemo: '-',
+      localTotalCount: '8',
+    },
+    {
+      localName: '임시창고2',
+      localAddress: '수영구',
+      localMemo: '-',
+      localTotalCount: '8',
+    },
+    {
+      localName: '임시창고2',
+      localAddress: '수영구',
+      localMemo: '-',
+      localTotalCount: '8',
+    },
+
+
   ];
 
   // 위치추가 모달
@@ -26,8 +102,8 @@ function LocationInfo() {
   const [selectedLocation, setSelectedLocation] = useState(null);
 
   return (
-    <div className=" flex-1 p-6 overflow-y-auto ">
-      <div className="bg-white rounded shadow p-4 h-full min-w-[100px] overflow-auto" style={{ padding: '0px 40px 80px 40px' }}>
+    <div className=" flex-1 p-6 overflow-y-auto">
+      <div className="bg-white rounded shadow p-4 min-x-[100vh]  min-h-[80vh] " style={{ padding: '0px 40px 80px 40px' }} >
     <div>
       <Topline
         title="위치"
@@ -42,24 +118,26 @@ function LocationInfo() {
       >
         <div>
           {/* 테이블 */}
-          <div className="overflow-auto w-full pretty-scrollbar flex-auto m-3 mt-4 text-center">
-            <table className="min-w-full table-fixed border-collapse">
+          <div className="overflow-auto w-max pretty-scrollbar flex-auto m-3 mt-4 text-center">
+            <table className="w-full table-fiex border-collapse">
               <thead className="bg-white">
-              <tr className="bg-white sticky top-0 z-30 border-b text-left">
-                <th className="py-2 px-4">이름</th>
-                <th className="py-2 px-4">재고 수량</th>
-                <th className="py-2 px-4">메모</th>
-                <th className="py-2 px-4 text-right"></th>
+              <tr className="bg-white sticky top-0 z-30 border-b text-center">
+                <th className="py-2 px-4 w-[200px]">이름</th>
+                <th className="py-2 px-4 w-[400px]">주소</th>
+                <th className="py-2 px-4 w-[200px]">재고 수량</th>
+                <th className="py-2 px-4 w-[440px]">메모</th>
+                <th className="py-2 px-4 w-[250px] text-right"></th>
               </tr>
               </thead>
               <tbody>
               {locationInfo.map((locationInfo, idx) => (
                 <tr key={idx}
-                    className="border-b border-gray-200 text-left">
-                  <td className="py-2 px-4">{locationInfo.localName}</td>
-                  <td className="py-2 px-4">{locationInfo.localTotalCount}</td>
-                  <td className="py-2 px-4">{locationInfo.localMemo}</td>
-                  <td className="py-2 px-4 text-right space-x-2">
+                    className="border-b border-gray-200 text-center">
+                  <td className="py-2 px-4 w-[200px]">{locationInfo.localName}</td>
+                  <td className="py-2 px-4 w-[400px]">{locationInfo.localAddress}</td>
+                  <td className="py-2 px-4 w-[200px]">{locationInfo.localTotalCount}</td>
+                  <td className="py-2 px-4 w-[440px]">{locationInfo.localMemo}</td>
+                  <td className="py-2 px-4 w-[250px] text-right space-x-2">
                     <button
                       onClick={() => {
                         setSelectedLocation(locationInfo); // 현재 반복 중인 항목
