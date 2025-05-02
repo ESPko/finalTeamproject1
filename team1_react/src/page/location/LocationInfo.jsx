@@ -26,6 +26,8 @@ function LocationInfo() {
   const [selectedLocation, setSelectedLocation] = useState(null);
 
   return (
+    <div className=" flex-1 p-6 overflow-y-auto ">
+      <div className="bg-white rounded shadow p-4 h-full min-w-[100px] overflow-auto" style={{ padding: '0px 40px 80px 40px' }}>
     <div>
       <Topline
         title="위치"
@@ -115,6 +117,8 @@ function LocationInfo() {
       </Modal>
 
 
+    </div>
+      </div>
     </div>
   );
 }

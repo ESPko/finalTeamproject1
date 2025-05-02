@@ -15,8 +15,17 @@ function EquipmentInformation() {
       price: '500',
       safetyStock: '5',
       totalQuantity: '2',
-      tempWarehouse1: '1',
-      tempWarehouse2: '1',
+      tempWarehouse: '임시창고1',
+      vendorName: '회사A',
+      orderDate: '2025-04-20',
+    },
+    {
+      name: '몰',
+      category: '-',
+      price: '500',
+      safetyStock: '5',
+      totalQuantity: '6',
+      tempWarehouse: '임시창고2',
       vendorName: '회사A',
       orderDate: '2025-04-20',
     },
@@ -26,8 +35,7 @@ function EquipmentInformation() {
       price: '1,000',
       safetyStock: '10',
       totalQuantity: '7',
-      tempWarehouse1: '0',
-      tempWarehouse2: '7',
+      tempWarehouse: '임시창고2',
       vendorName: '회사B',
       orderDate: '2025-04-25',
     },
@@ -42,8 +50,7 @@ function EquipmentInformation() {
     orderDate: true,
     safetyStock: true,
     totalQuantity: true,
-    tempWarehouse1: true,
-    tempWarehouse2: true,
+    tempWarehouse: true,
   });
   const toggleColumn = (key) => {
     setVisibleColumns((prev) => ({
@@ -64,6 +71,8 @@ function EquipmentInformation() {
 
 
   return (
+    <div className=" flex-1 p-6 overflow-y-auto ">
+      <div className="bg-white rounded shadow p-4 h-full min-w-[100px] overflow-auto" style={{ padding: '0px 40px 80px 40px' }}>
     <div>
       <Topline
         title="제품"
@@ -100,9 +109,9 @@ function EquipmentInformation() {
                 <span>컬럼 설정</span>
               </div>
               {showSettings && (
-                <div className="absolute top-12 right-0 bg-white border rounded shadow p-4 z-50">
+                <div className="absolute top-12 right-0 bg-white border rounded shadow p-2 z-50 inline-block">
                   {Object.keys(visibleColumns).map((key) => (
-                    <div key={key} className="flex items-center mb-2">
+                    <div key={key} className="inline-flex items-center mb-2">
                       <input
                         type="checkbox"
                         id={key}
@@ -118,8 +127,7 @@ function EquipmentInformation() {
                           orderDate: '매입날짜',
                           safetyStock: '적정재고',
                           totalQuantity: '현재재고',
-                          tempWarehouse1: '임시창고1',
-                          tempWarehouse2: '임시창고2',
+                          tempWarehouse: '창고 위치',
                         })[key]}
                       </label>
                     </div>
@@ -133,7 +141,7 @@ function EquipmentInformation() {
 
           {/* 테이블 */}
           <div className="overflow-auto w-full pretty-scrollbar flex-auto m-3 mt-4 text-center">
-            <table className="w-full table-fixed border-collapse">
+            <table className="w-full table-auto border-collapse">
               <thead className="bg-white">
               <tr className="bg-white sticky top-0 z-30 border-b">
                 <th className="sticky bg-white w-[80px]">사진</th>
@@ -141,11 +149,11 @@ function EquipmentInformation() {
                 {visibleColumns.category && <th>카테고리</th>}
                 {visibleColumns.vendorName && <th>매입회사</th>}
                 {visibleColumns.price && <th>매입가</th>}
-                {visibleColumns.orderDate && <th>매입날짜</th>}
-                {visibleColumns.safetyStock && <th>적정재고</th>}
-                {visibleColumns.totalQuantity && <th>현재재고</th>}
-                {visibleColumns.tempWarehouse1 && <th>임시창고1</th>}
-                {visibleColumns.tempWarehouse2 && <th>임시창고2</th>}
+                {visibleColumns.orderDate && <th>매입 날짜</th>}
+                {visibleColumns.safetyStock && <th>적정 재고</th>}
+                {visibleColumns.totalQuantity && <th>현재 재고</th>}
+                {visibleColumns.tempWarehouse && <th>창고 위치</th>}
+
               </tr>
               </thead>
               <tbody>
@@ -163,8 +171,7 @@ function EquipmentInformation() {
                   {visibleColumns.orderDate && <td>{product.orderDate}</td>}
                   {visibleColumns.safetyStock && <td>{product.safetyStock}</td>}
                   {visibleColumns.totalQuantity && <td>{product.totalQuantity}</td>}
-                  {visibleColumns.tempWarehouse1 && <td>{product.tempWarehouse1}</td>}
-                  {visibleColumns.tempWarehouse2 && <td>{product.tempWarehouse2}</td>}
+                  {visibleColumns.tempWarehouse && <td>{product.tempWarehouse}</td>}
                 </tr>
               ))}
               </tbody>
@@ -211,6 +218,8 @@ function EquipmentInformation() {
         <EquipmentDetail product={selectedProduct} />
       </Modal>
 
+    </div>
+      </div>
     </div>
   );
 }

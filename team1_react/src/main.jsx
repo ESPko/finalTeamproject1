@@ -19,7 +19,7 @@ import ApprovalPage from './layout/ApprovalPage.jsx';
 import StoragePage from './layout/StoragePage.jsx';
 import LocationDetail from './page/location/LocationDetail.jsx';
 import LocationInfo from './page/location/LocationInfo.jsx';
-
+import ClientList from './page/Client/ClientList.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -34,21 +34,17 @@ createRoot(document.getElementById('root')).render(
           <Route path={'/test5'} element={<MemberManagement />} />
           <Route path={'/test6'} element={<TestPage6 />} />
 
-
         </Route>
         <Route path="/login" element={<Login4 />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
       <EquipmentInformation/>
       <LocationInfo/>
-        <ProductList/>
+        <ProductSearch/>
         <MemberManagement/>
       <ApprovalPage/>
       <StoragePage/>
-
-
-
-
+      <ClientList/>
     </BrowserRouter>
   </StrictMode>
 )
