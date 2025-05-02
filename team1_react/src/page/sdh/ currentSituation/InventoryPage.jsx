@@ -1,32 +1,31 @@
-import SideBar from '../../../components/layout/SideBar.jsx';
-import Header from '../../../components/layout/Header.jsx';
-import Navigation from '../../../components/sdh/navi/Navigation.jsx';
 
-function InventoryPage ()
-{
+import Navigation from '../../../components/sdh/navi/Navigation.jsx';
+import Topline from '../../../components/layout/Topline.jsx';
+
+function InventoryPage() {
   return (
-    <>
-      <Header />
-      <div className="flex min-w-[820px]">
-        <SideBar />
+    <div className=" flex-1 p-6 overflow-y-auto">
+      <div className="bg-white rounded shadow p-4 min-x-[100vh]  min-h-[80vh] "
+           style={{ padding: '0px 40px 80px 40px' }}>
         <div>
-          <div className="px-10 pb-20">
-            <div className="w-full h-[82px]">
-              <div className="text-2xl">입출고요약</div>
-            </div>
+          <Topline
+            title="비품"
+          >
             <Navigation />
-          </div>
-          <div className="min-w-[820px] pl-10">
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Culpa
-              doloremque est illum labore libero placeat, ut voluptas
-              voluptatibus. Aperiam dicta error iure nemo unde. Aliquid at
-              eveniet illum ipsa recusandae.
-            </p>
-          </div>
+            <div className="min-w-[820px] pl-10">
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Culpa
+                doloremque est illum labore libero placeat, ut voluptas
+                voluptatibus. Aperiam dicta error iure nemo unde. Aliquid at
+                eveniet illum ipsa recusandae.
+              </p>
+            </div>
+          </Topline>
         </div>
       </div>
-    </>
+    </div>
+
+
   );
 }
 

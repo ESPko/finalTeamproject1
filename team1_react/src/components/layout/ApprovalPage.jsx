@@ -1,10 +1,14 @@
+import Topline from './Topline.jsx';
+
 function ApprovalPage() {
   return (
-      <main className=" flex-1 p-6 overflow-y-auto">
-        <div className="bg-white rounded shadow p-4 h-full" style={{ width: '1530px', padding: '0px 40px 80px 40px' }}>
-          <div className={'flex flex-col pb-[10px]'} style={{ height: '82px', borderBottom: '1px solid black' }}>
-            <div className="text-gray-700 font-semibold mt-auto h-[36px]" style={{ fontSize: '24px' }}>승인 목록</div>
-          </div>
+    <div className=" flex-1 p-6 overflow-y-auto">
+      <div className="bg-white rounded shadow p-4 min-x-[100vh]  min-h-[80vh] " style={{ padding: '0px 40px 80px 40px' }} >
+        <div>
+          <Topline
+            title="승인목록"
+          >
+          <div>
           <div className="bg-danger mt-[40px]">
             <div>
               <input
@@ -35,8 +39,14 @@ function ApprovalPage() {
               <div className={'col-span-1'}></div>
             </div>
           </div>
+          </div>
+          </Topline>
         </div>
-      </main>
+      </div>
+    </div>
+
+
+
   );
 }
 
