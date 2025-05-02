@@ -1,0 +1,89 @@
+import { useState } from 'react';
+import { DefinedRange } from 'react-date-range'; // React Date Range 라이브러리 사용 가정
+
+import React, { useState } from 'react';
+
+class CustomStaticRangeLabelContent extends React.Component {
+  constructor(props) {
+    super(props);
+    
+    this.state = {
+      currentDateString: Date(),
+    };
+    
+    this.intervalId = setInterval(() => {
+      this.setState({
+        currentDateString: Date(),
+      });
+    }, 1000);
+  }
+  
+  componentWillUnmount() {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
+  }
+  
+  render() {
+    const { currentDateString } = this.state;
+    const { text } = this.props;
+    
+    return (
+      <span>
+        <i>{text}</i>
+        <span className={'random-date-string'}>
+          <b>{currentDateString}</b>
+        </span>
+      </span>
+    );
+  }
+}
+
+const renderStaticRangeLabel = () => (
+  <CustomStaticRangeLabelContent text={'This is a custom label content: '} />
+);
+
+const [state, setState] = useState([
+  {
+    startDate: new Date(),
+    endDate: null,
+    key: 'selection'
+  }
+]);
+
+<DefinedRange
+  onChange={item => setState([item.selection])}
+  ranges={state}
+  renderStaticRangeLabel={renderStaticRangeLabel}
+  staticRanges={[
+    {
+      label: '오늘',
+      hasCustomRendering: true,
+      range: () => ({
+        startDate: new Date(),
+        endDate: new Date(),
+      }),
+      isSelected() {
+        return true;
+      },
+    },
+    {
+      label: '어제',
+      hasCustomRendering: true,
+      range: () => {
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        return {
+          startDate: yesterday,
+          endDate: yesterday,
+        };
+      },
+      isSelected() {
+        return false;
+      },
+    },
+  ]}
+/>;
+
+
+export default CustomStaticRangeLabelContent;

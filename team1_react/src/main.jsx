@@ -20,6 +20,7 @@ import StoragePage from './layout/StoragePage.jsx';
 import LocationDetail from './page/location/LocationDetail.jsx';
 import LocationInfo from './page/location/LocationInfo.jsx';
 import ClientList from './page/Client/ClientList.jsx';
+import InventoryPage from './page/sdh/ currentSituation/InventoryPage';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -46,5 +47,7 @@ createRoot(document.getElementById('root')).render(
       <StoragePage/>
       <ClientList/>
     </BrowserRouter>
+    <InventoryPage/>
+    {/*<QrTestPage />*/}
   </StrictMode>
 )
