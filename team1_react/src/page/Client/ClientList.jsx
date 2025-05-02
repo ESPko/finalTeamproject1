@@ -12,7 +12,6 @@ function ClientList() {
 
   const clients = [
     {
-      clientType: '입고처',
       clientName: '임시입고거래처1',
       clientPhoneNumber: '010-1234-5678',
       clientEmail: 'example@email.com',
@@ -20,7 +19,104 @@ function ClientList() {
       clientNote: ' 매월 정기납품'
     },
     {
-      clientType: '출고처',
+      clientName: '임시입고거래처2',
+      clientPhoneNumber: '010-1234-5678',
+      clientEmail: 'example@email.com',
+      clientAddress: '서울특별시 강남구 ...',
+      clientNote: 'VIP 거래처'
+    },
+    {
+      clientName: '임시입고거래처1',
+      clientPhoneNumber: '010-1234-5678',
+      clientEmail: 'example@email.com',
+      clientAddress: '서울특별시 강남구 ...',
+      clientNote: ' 매월 정기납품'
+    },
+    {
+      clientName: '임시입고거래처2',
+      clientPhoneNumber: '010-1234-5678',
+      clientEmail: 'example@email.com',
+      clientAddress: '서울특별시 강남구 ...',
+      clientNote: 'VIP 거래처'
+    },
+    {
+      clientName: '임시입고거래처1',
+      clientPhoneNumber: '010-1234-5678',
+      clientEmail: 'example@email.com',
+      clientAddress: '서울특별시 강남구 ...',
+      clientNote: ' 매월 정기납품'
+    },
+    {
+      clientName: '임시입고거래처2',
+      clientPhoneNumber: '010-1234-5678',
+      clientEmail: 'example@email.com',
+      clientAddress: '서울특별시 강남구 ...',
+      clientNote: 'VIP 거래처'
+    },
+    {
+      clientName: '임시입고거래처1',
+      clientPhoneNumber: '010-1234-5678',
+      clientEmail: 'example@email.com',
+      clientAddress: '서울특별시 강남구 ...',
+      clientNote: ' 매월 정기납품'
+    },
+    {
+      clientName: '임시입고거래처2',
+      clientPhoneNumber: '010-1234-5678',
+      clientEmail: 'example@email.com',
+      clientAddress: '서울특별시 강남구 ...',
+      clientNote: 'VIP 거래처'
+    },
+    {
+      clientName: '임시입고거래처1',
+      clientPhoneNumber: '010-1234-5678',
+      clientEmail: 'example@email.com',
+      clientAddress: '서울특별시 강남구 ...',
+      clientNote: ' 매월 정기납품'
+    },
+    {
+      clientName: '임시입고거래처2',
+      clientPhoneNumber: '010-1234-5678',
+      clientEmail: 'example@email.com',
+      clientAddress: '서울특별시 강남구 ...',
+      clientNote: 'VIP 거래처'
+    },
+    {
+      clientName: '임시입고거래처1',
+      clientPhoneNumber: '010-1234-5678',
+      clientEmail: 'example@email.com',
+      clientAddress: '서울특별시 강남구 ...',
+      clientNote: ' 매월 정기납품'
+    },
+    {
+      clientName: '임시입고거래처2',
+      clientPhoneNumber: '010-1234-5678',
+      clientEmail: 'example@email.com',
+      clientAddress: '서울특별시 강남구 ...',
+      clientNote: 'VIP 거래처'
+    },
+    {
+      clientName: '임시입고거래처1',
+      clientPhoneNumber: '010-1234-5678',
+      clientEmail: 'example@email.com',
+      clientAddress: '서울특별시 강남구 ...',
+      clientNote: ' 매월 정기납품'
+    },
+    {
+      clientName: '임시입고거래처2',
+      clientPhoneNumber: '010-1234-5678',
+      clientEmail: 'example@email.com',
+      clientAddress: '서울특별시 강남구 ...',
+      clientNote: 'VIP 거래처'
+    },
+    {
+      clientName: '임시입고거래처1',
+      clientPhoneNumber: '010-1234-5678',
+      clientEmail: 'example@email.com',
+      clientAddress: '서울특별시 강남구 ...',
+      clientNote: ' 매월 정기납품'
+    },
+    {
       clientName: '임시입고거래처2',
       clientPhoneNumber: '010-1234-5678',
       clientEmail: 'example@email.com',
@@ -42,17 +138,17 @@ function ClientList() {
 
 
   return (
-    <div className=" flex-1 p-6 overflow-y-auto ">
-      <div className="bg-white rounded shadow p-4 h-full min-w-[100px] overflow-auto" style={{ padding: '0px 40px 80px 40px' }}>
+    <div className=" flex-1 p-6 overflow-y-auto">
+      <div className="bg-white rounded shadow p-4 min-x-[100vh]  min-h-[80vh] " style={{ padding: '0px 40px 80px 40px' }} >
     <div>
       <Topline
-        title="거래처"
+        title="매입처"
         actions={
           <button
             onClick={() => setClientAdd(true)}
             className="bg-blue-600 text-white px-4 py-2 rounded"
           >
-            거래처 추가
+            매입처 추가
           </button>
         }
       >
@@ -72,29 +168,27 @@ function ClientList() {
           </div>
 
           {/* 테이블 */}
-          <div className="overflow-auto w-full pretty-scrollbar flex-auto m-3 mt-4 text-center">
+          <div className="overflow-auto w-max pretty-scrollbar flex-auto m-3 mt-4 text-center">
             <table className="min-w-full table-fixed border-collapse">
               <thead className="bg-white">
-              <tr className="bg-white sticky top-0 z-30 border-b text-left">
-                <th className="py-2 px-4">종류</th>
-                <th className="py-2 px-4">이름</th>
-                <th className="py-2 px-4">전화번호</th>
-                <th className="py-2 px-4">이메일</th>
-                <th className="py-2 px-4">주소</th>
-                <th className="py-2 px-4">메모</th>
+              <tr className="bg-white sticky top-0 z-30 border-b text-center">
+                <th className="py-2 px-4 w-[300px]">이름</th>
+                <th className="py-2 px-4 w-[200px]">전화번호</th>
+                <th className="py-2 px-4 w-[240px]">이메일</th>
+                <th className="py-2 px-4 w-[400px]">주소</th>
+                <th className="py-2 px-4 w-[350px]">메모</th>
               </tr>
               </thead>
               <tbody>
               {clients.map((client, idx) => (
                 <tr key={idx}
                     onClick={()=> clientClick(client)}
-                    className="border-b border-gray-200 text-left">
-                  <td className="py-2 px-4">{client.clientType}</td>
-                  <td className="py-2 px-4">{client.clientName}</td>
-                  <td className="py-2 px-4">{client.clientPhoneNumber}</td>
-                  <td className="py-2 px-4">{client.clientEmail}</td>
-                  <td className="py-2 px-4">{client.clientAddress}</td>
-                  <td className="py-2 px-4">{client.clientNote}</td>
+                    className="border-b border-gray-200 text-center">
+                  <td className="py-2 px-4  w-[300px] ">{client.clientName}</td>
+                  <td className="py-2 px-4 w-[200px]">{client.clientPhoneNumber}</td>
+                  <td className="py-2 px-4 w-[240px] ">{client.clientEmail}</td>
+                  <td className="py-2 px-4 w-[400px] ">{client.clientAddress}</td>
+                  <td className="py-2 px-4 w-[350px]">{client.clientNote}</td>
                 </tr>
               ))}
               </tbody>
@@ -126,7 +220,7 @@ function ClientList() {
       <Modal
         isOpen={clientDetailModal}
         onClose={() => setClientDetailModal(false)}
-        title="거래처 수정"
+        title="매입처 수정"
         footer={
           <>
             <button className="bg-blue-600 text-white px-4 py-2 rounded">수정</button>
@@ -134,7 +228,7 @@ function ClientList() {
               onClick={() => setClientDetailModal(false)}
               className="bg-gray-200 text-gray-700 px-4 py-2 rounded"
             >
-              취소
+              삭제
             </button>
           </>
         }

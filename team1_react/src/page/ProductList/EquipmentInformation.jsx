@@ -39,6 +39,66 @@ function EquipmentInformation() {
       vendorName: '회사B',
       orderDate: '2025-04-25',
     },
+    {
+      name: '임시제품1',
+      category: '-',
+      price: '1,000',
+      safetyStock: '10',
+      totalQuantity: '7',
+      tempWarehouse: '임시창고2',
+      vendorName: '회사B',
+      orderDate: '2025-04-25',
+    },
+    {
+      name: '임시제품1',
+      category: '-',
+      price: '1,000',
+      safetyStock: '10',
+      totalQuantity: '7',
+      tempWarehouse: '임시창고2',
+      vendorName: '회사B',
+      orderDate: '2025-04-25',
+    },
+    {
+      name: '임시제품1',
+      category: '-',
+      price: '1,000',
+      safetyStock: '10',
+      totalQuantity: '7',
+      tempWarehouse: '임시창고2',
+      vendorName: '회사B',
+      orderDate: '2025-04-25',
+    },
+    {
+      name: '임시제품1',
+      category: '-',
+      price: '1,000',
+      safetyStock: '10',
+      totalQuantity: '7',
+      tempWarehouse: '임시창고2',
+      vendorName: '회사B',
+      orderDate: '2025-04-25',
+    },
+    {
+      name: '임시제품1',
+      category: '-',
+      price: '1,000',
+      safetyStock: '10',
+      totalQuantity: '7',
+      tempWarehouse: '임시창고2',
+      vendorName: '회사B',
+      orderDate: '2025-04-25',
+    },
+    {
+      name: '임시제품1',
+      category: '-',
+      price: '1,000',
+      safetyStock: '10',
+      totalQuantity: '7',
+      tempWarehouse: '임시창고2',
+      vendorName: '회사B',
+      orderDate: '2025-04-25',
+    },
   ];
 
   //   컬럼 설정
@@ -71,8 +131,8 @@ function EquipmentInformation() {
 
 
   return (
-    <div className=" flex-1 p-6 overflow-y-auto ">
-      <div className="bg-white rounded shadow p-4 h-full min-w-[100px] overflow-auto" style={{ padding: '0px 40px 80px 40px' }}>
+    <div className=" flex-1 p-6 overflow-y-auto">
+      <div className="bg-white rounded shadow p-4 min-x-[100vh]  min-h-[80vh] " style={{ padding: '0px 40px 80px 40px' }} >
     <div>
       <Topline
         title="비품"
@@ -86,61 +146,59 @@ function EquipmentInformation() {
         }
       >
         <div >
-          {/* 검색창 */}
-          <div className="flex items-center justify-between m-3">
 
-            <div className="relative w-full max-w-md min-h-[36px] bg-white border border-[#cbccd3] rounded-md flex items-center transition-all duration-100">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <SearchIcon />
-              </div>
-              <input
-                type="text"
-                placeholder="비품명, 속성 검색"
-                className="pl-10 pr-4 py-2 w-full focus:outline-none"
-              />
-            </div>
-
-            <div className="relative ml-4">
-              <div
-                className="flex items-center bg-white border border-[#cbccd3] rounded-md px-3 py-2 cursor-pointer hover:shadow"
-                onClick={() => setShowSettings(!showSettings)}
-              >
-                <FiSettings className="h-5 w-5 text-gray-400 mr-2" />
-                <span>컬럼 설정</span>
-              </div>
-              {showSettings && (
-                <div className="absolute top-12 right-0 bg-white border rounded shadow p-2 z-50 inline-block">
-                  {Object.keys(visibleColumns).map((key) => (
-                    <div key={key} className="inline-flex items-center mb-2">
-                      <input
-                        type="checkbox"
-                        id={key}
-                        checked={visibleColumns[key]}
-                        onChange={() => toggleColumn(key)}
-                        className="mr-2"
-                      />
-                      <label htmlFor={key}>
-                        {({
-                          category: '카테고리',
-                          vendorName: '매입회사',
-                          price: '매입가',
-                          orderDate: '매입날짜',
-                          safetyStock: '적정재고',
-                          totalQuantity: '현재재고',
-                          tempWarehouse: '창고 위치',
-                        })[key]}
-                      </label>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-
-
-
-          {/* 테이블 */}
           <div className="overflow-auto w-max pretty-scrollbar flex-auto m-3 mt-4 text-center">
+            {/* 검색창 */}
+            <div className="flex  items-center justify-between m-3">
+
+              <div className="relative w-full max-w-md min-h-[36px] bg-white border border-[#cbccd3] rounded-md flex items-center transition-all duration-100">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <SearchIcon />
+                </div>
+                <input
+                  type="text"
+                  placeholder="비품명, 속성 검색"
+                  className="pl-10 pr-4 py-2 w-full focus:outline-none"
+                />
+              </div>
+
+              <div className="relative ml-4">
+                <div
+                  className="flex items-center bg-white border border-[#cbccd3] rounded-md px-3 py-2 cursor-pointer hover:shadow"
+                  onClick={() => setShowSettings(!showSettings)}
+                >
+                  <FiSettings className="h-5 w-5 text-gray-400 mr-2" />
+                  <span>컬럼 설정</span>
+                </div>
+                {showSettings && (
+                  <div className="absolute top-12 right-0 bg-white border rounded shadow p-2 z-50 inline-block">
+                    {Object.keys(visibleColumns).map((key) => (
+                      <div key={key} className="inline-flex items-center mb-2">
+                        <input
+                          type="checkbox"
+                          id={key}
+                          checked={visibleColumns[key]}
+                          onChange={() => toggleColumn(key)}
+                          className="mr-2"
+                        />
+                        <label htmlFor={key}>
+                          {({
+                            category: '카테고리',
+                            vendorName: '매입회사',
+                            price: '매입가',
+                            orderDate: '매입날짜',
+                            safetyStock: '적정재고',
+                            totalQuantity: '현재재고',
+                            tempWarehouse: '창고 위치',
+                          })[key]}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+            {/* 테이블 */}
             <table className="w-full table-flex border-collapse ">
               <thead className="bg-white">
               <tr className="bg-white sticky top-0 z-30 border-b">
