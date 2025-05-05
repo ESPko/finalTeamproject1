@@ -13,25 +13,34 @@ import TestPage4 from './page/TestPage4.jsx';
 import TestPage5 from './page/TestPage5.jsx';
 import TestPage6 from './page/TestPage6.jsx';
 import AxiosTest from './components/AxiosTest.jsx';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <AxiosTest />
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<App />}>
-          <Route index element={<MainPage />} />
-          <Route path={'/test1'} element={<TestPage1 />} />
-          <Route path={'/test2'} element={<TestPage2 />} />
-          <Route path={'/test3'} element={<TestPage3 />} />
-          <Route path={'/test4'} element={<TestPage4 />} />
-          <Route path={'/test5'} element={<TestPage5 />} />
-          <Route path={'/test6'} element={<TestPage6 />} />
-        </Route>
+        {/* 로그인 없이 접근 가능 */}
         <Route path="/login" element={<Login4 />} />
         <Route path="*" element={<ErrorPage />} />
-      </Routes>
 
+        {/* 로그인 상태여야 접근 가능 */}
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <App />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<MainPage />} />
+          <Route path="/test1" element={<TestPage1 />} />
+          <Route path="/test2" element={<TestPage2 />} />
+          <Route path="/test3" element={<TestPage3 />} />
+          <Route path="/test4" element={<TestPage4 />} />
+          <Route path="/test5" element={<TestPage5 />} />
+          <Route path="/test6" element={<TestPage6 />} />
+        </Route>
+      </Routes>
     </BrowserRouter>
   </StrictMode>
 )

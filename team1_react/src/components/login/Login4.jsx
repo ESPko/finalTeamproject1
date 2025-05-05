@@ -2,16 +2,21 @@ import React, { useState } from "react";
 import { Eye, EyeOff } from 'lucide-react';
 import Header from '../layout/Header.jsx';
 import { useNavigate } from 'react-router-dom';
+import axiosInstance from '../../api/axiosInstance.jsx';
 
 export default function Login3() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+
+  const [token, setToken] = useState(localStorage.getItem('token') || '');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = () => {
+  // 로그인 요청
+  const handleLogin = async () => {
     setLoading(true);
     setError("");
 
@@ -25,7 +30,22 @@ export default function Login3() {
         setError("아이디 또는 비밀번호가 올바르지 않습니다.");
       }
     }, 2000);
+
+    try {
+      const response = await axiosInstance.post('../api/login', {
+        id: username,
+        pass: password,
+      });
+
+      const receivedToken = response.data.token;
+      setToken(receivedToken);
+      localStorage.setItem('token', receivedToken);
+      console.log('Login success:', response.data);
+    } catch (error) {
+      console.error('Login failed:', error);
+    }
     navigate(`/`);
+
   };
 
   return (

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from 'react';
+import axiosInstance from '../api/axiosInstance.jsx';
 
 function AxiosTest() {
   const [token, setToken] = useState(localStorage.getItem('token') || '');
@@ -9,7 +10,7 @@ function AxiosTest() {
   // 로그인 요청
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://localhost:8080/api/login', {
+      const response = await axiosInstance.post('../api/login', {
         id: username,
         pass: password,
       });
@@ -29,6 +30,7 @@ function AxiosTest() {
     localStorage.removeItem('token');
   };
 
+
     const sendDataTest = () => {
         axios.get("http://localhost:8080/user")
           .then(res => {
@@ -40,11 +42,6 @@ function AxiosTest() {
               console.log(err)
           })
     }
-
-
-
-
-
 
     return (
 
