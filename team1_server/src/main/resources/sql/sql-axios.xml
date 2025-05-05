@@ -6,4 +6,11 @@
     <select id="selectEmployeeList" resultType="bitc.fullstack503.team1_server.dto.UserDTO">
         select * from user;
     </select>
+
+    <select id="findByUsername" resultType="bitc.fullstack503.team1_server.dto.UserDTO">
+        SELECT * FROM user WHERE id = #{id}
+    </select>
+
+
+
 </mapper>
