@@ -51,27 +51,32 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _infoBlock(context, '아이템 이름', item.name),
-                    const SizedBox(height: 20),
-                    _infoBlock(context, '카테고리', item.category),
-                    const SizedBox(height: 20),
-                    _infoBlock(context, '공급처', item.vendorName),
-                    const SizedBox(height: 20),
-                    _infoBlock(context, '창고 이름', item.warehouseName),
-                    const SizedBox(height: 20),
-                    _infoBlock(context, '수량', '${item.quantity}'),
-                    const SizedBox(height: 20),
-                    _infoBlock(context, '규격', '${item.standard}'),
-                    const SizedBox(height: 20),
-                    _infoBlock(context, '가격', '${item.price}'),
-                    const SizedBox(height: 20),
-                    _infoBlock(context, '등록 시간', item.time.toLocal().toString()), // 시간 포맷 조정
-
-                    const SizedBox(height: 30),
                     // 이미지 추가 (이미지 URL을 실제로 화면에 표시하는 부분)
                     if (item.image.isNotEmpty)
-                      Image.network(item.image, height: 200, fit: BoxFit.cover),
-                    const SizedBox(height: 20),
+                      Center(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Image.network(item.image, height: 250, fit: BoxFit.cover),
+                        ),
+                      ),
+                    const SizedBox(height: 30),
+
+                    _buildInfoBox(context, '아이템 정보', [
+                      _buildInfoRow('아이템 이름', item.name),
+                      _buildInfoRow('카테고리', item.category),
+                      _buildInfoRow('공급처', item.vendorName),
+                      _buildInfoRow('창고 이름', item.warehouseName),
+                    ]),
+
+                    _buildInfoBox(context, '재고 및 규격', [
+                      _buildInfoRow('수량', '${item.quantity}'),
+                      _buildInfoRow('규격', '${item.standard}'),
+                      _buildInfoRow('가격', '${item.price}'),
+                    ]),
+
+                    _buildInfoBox(context, '기타 정보', [
+                      _buildInfoRow('등록 시간', item.time.toLocal().toString()),
+                    ]),
                   ],
                 ),
               );
@@ -82,14 +87,37 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
     );
   }
 
-  Widget _infoBlock(BuildContext context, String title, String value) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(title, style: Theme.of(context).textTheme.labelLarge),
-        const SizedBox(height: 6),
-        Text(value, style: Theme.of(context).textTheme.titleMedium),
-      ],
+  Widget _buildInfoBox(BuildContext context, String title, List<Widget> rows) {
+    return Card(
+      elevation: 4,
+      margin: const EdgeInsets.only(bottom: 16),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 12),
+            ...rows,
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(String title, String value) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+          Text(value, style: const TextStyle(fontSize: 16)),
+        ],
+      ),
     );
   }
 }
