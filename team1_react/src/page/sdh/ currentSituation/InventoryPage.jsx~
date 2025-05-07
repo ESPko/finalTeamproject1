@@ -104,7 +104,9 @@ function InventoryPage ()
       <div className="bg-white rounded shadow p-4 min-x-[100vh]  min-h-[80vh] "
            style={{ padding: '0px 40px 80px 40px' }}>
         <div>
-          <Topline title="입출고 조회">
+          <Topline
+            title="입출고 조회"
+          >
             <InventoryNavigation
               selectedLocations={selectedLocations}
               setSelectedLocations={setSelectedLocations}

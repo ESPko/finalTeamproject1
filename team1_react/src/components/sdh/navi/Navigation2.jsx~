@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import CalendarNavi from './CalendarNavi.jsx';
 import SearchInput from './SearchInput.jsx';
-import Location from './Location.jsx';
-import Correspondent from './Correspondent.jsx';
+import OutboundPerson from './OutboundPerson.jsx';
+import Department from './Department.jsx';
 
 function Navigation ()
 {
-  const [selectedLocations, setSelectedLocations] = useState([]);
-  const [selectedCorrespondents, setSelectedCorrespondents] = useState([]);
+  const [selectedDepartments, setSelectedDepartments] = useState([]);
+  const [selectedOutboundPerson, setSelectedOutboundPerson] = useState([]);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [tags, setTags] = useState([]);
@@ -23,8 +23,8 @@ function Navigation ()
         }}
       />
       <SearchInput tags={tags} setTags={setTags} />
-      <Location selected={selectedLocations} setSelected={setSelectedLocations} />
-      <Correspondent selected={selectedCorrespondents} setSelected={setSelectedCorrespondents} />
+      <Department selected={selectedDepartments} setSelected={setSelectedDepartments} />
+      <OutboundPerson selected={selectedOutboundPerson} setSelected={setSelectedOutboundPerson} />
     </div>
   );
 }

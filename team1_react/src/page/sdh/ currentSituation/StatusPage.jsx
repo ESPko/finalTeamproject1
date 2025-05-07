@@ -1,16 +1,11 @@
-import InventoryNavigation from '../../../components/sdh/navi/InventoryNavigation.jsx';
 import Topline from '../../../components/layout/Topline.jsx';
-import InventoryTableBody from '../../../components/sdh/inventory/InventoryTableBody.jsx';
 import { useEffect, useState } from 'react';
+import StatusNavigation from '../../../components/sdh/navi/StatusNavigation.jsx';
+import StatusTableBody from '../../../components/sdh/inventory/StatusTableBody.jsx';
 
-function InventoryPage ()
+function StatusPage ()
 {
   const [products, setProducts] = useState([]);
-  const [selectedLocations, setSelectedLocations] = useState([]);
-  const [selectedCorrespondents, setSelectedCorrespondents] = useState([]);
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
-  const [tags, setTags] = useState([]);
   
   let data = [
     {
@@ -18,20 +13,22 @@ function InventoryPage ()
       name: '볼펜',
       tempWarehouse: '임시창고1',
       vendorName: '회사A',
-      inbound: 3,
-      outbound: 2,
-      adjusted: 0,
-      totalQuantity: 1,
+      department: '부서A',
+      outboundPerson: '홍길동',
+      beforeQuantity: 3,
+      afterQuantity: 1,
+      date: '2023-01-01 11:22:33',
     },
     {
+      image: 'https://i.postimg.cc/6QHKxZB9/4.png',
       name: 'A4용지',
-      inbound: 8,
-      outbound: 2,
-      adjusted: 0,
-      totalQuantity: 6,
       tempWarehouse: '임시창고2',
       vendorName: '회사A',
-      image: 'https://i.postimg.cc/6QHKxZB9/4.png',
+      department: '부서B',
+      outboundPerson: '전우치',
+      beforeQuantity: 6,
+      afterQuantity: 3,
+      date: '2023-01-01 11:44:55',
     },
     {
       name: '임시제품1',
@@ -104,19 +101,10 @@ function InventoryPage ()
       <div className="bg-white rounded shadow p-4 min-x-[100vh]  min-h-[80vh] "
            style={{ padding: '0px 40px 80px 40px' }}>
         <div>
-          <Topline title="입출고 조회">
-            <InventoryNavigation
-              selectedLocations={selectedLocations}
-              setSelectedLocations={setSelectedLocations}
-              selectedCorrespondents={selectedCorrespondents}
-              setSelectedCorrespondents={setSelectedCorrespondents}
-              startDate={startDate}
-              setStartDate={setStartDate}
-              endDate={endDate}
-              setEndDate={setEndDate}
-              tags={tags}
-              setTags={setTags}
-            />
+          <Topline
+            title="비품 사용 현황"
+          >
+            <StatusNavigation />
             <table className=" table-fixed border-collapse">
               <thead className="bg-white top-0 z-30">
               <tr className="border-b border-gray-300">
@@ -124,13 +112,14 @@ function InventoryPage ()
                 <th className="cell-style w-[200px]">제품명</th>
                 <th className="cell-style w-[180px]">보관위치</th>
                 <th className="cell-style w-[190px]">거래처</th>
-                <th className="cell-style w-[130px]">입고량</th>
-                <th className="cell-style w-[130px]">출고량</th>
-                <th className="cell-style w-[130px]">조정량</th>
-                <th className="cell-style w-[130px]">종료재고</th>
+                <th className="cell-style w-[130px]">부서</th>
+                <th className="cell-style w-[130px]">출고자</th>
+                <th className="cell-style w-[130px]">재고변동</th>
+                <th className="cell-style w-[130px]">수량</th>
+                <th className="cell-style w-[200px]">출고일</th>
               </tr>
               </thead>
-              <InventoryTableBody products={products} />
+              <StatusTableBody products={products} />
             </table>
           </Topline>
         </div>
@@ -140,4 +129,4 @@ function InventoryPage ()
   );
 }
 
-export default InventoryPage;
+export default StatusPage;
