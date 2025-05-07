@@ -3,57 +3,47 @@ import { Eye, EyeOff } from 'lucide-react';
 import Header from '../layout/Header.jsx';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../api/axiosInstance.jsx';
+import { useAuth } from '../../contexts/AuthContext.jsx';
 
-export default function Login3() {
+export default function Login4() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const [token, setToken] = useState(localStorage.getItem('token') || '');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
 
-  // 로그인 요청
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
   const handleLogin = async () => {
     setLoading(true);
     setError("");
 
-    setTimeout(() => {
-      setLoading(false);
-
-      if (username === "admin" && password === "password") {
-        // 로그인 성공 -> 홈화면 이동
-        // navigate("/home");
-      } else {
-        setError("아이디 또는 비밀번호가 올바르지 않습니다.");
-      }
-    }, 2000);
-
     try {
-      const response = await axiosInstance.post('../api/login', {
+      const response = await axiosInstance.post('/api/login', {
         id: username,
         pass: password,
       });
 
-      const receivedToken = response.data.token;
-      setToken(receivedToken);
-      localStorage.setItem('token', receivedToken);
-      console.log('Login success:', response.data);
+      const { token, user } = response.data;
+
+      login(user, token);
+      console.log('Login success:', user);
+
+      navigate(`/`);
     } catch (error) {
       console.error('Login failed:', error);
+      setError("아이디 또는 비밀번호가 올바르지 않습니다.");
+    } finally {
+      setLoading(false);
     }
-    navigate(`/`);
-
   };
 
   return (
     <>
       <div className="min-h-screen flex items-center justify-center bg-[#fdf8ec] bg-[url('/a.jpg')] bg-repeat bg-cover">
-      {/* 로그인 박스 */}
       <div className="relative bg-white shadow-lg rounded-lg p-8 w-96">
-        {/* 테이프 */}
         <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2
                 bg-blue-900/70 text-white text-sm font-bold uppercase tracking-wide
                 px-8 py-2 rounded-sm shadow-md backdrop-blur-sm opacity-90
