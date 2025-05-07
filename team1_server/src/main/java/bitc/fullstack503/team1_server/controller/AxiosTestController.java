@@ -18,10 +18,10 @@ public class AxiosTestController
   }
   
   // 파라미터가 없는 GET 방식 통신 (전체 검색)
-  @GetMapping ("/employee")
-  public Object selectEmployeeList () throws Exception
-  {
-    List<EmployeeDTO> employeeList = axiosService.selectEmployeeList ();
-    return employeeList;
-  }
+//  @GetMapping ("/employee")
+//  public Object selectEmployeeList () throws Exception
+//  {
+//    List<EmployeeDTO> employeeList = axiosService.selectEmployeeList ();
+//    return employeeList;
+//  }
 }

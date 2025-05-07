@@ -10,9 +10,9 @@ public class AxioserviceImpl implements AxiosService
   @Autowired
   private AxiosMapper axiosMapper;
   
-  @Override
-  public List<EmployeeDTO> selectEmployeeList () throws Exception
-  {
-    return axiosMapper.selectEmployeeList ();
-  }
+//  @Override
+//  public List<EmployeeDTO> selectEmployeeList () throws Exception
+//  {
+//    return axiosMapper.selectEmployeeList ();
+//  }
 }

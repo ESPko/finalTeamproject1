@@ -3,7 +3,7 @@
 
 <mapper namespace="bitc.fullstack503.team1_server.mapper.AxiosMapper">
     <!-- 파라미터가 없는 GET 방식 통신 (전체 검색) -->
-    <select id="selectEmployeeList" resultType="bitc.fullstack503.team1_server.dto.EmployeeDTO">
-        select * from employee;
-    </select>
+<!--    <select id="selectEmployeeList" resultType="bitc.fullstack503.team1_server.dto.EmployeeDTO">-->
+<!--        select * from employee;-->
+<!--    </select>-->
 </mapper>

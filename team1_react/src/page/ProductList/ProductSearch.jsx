@@ -24,8 +24,6 @@ function ProductSearch() {
 
   const [selectedWarehouse, setSelectedWarehouse] =useState('위치 선택')
 
-  // const [dropdownMenu, setDropdownMenu] = useState(false)
-
   const changSearch = (e) =>{
     setSearch(e.target.value);
   };
@@ -51,77 +49,72 @@ function ProductSearch() {
   return (
     <div className=" flex-1 p-6 overflow-y-auto">
       <div className="bg-white rounded shadow p-4 min-x-[100vh]  min-h-[80vh] " style={{ padding: '0px 40px 80px 40px' }} >
-    <div>
-      <Topline title="비품 검색"
-      actions={
-      <button
-        className="bg-blue-600 text-white px-4 py-2 rounded">제품 추가</button>
-      }
-      >
         <div>
-          <div className="bg-white m-3 w-full p-6 rounded ">
-            <div className="flex justify-between items-center gap-4 mb-6">
+          <Topline title="비품 검색"
+          >
+            <div>
+              <div className="bg-white m-3 max-w-full p-6 rounded ">
+                <div className="flex  items-center gap-4 mb-6">
 
-              {/* 창고 위치 선택 드롭다운 메뉴 */}
-              <div className="mb-4">
-                <label className="font-semibold mb-2 block">창고 선택</label>
-                <select
-                  value={selectedWarehouse}
-                  onChange={(e) => {
-                    setSelectedWarehouse(e.target.value)
-                    warehouseSelect(e.target.value)
-                  }}
-                  className="w-full border border-gray-300 rounded px-3 py-2">
-                  {['모든 창고', '창고 1','창고 2','창고 3','창고 4',].map((name) => (
-                    <option key={name} value={name}>{name}</option>
-                  ))}
-                </select>
-              </div>
+                  {/* 창고 위치 선택 드롭다운 메뉴 */}
+                  <div className="mb-4">
+                    <label className="font-semibold mb-2 block">창고 선택</label>
+                    <select
+                      value={selectedWarehouse}
+                      onChange={(e) => {
+                        setSelectedWarehouse(e.target.value)
+                        warehouseSelect(e.target.value)
+                      }}
+                      className="w-full border border-gray-300 rounded px-3 py-2">
+                      {['모든 창고', '창고 1','창고 2','창고 3','창고 4',].map((name) => (
+                        <option key={name} value={name}>{name}</option>
+                      ))}
+                    </select>
+                  </div>
 
-              {/* 검색창 */}
-              <div className="flex items-center flex-grow max-w-[1000px]">
-                <input
-                  type="text"
-                  value={search}
-                  onChange={changSearch}
-                  placeholder="찾으시는 비품의 이름을 입력하세요"
-                  className="flex-grow border border-gray-300 px-4 py-2 rounded-l outline-none"
-                />
-                <button
-                  onClick={searchProduct}
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-r"
-                >
-                  {/*<img src="src/productImg/search.png" width={'27px'}/>*/}
-                  <SearchIcon />
-                </button>
+                  {/* 검색창 */}
+                  <div className="flex items-center flex-grow max-w-[800px] mt-3">
+                    <input
+                      type="text"
+                      value={search}
+                      onChange={changSearch}
+                      placeholder="찾으시는 비품의 이름을 입력하세요"
+                      className="flex-grow border border-gray-300 px-4 py-2 rounded-l outline-none"
+                    />
+                    <button
+                      onClick={searchProduct}
+                      className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-r"
+                    >
+                      {/*<img src="src/productImg/search.png" width={'27px'}/>*/}
+                      <SearchIcon />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex gap-6">
+                  <div className="w-1/2 mt-12 p-3">
+                    {/* 비품 리스트 */}
+                    {filteredProducts.length > 0 ? (
+                      <ProductSearchItem
+                        products={filteredProducts}
+                        onSelectedProduct={setSelectedProduct}
+                      />
+                    ) : (
+                      <NoResultProduct />
+                    )}
+                  </div>
+
+                  <div className="w-1/2 mt-12 p-3">
+                    {/* 상세 보기 */}
+                    <ProductListDetail product={selectedProduct} />
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div className="flex gap-6">
-              <div className="w-1/2 mt-12 p-3">
-                {/* 비품 리스트 */}
-                {filteredProducts.length > 0 ? (
-                  <ProductSearchItem
-                    products={filteredProducts}
-                    onSelectedProduct={setSelectedProduct}
-                  />
-                ) : (
-                  <NoResultProduct />
-                )}
-              </div>
+          </Topline>
 
-              <div className="w-1/2 mt-12 p-3">
-                {/* 상세 보기 */}
-                <ProductListDetail product={selectedProduct} />
-              </div>
-            </div>
-          </div>
         </div>
-
-
-
-      </Topline>
-    </div>
       </div>
     </div>
   );

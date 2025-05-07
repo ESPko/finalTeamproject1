@@ -5,5 +5,5 @@ import java.util.List;
 @Mapper
 public interface AxiosMapper
 {
-  List<EmployeeDTO> selectEmployeeList () throws Exception;
+//  List<EmployeeDTO> selectEmployeeList () throws Exception;
 }
