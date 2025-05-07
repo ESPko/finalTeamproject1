@@ -1,0 +1,4 @@
+package bitc.fullstack503.team1_server.dto;
+
+public class UserDTO {
+}
