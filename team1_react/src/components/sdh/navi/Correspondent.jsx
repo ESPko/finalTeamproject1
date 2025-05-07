@@ -1,34 +1,28 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-function Correspondent ()
+function Correspondent ({ selected, setSelected })
 {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState('');
-  const [selectedCorrespondents, setSelectedCorrespondents] = useState([]);
   const dropdownRef = useRef(null);
   
-  const correspondents = [
-    '임시거래처1',
+  const correspondents = ['임시거래처1',
     '임시거래처2',
     '엄청엄청길어져도되는이름테스트용임시거래처',
     '임시거래처3',
     '임시거래처4',
     'ASDASD',
-    'asdASD',
-  ];
+    'asdASD'];
   
-  const filteredCorrespondents = useMemo(() => {
-    return correspondents.filter((correspondent) =>
-      correspondent.toLowerCase().includes(search.toLowerCase()),
+  const filtered = useMemo(() => {
+    return correspondents.filter((item) =>
+      item.toLowerCase().includes(search.toLowerCase()),
     );
   }, [search]);
   
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target)
-      )
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target))
       {
         setIsOpen(false);
       }
@@ -37,29 +31,23 @@ function Correspondent ()
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
   
-  const toggleCorrespondent = (correspondent) => {
-    setSelectedCorrespondents((prev) =>
-      prev.includes(correspondent)
-        ? prev.filter((item) => item !== correspondent)
-        : [...prev, correspondent],
+  const toggle = (item) => {
+    setSelected((prev) =>
+      prev.includes(item)
+        ? prev.filter((i) => i !== item)
+        : [...prev, item],
     );
   };
   
-  const isChecked = (correspondent) => selectedCorrespondents.includes(correspondent);
-  
-  const displayText =
-    selectedCorrespondents.length > 0
-      ? `거래처 : ${selectedCorrespondents.join(', ')}`
-      : '거래처';
-  
-  const hasSelection = selectedCorrespondents.length > 0;
+  const isChecked = (item) => selected.includes(item);
+  const displayText = selected.length > 0 ? `거래처 : ${selected.join(', ')}` : '거래처';
   
   return (
     <div className="relative inline-block text-left h-auto" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen((prev) => !prev)}
         className={`h-[40px] max-w-[400px] px-4 border overflow-hidden whitespace-nowrap text-ellipsis rounded ${
-          hasSelection
+          selected.length > 0
             ? 'bg-blue-100 text-blue-600 border-blue-300'
             : 'bg-gray-200 text-gray-800 border-gray-300'
         }`}
@@ -77,26 +65,19 @@ function Correspondent ()
             onChange={(e) => setSearch(e.target.value)}
           />
           <ul className="overflow-y-auto max-h-60 p-0">
-            {filteredCorrespondents.map((correspondent, index) => {
-              const inputId = `correspondent-${index}`;
-              return (
-                <li key={inputId} className="hover:bg-gray-100">
-                  <label
-                    htmlFor={inputId}
-                    className="flex items-center px-3 py-2 w-full whitespace-nowrap cursor-pointer"
-                  >
-                    <input
-                      type="checkbox"
-                      id={inputId}
-                      checked={isChecked(correspondent)}
-                      onChange={() => toggleCorrespondent(correspondent)}
-                      className="mr-2 accent-blue-500"
-                    />
-                    <span className="text-gray-800">{correspondent}</span>
-                  </label>
-                </li>
-              );
-            })}
+            {filtered.map((item, index) => (
+              <li key={index} className="hover:bg-gray-100">
+                <label className="flex items-center px-3 py-2 w-full whitespace-nowrap cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={isChecked(item)}
+                    onChange={() => toggle(item)}
+                    className="mr-2 accent-blue-500"
+                  />
+                  <span className="text-gray-800">{item}</span>
+                </label>
+              </li>
+            ))}
           </ul>
         </div>
       )}
