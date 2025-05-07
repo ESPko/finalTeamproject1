@@ -21,19 +21,19 @@ class InventoryMainPage extends StatefulWidget {
 class _InventoryMainPageState extends State<InventoryMainPage> {
   final String today = DateFormat('MM월 dd일').format(DateTime.now());
 
-  final PageController _carouselController = PageController();
-  int _currentPage = 0;
-
-  // 배너 이미지 URL 리스트
-  final List<String> _images = [
-    'https://i.postimg.cc/rmb6kNDj/banner1.jpg',
-    'https://i.postimg.cc/J7D0BT51/banner2.jpg',
-    'https://i.postimg.cc/MX2hcZbj/banner3.jpg',
-    'https://i.postimg.cc/cC8p4tYS/banner4.jpg',
-    'https://i.postimg.cc/2js6d40n/banner5.jpg',
-  ];
-
-  Timer? _timer;
+  // final PageController _carouselController = PageController();
+  // int _currentPage = 0;
+  //
+  // // 배너 이미지 URL 리스트
+  // final List<String> _images = [
+  //   'https://i.postimg.cc/rmb6kNDj/banner1.jpg',
+  //   'https://i.postimg.cc/J7D0BT51/banner2.jpg',
+  //   'https://i.postimg.cc/MX2hcZbj/banner3.jpg',
+  //   'https://i.postimg.cc/cC8p4tYS/banner4.jpg',
+  //   'https://i.postimg.cc/2js6d40n/banner5.jpg',
+  // ];
+  //
+  // Timer? _timer;
 
   // 더미 상품 데이터
   final List<Map<String, dynamic>> _products = [
@@ -44,32 +44,32 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
     {'name': '제품E', 'company': '회사5', 'currentStock': 5, 'optimalStock': 40},
   ];
 
-  @override
-  void initState() {
-    super.initState();
-    _startAutoCarousel();
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
-
-  void _startAutoCarousel() {
-    _timer = Timer.periodic(Duration(seconds: 3), (timer) {
-      if (_currentPage < _images.length - 1) {
-        _currentPage++;
-      } else {
-        _currentPage = 0;
-      }
-      _carouselController.animateToPage(
-        _currentPage,
-        duration: Duration(milliseconds: 1000),
-        curve: Curves.easeInOut,
-      );
-    });
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _startAutoCarousel();
+  // }
+  //
+  // @override
+  // void dispose() {
+  //   _timer?.cancel();
+  //   super.dispose();
+  // }
+  //
+  // void _startAutoCarousel() {
+  //   _timer = Timer.periodic(Duration(seconds: 3), (timer) {
+  //     if (_currentPage < _images.length - 1) {
+  //       _currentPage++;
+  //     } else {
+  //       _currentPage = 0;
+  //     }
+  //     _carouselController.animateToPage(
+  //       _currentPage,
+  //       duration: Duration(milliseconds: 1000),
+  //       curve: Curves.easeInOut,
+  //     );
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -85,8 +85,8 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildCarousel(),
-              SizedBox(height: 16),
+              // _buildCarousel(),
+              // SizedBox(height: 16),
               _buildSummaryCard(),
               SizedBox(height: 16),
               _buildProductList(), // 리스트 형태로 변경
@@ -97,45 +97,45 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
     );
   }
 
-  // 1. 캐러셀 위젯
-  Widget _buildCarousel() {
-    return Padding(
-      padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-      child: Container(
-        height: 200, // 갤24 기준 160이면 적당함, 플러터 크롬웹 기준 220
-        child: PageView.builder(
-          controller: _carouselController,
-          itemCount: _images.length,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image.network(
-                  _images[index],
-                  fit: BoxFit.fill,
-                  height: double.infinity,
-                  width: double.infinity,
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Center(child: CircularProgressIndicator());
-                  },
-                  errorBuilder: (context, error, stackTrace) {
-                    return Center(child: Icon(Icons.error));
-                  },
-                ),
-              ),
-            );
-          },
-          onPageChanged: (index) {
-            setState(() {
-              _currentPage = index;
-            });
-          },
-        ),
-      ),
-    );
-  }
+  // // 1. 캐러셀 위젯
+  // Widget _buildCarousel() {
+  //   return Padding(
+  //     padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+  //     child: Container(
+  //       height: 200, // 갤24 기준 160이면 적당함, 플러터 크롬웹 기준 220
+  //       child: PageView.builder(
+  //         controller: _carouselController,
+  //         itemCount: _images.length,
+  //         itemBuilder: (context, index) {
+  //           return Padding(
+  //             padding: const EdgeInsets.symmetric(horizontal: 0),
+  //             child: ClipRRect(
+  //               borderRadius: BorderRadius.circular(20),
+  //               child: Image.network(
+  //                 _images[index],
+  //                 fit: BoxFit.fill,
+  //                 height: double.infinity,
+  //                 width: double.infinity,
+  //                 loadingBuilder: (context, child, loadingProgress) {
+  //                   if (loadingProgress == null) return child;
+  //                   return Center(child: CircularProgressIndicator());
+  //                 },
+  //                 errorBuilder: (context, error, stackTrace) {
+  //                   return Center(child: Icon(Icons.error));
+  //                 },
+  //               ),
+  //             ),
+  //           );
+  //         },
+  //         onPageChanged: (index) {
+  //           setState(() {
+  //             _currentPage = index;
+  //           });
+  //         },
+  //       ),
+  //     ),
+  //   );
+  // }
 
 
   // 2. 오늘 날짜 및 요약 카드
