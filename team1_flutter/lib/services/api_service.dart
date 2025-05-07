@@ -24,7 +24,7 @@ class ApiService {
   }
 
   // ✅ ID로 특정 아이템 조회
-  Future<Item> fetchItemById(String itemId) async {
+  Future<Item> fetchItemById(int itemId) async {
     try {
       final response = await dio.get('$baseUrl/$itemId'); // `/items/아이디` 요청
 

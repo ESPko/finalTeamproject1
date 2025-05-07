@@ -6,8 +6,8 @@
     SELECT * FROM item
   </select>
 
-  <select id="getItemByCode" parameterType="String" resultType="bitc.fullstack503.team1_server.dto.ItemDTO">
-    SELECT * FROM item WHERE code = #{code}
+  <select id="getItemByCode" parameterType="int" resultType="bitc.fullstack503.team1_server.dto.ItemDTO">
+    SELECT * FROM item WHERE idx = #{idx}
   </select>
 
   <update id="updateItem" parameterType="bitc.fullstack503.team1_server.dto.ItemDTO">
@@ -15,7 +15,7 @@
     SET name = #{name}, category = #{category}, vendor_name = #{vendorName}, warehouse_name = #{warehouseName},
         quantity = #{quantity}, standard = #{standard}, qr = #{qr}, approve = #{approve}, price = #{price},
         image = #{image}, time = #{time}
-    WHERE code = #{code}
+    WHERE idx = #{idx}
   </update>
 
 </mapper>
