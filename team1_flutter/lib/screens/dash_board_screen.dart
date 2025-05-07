@@ -1,12 +1,11 @@
-import 'dart:async';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:test2/screens/qr_scanner_screen.dart';
-import 'package:test2/screens/stock_check.dart';
+import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+import 'package:test2/models/item.dart';
 import '../widgets/custom_qr_icon.dart';
 
-// 메인 대시보드 화면 위젯 (AppBar 포함)
 class DashBoardScreen extends StatelessWidget {
   const DashBoardScreen({Key? key}) : super(key: key);
 
@@ -14,15 +13,14 @@ class DashBoardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('아이템매니아'), // 상단 제목
+        title: Text('아이템매니아'),
         elevation: 0,
       ),
-      body: InventoryMainPage(), // 재고관리 페이지 본체를 호출
+      body: InventoryMainPage(),
     );
   }
 }
 
-// StatefulWidget: 검색 기능과 재고 동적 계산을 위해 상태 관리
 class InventoryMainPage extends StatefulWidget {
   @override
   _InventoryMainPageState createState() => _InventoryMainPageState();
@@ -30,125 +28,143 @@ class InventoryMainPage extends StatefulWidget {
 
 class _InventoryMainPageState extends State<InventoryMainPage> {
   final String today = DateFormat('MM월 dd일').format(DateTime.now()); // 오늘 날짜 표시용
+  List<Item> _items = []; // 아이템 리스트
+  List<Item> _filteredItems = []; // 필터링된 아이템 리스트
+  bool _isLoading = true; // 데이터 로딩 상태
+  TextEditingController _searchController = TextEditingController(); // 검색 입력 컨트롤러
 
-  // 샘플 제품 목록 (제품명, 회사명, 현재재고, 적정재고)
-  final List<Map<String, dynamic>> _products = [
-    {'name': '제품A', 'company': '회사1', 'currentStock': 30, 'optimalStock': 50},
-    {'name': '제품B', 'company': '회사2', 'currentStock': 80, 'optimalStock': 80},
-    {'name': '제품C', 'company': '회사3', 'currentStock': 20, 'optimalStock': 60},
-    {'name': '제품D', 'company': '회사4', 'currentStock': 100, 'optimalStock': 100},
-    {'name': '제품E', 'company': '회사5', 'currentStock': 5, 'optimalStock': 40},
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _fetchItems(); // 화면이 초기화 될 때 데이터를 받아옴
+    _searchController.addListener(_filterItems); // 검색 바의 텍스트 변경에 리스너 추가
+  }
 
-  // 검색어 입력을 저장하는 컨트롤러
-  final TextEditingController _searchController = TextEditingController();
-  // 이 컨트롤러에 사용자가 검색어를 입력하면 해당 값으로 리스트를 필터링할 수 있음
+  // API에서 아이템 데이터를 받아오는 함수
+  Future<void> _fetchItems() async {
+    final response = await http.get(Uri.parse('http://10.100.203.16:8080/api/items'));
 
-  // 현재 모든 제품의 총재고를 계산
-  int getTotalStock() {
-    return _products.fold(0, (sum, product) {
-      int currentStock = product['currentStock'] ?? 0;
-      return sum + currentStock;
+    if (response.statusCode == 200) {
+      List<dynamic> data = json.decode(utf8.decode(response.bodyBytes)); // UTF-8로 디코딩
+      setState(() {
+        _items = data.map((item) => Item.fromJson(item)).toList(); // 받은 데이터를 Item 모델로 변환
+        _filteredItems = _items; // 초기에는 필터링된 아이템도 전체 목록
+        _isLoading = false;
+      });
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
+      throw Exception('아이템 목록을 불러오는 데 실패했습니다.');
+    }
+  }
+
+  // 검색 바의 텍스트를 기반으로 아이템 필터링
+  void _filterItems() {
+    String query = _searchController.text.toLowerCase();
+    setState(() {
+      _filteredItems = _items.where((item) {
+        return item.name.toLowerCase().contains(query) || item.vendorName.toLowerCase().contains(query);
+      }).toList();
     });
   }
 
-  // 모든 제품의 적정재고 총합
-  int getTotalInStock() {
-    return _products.fold(0, (sum, product) {
-      int optimalStock = product['optimalStock'] ?? 0;
-      return sum + optimalStock;
+  // 현재 모든 아이템의 총재고를 계산
+  int getTotalStock() {
+    return _filteredItems.fold(0, (sum, item) {
+      int quantity = item.quantity ?? 0;
+      return sum + quantity;
     });
+  }
+
+  // 아이템 목록을 카드로 출력
+  Widget _buildProductCard() {
+    return Column(
+      children: _filteredItems.map((item) => _buildProductItemCard(item)).toList(),
+    );
+  }
+
+  Widget _buildProductItemCard(Item item) {
+    final bool isStockLow = item.quantity < item.standard;
+
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.3), blurRadius: 10, offset: Offset(0, 5))],
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 80,
+            height: 80,
+            decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(10)),
+            child: Icon(Icons.image, size: 40, color: Colors.white),
+          ),
+          SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(item.name, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                SizedBox(height: 4),
+                Text(item.vendorName, style: TextStyle(fontSize: 16, color: Colors.black54)),
+              ],
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              SizedBox(height: 8),
+              Text('현재재고 ${item.quantity}', style: TextStyle(fontSize: 14, color: Colors.black87)),
+              Text(
+                '적정재고 ${item.standard}',
+                style: TextStyle(fontSize: 14, color: isStockLow ? Colors.red : Colors.black87),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        // 전체 스크롤 가능한 본문
-        SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildSummaryCard(), // 날짜 및 재고 요약 카드
-                SizedBox(height: 16),
-                CustomSearchBar(controller: _searchController), // 검색 입력창
-                SizedBox(height: 16),
-                _buildProductCard(), // 제품 목록 카드들
-              ],
-            ),
-          ),
+    return _isLoading
+        ? Center(child: CircularProgressIndicator()) // 데이터가 로딩 중이면 로딩 화면 표시
+        : SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildSummaryCard(),
+            SizedBox(height: 16),
+            CustomSearchBar(controller: _searchController), // 검색 바 추가
+            SizedBox(height: 16),
+            _buildProductCard(), // 필터링된 아이템 목록 표시
+          ],
         ),
-
-        // 우측 하단에 QR 스캔/재고 알림 버튼 배치
-        Positioned(
-          bottom: 70,
-          right: 16,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              // QR 스캐너 화면으로 이동하는 버튼
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => QRScannerScreen()));
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  shape: CircleBorder(),
-                  padding: EdgeInsets.all(24),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('QR', style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold)),
-                    Text('Scan', style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold)),
-                  ],
-                ),
-              ),
-              SizedBox(width: 16),
-
-              // 재고 알림 화면으로 이동하는 버튼
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => StockCheck()));
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange,
-                  shape: CircleBorder(),
-                  padding: EdgeInsets.all(24),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('재고', style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold)),
-                    Text('알림', style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold)),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
+      ),
     );
   }
 
-  // 상단 날짜 및 요약정보 카드
+  // 상단 요약 카드
   Widget _buildSummaryCard() {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Color(0xFF4F67FF), // 파란 배경
+        color: Color(0xFF4F67FF),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.3), blurRadius: 10, offset: Offset(0, 5))],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 날짜 텍스트 표시
           RichText(
             text: TextSpan(
               children: [
@@ -160,11 +176,11 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
           SizedBox(height: 20),
           Row(
             children: [
-              _buildSummaryText(getTotalStock().toString()), // 총재고
+              _buildSummaryText(getTotalStock().toString()),
               _buildVerticalDivider(),
-              _buildSummaryText(getTotalInStock().toString()), // 총입고
+              _buildSummaryText('0'), // 총입고 예시
               _buildVerticalDivider(),
-              _buildSummaryText('0'), // 총출고 (기능 구현 필요)
+              _buildSummaryText('0'), // 총출고 예시
             ],
           ),
           Row(
@@ -181,7 +197,6 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
     );
   }
 
-  // 숫자 요약 텍스트 위젯
   Widget _buildSummaryText(String text) {
     return Flexible(
       child: Center(
@@ -190,7 +205,6 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
     );
   }
 
-  // 라벨용 텍스트
   Widget _buildSummaryLabel(String text) {
     return Flexible(
       child: Center(
@@ -199,77 +213,14 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
     );
   }
 
-  // 세로 구분선
   Widget _buildVerticalDivider() {
     return Container(
       height: 50,
       child: VerticalDivider(color: Colors.white, thickness: 1, width: 20),
     );
   }
-
-  // 모든 제품 목록을 카드로 출력
-  Widget _buildProductCard() {
-    return Column(
-      children: _products.map((product) => _buildProductItemCard(product)).toList(),
-    );
-  }
-
-  // 개별 제품 정보 카드 위젯
-  Widget _buildProductItemCard(Map<String, dynamic> product) {
-    final bool isStockLow = product['currentStock'] < product['optimalStock']; // 적정재고 미만 여부
-
-    return Container(
-      width: double.infinity,
-      margin: EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.3), blurRadius: 10, offset: Offset(0, 5))],
-      ),
-      child: Row(
-        children: [
-          // 제품 이미지 영역
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(10)),
-            child: Icon(Icons.image, size: 40, color: Colors.white),
-          ),
-          SizedBox(width: 16),
-
-          // 제품명 + 회사명
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(product['name'], style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                SizedBox(height: 4),
-                Text(product['company'], style: TextStyle(fontSize: 16, color: Colors.black54)),
-              ],
-            ),
-          ),
-
-          // 현재 재고 및 적정 재고 (색상으로 경고)
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              SizedBox(height: 8),
-              Text('현재재고 ${product['currentStock']}', style: TextStyle(fontSize: 14, color: Colors.black87)),
-              Text(
-                '적정재고 ${product['optimalStock']}',
-                style: TextStyle(fontSize: 14, color: isStockLow ? Colors.red : Colors.black87),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
 }
 
-// ✅ 커스텀 검색바 위젯
-// 사용자가 제품명을 직접 입력할 수 있으며, 오른쪽에는 QR 기능 버튼도 함께 배치
 class CustomSearchBar extends StatelessWidget {
   final TextEditingController controller;
 
@@ -281,11 +232,11 @@ class CustomSearchBar extends StatelessWidget {
       height: 80,
       padding: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
-        color: Colors.white, // 🔲 검색 바 배경색: 흰색
-        borderRadius: BorderRadius.circular(12), // 모서리 둥글게
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.3), // 그림자 색상
+            color: Colors.grey.withOpacity(0.3),
             blurRadius: 8,
             offset: const Offset(0, 3),
           ),
@@ -293,42 +244,38 @@ class CustomSearchBar extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Icon(Icons.search, color: Colors.grey), // 🔍 왼쪽 돋보기 아이콘
+          const Icon(Icons.search, color: Colors.grey),
           const SizedBox(width: 8),
-
-          // 🔠 텍스트 입력 필드 (검색어 입력)
           Expanded(
             child: TextField(
-              controller: controller, // 사용자가 입력한 검색어를 받아오는 컨트롤러
-              style: const TextStyle(fontSize: 20), // ✅ 입력 글씨 크기
+              controller: controller,
+              style: const TextStyle(fontSize: 20),
               decoration: const InputDecoration(
-                hintText: '제품 검색', // 입력 전 보여지는 힌트 텍스트
+                hintText: '제품 검색',
                 hintStyle: TextStyle(
                   color: Colors.grey,
-                  fontSize: 20, // ✅ 힌트 글씨 크기
+                  fontSize: 20,
                 ),
                 border: InputBorder.none,
                 isDense: true,
               ),
-              // 입력값 변화 시 setState 등으로 상품 목록 필터링 가능
             ),
           ),
-
-          // 🔳 세로 구분선 (QR 버튼과 입력창 구분)
           Container(
-            width: 1, // 세로선 너비
+            width: 1,
             height: 45,
             color: Colors.grey.shade300,
           ),
-
           const SizedBox(width: 15),
-
-          // 📷 QR 아이콘 영역
-          // → CustomQRIcon은 사용자가 만든 위젯이며,
-          //    가운데가 뚫려있고 - 모양 선이 있는 사각형으로 구현됨
-          CustomQRIcon(
-            size: 24, // 아이콘 크기 조정 가능
-            color: const Color(0xFF4F67FF), // ✅ 색상: #4F67FF (파란톤)
+          GestureDetector(
+            onTap: () {
+              // QR 코드 이미지 클릭 시 QR 스캐너 화면으로 이동
+              Navigator.pushNamed(context, '/scan');
+            },
+            child: CustomQRIcon(
+              size: 24,
+              color: const Color(0xFF4F67FF),
+            ),
           ),
         ],
       ),

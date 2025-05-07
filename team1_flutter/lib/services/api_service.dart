@@ -16,7 +16,7 @@ class ApiService {
             .map((item) => Item.fromJson(item))
             .toList(); // JSON → Item 변환
       } else {
-        throw Exception('아이템을 불러오는 데 실패했습니다');
+        throw Exception('아이템을 불러오는 데 실패했습니다: ${response.statusCode}');
       }
     } catch (e) {
       throw Exception('아이템을 불러오는 데 실패했습니다: $e');
@@ -31,35 +31,14 @@ class ApiService {
       if (response.statusCode == 200) {
         return Item.fromJson(response.data);
       } else {
-        throw Exception('아이템을 불러오는 데 실패했습니다');
+        throw Exception('아이템을 불러오는 데 실패했습니다: ${response.statusCode}');
       }
     } catch (e) {
       throw Exception('아이템을 불러오는 데 실패했습니다: $e');
     }
   }
 
-  // ✅ 새로운 아이템 추가 (POST 요청)
-  Future<Item> createItem(Item item) async {
-    try {
-      final response = await dio.post(
-        baseUrl,
-        data: item.toJson(), // Item → JSON 형태로 전송
-        options: Options(
-          headers: {'Content-Type': 'application/json'},
-        ),
-      );
-
-      if (response.statusCode == 201) {
-        return Item.fromJson(response.data); // 생성된 아이템 반환
-      } else {
-        throw Exception('아이템을 생성하는 데 실패했습니다');
-      }
-    } catch (e) {
-      throw Exception('아이템을 생성하는 데 실패했습니다: $e');
-    }
-  }
-
-// ✅ 수량을 입력받아 그만큼 차감하는 PATCH 요청
+  // ✅ 수량을 입력받아 그만큼 차감하는 PATCH 요청
   Future<Item> dispatchItem(String itemId, int quantityToSubtract) async {
     try {
       final response = await dio.patch(
@@ -75,7 +54,7 @@ class ApiService {
       if (response.statusCode == 200) {
         return Item.fromJson(response.data); // 수정된 아이템 반환
       } else {
-        throw Exception('아이템 수량을 차감하는 데 실패했습니다');
+        throw Exception('아이템 수량을 차감하는 데 실패했습니다: ${response.statusCode}');
       }
     } catch (e) {
       if (e is DioError) {

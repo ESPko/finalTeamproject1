@@ -1,8 +1,12 @@
 package bitc.fullstack503.team1_server.dto;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 @Data
+@Getter
+@Setter
 public class ItemDTO
 {
   private int idx;

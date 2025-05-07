@@ -1,10 +1,9 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import '../models/item.dart';
-import '../services/api_service.dart';
 import 'package:flutter/services.dart';
+import '../models/item.dart';
+import '../services/api_service.dart'; // 데이터베이스 연동용 서비스
 
-// 아이템 상세정보를 보여주는 화면
 class ItemDetailScreen extends StatefulWidget {
   final String itemId; // 전달받은 아이템 ID
 
@@ -120,7 +119,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
 
       try {
         final updatedItem = await ApiService().dispatchItem(
-          item.id.toString(),
+          item.idx.toString(),
           input,
         );
 

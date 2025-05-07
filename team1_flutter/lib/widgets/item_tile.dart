@@ -52,7 +52,7 @@ class ItemTile extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => ItemDetailScreen(itemId: item.id.toString()), // 아이템 ID 전달
+                        builder: (_) => ItemDetailScreen(itemId: item.idx.toString()), // 아이템 ID 전달
                       ),
                     );
                   },
@@ -61,7 +61,7 @@ class ItemTile extends StatelessWidget {
               const SizedBox(width: 10), // 아이콘과 QR 사이 여백
               // QR 코드 생성기
     QrImageView(
-    data: 'http://10.100.203.16:8080/api/items/${item.id}/dispatch-quantity', // <- 수정된 경로
+    data: 'http://10.100.203.16:8080/api/items/${item.idx}/dispatch-quantity', // <- 수정된 경로
     version: QrVersions.auto,
     size: 80.0,
               ),

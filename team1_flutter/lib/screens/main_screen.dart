@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:test2/screens/history_screen.dart';
-import 'package:test2/screens/item_list_screen.dart';
 import 'package:test2/screens/login_screen.dart';
-import 'package:test2/screens/search_filter_screen.dart';
 import 'package:test2/screens/dash_board_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -18,7 +16,6 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> _screens = [
     DashBoardScreen(),
-    SearchFilterScreen(),
     HistoryScreen(),
     LoginScreen(),
   ];
@@ -54,10 +51,6 @@ class _MainScreenState extends State<MainScreen> {
             BottomNavigationBarItem(
               icon: Icon(Icons.dashboard),
               label: '대시보드',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              label: '비품검색',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.history),
