@@ -3,14 +3,24 @@ import QRCode from 'react-qr-code';
 
 function QrTestPage ()
 {
-  const data = '123/모나미학용품창고1';
+  const data = '1/모나미학용품창고1';
   const onlyCode = data.split('/')[0];
-  asdad;
+  
   return (
-    <div style={{ padding: '40px' }}>
-      <h2>QR 테스트</h2>
-      <QRCode value={'http://10.100.203.16:8080/api/items/2/dispatch-quantity'} />
-    </div>
+    <>
+      <div className="p-10">
+        <h2 className="text-2xl font-semibold mb-4">QR 테스트</h2>
+        <div className="bg-white p-4 rounded shadow inline-block">
+          <QRCode value={`http://10.100.203.16:8080/api/items/${onlyCode}/dispatch-quantity`} />
+        </div>
+      </div>
+      <div className="p-10">
+        <h2 className="text-2xl font-semibold mb-4">QR 테스트</h2>
+        <div className="bg-white p-4 rounded shadow inline-block">
+          <QRCode value={`http://10.100.203.16:8080/api/items/${onlyCode}/dispatch-quantity`} />
+        </div>
+      </div>
+    </>
   );
 }
 
