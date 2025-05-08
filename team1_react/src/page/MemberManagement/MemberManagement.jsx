@@ -9,7 +9,7 @@ function MemberManagement() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const roleOption = ['부장', '구매 담당자', '사원'];
-  const departmentOption = ['경영부', '기획부', '마케팅부', '생산부', '구매부'];
+  const departmentOption = ['구매부', '경영부', '기획부', '마케팅부', '생산부' ];
 
   const roleMap = {
     0:'사원',
@@ -27,7 +27,8 @@ function MemberManagement() {
     axios.get('http://localhost:8080/member')
       .then(res => {
         const mappedData = res.data.map((user,index) => ({
-          id:user.idx,
+          idx:user.idx,
+          id:user.id,
           name: user.nickName,
           department: user.department,
           role:roleMap[user.position],
@@ -39,22 +40,55 @@ function MemberManagement() {
       })
   }, []);
 
+  const roleToPosition = (role) => {
+    switch(role){
+      case '부장': return 2;
+      case '구매 담당자': return 1;
+      case '사원': return 0;
+      default: return 0;
+    }
+  }
 
-
-  const changeRole = (id, newRole) => {
+  const changeRole = async (id, newRole) => {
     setEmployees(prev =>
       prev.map(emp => emp.id === id ? { ...emp, role: newRole } : emp),
     );
+    const member = employees.find(emp => emp.id === id);
+    const position =roleToPosition(newRole)
+
+    await axios.put('http://localhost:8080/updateMember', {
+      idx:id,
+      department: member.department,
+      position:position
+    })
   };
 
-  const changeDepartment = (id, newDepartment) => {
+  const changeDepartment = async (id, newDepartment) => {
     setEmployees(prev =>
       prev.map(emp => emp.id === id ? { ...emp, department: newDepartment } : emp),
     );
+    const member = employees.find(emp => emp.id ===id)
+    const position = roleToPosition(member.role)
+
+    await axios.put('http://localhost:8080/updateMember',{
+      idx:id,
+      department:newDepartment,
+      position:position
+    })
   };
 
-  const DeleteMember = (id) => {
-    setEmployees(prev => prev.filter(emp => emp.id !== id));
+  const DeleteMember = (idx) => {
+    console.log('삭제 요청 Idx: ',idx)
+    setEmployees(prev => prev.filter(emp => emp.idx !== idx));
+    axios.delete('http://localhost:8080/deleteMember',{
+      data:{idx:idx}
+    })
+      .then(res => {
+        console.log('삭제 완료!', res.data)
+      })
+      .catch(err => {
+        console.error(err)
+      })
   };
 
   const AddMember = (newMember) => {
@@ -79,7 +113,7 @@ function MemberManagement() {
             role:roleMap[position]
           }
         ])
-          setIsModalOpen(false);
+        setIsModalOpen(false);
       })
       .catch(err => {
         console.error(err)
@@ -116,7 +150,7 @@ function MemberManagement() {
 
                 {employees.map(emp => {
                   return (
-                    <div key={emp.id}
+                    <div key={emp.idx}
                          className="grid grid-cols-[250px_250px_250px_1fr]  items-center py-2 border border-gray-300">
                       <div className="ml-3">{emp.name}</div>
 
@@ -143,7 +177,7 @@ function MemberManagement() {
                       </div>
 
                       <div className="flex items-center justify-end">
-                        <button onClick={() => DeleteMember(emp.id)} className=" border border-gray-300 text-red-500 text-sm px-3 py-1 rounded
+                        <button onClick={() => DeleteMember(emp.idx)} className=" border border-gray-300 text-red-500 text-sm px-3 py-1 rounded
             hover:bg-red-500 ml-2 justify-end mr-4">삭제
                         </button>
                       </div>

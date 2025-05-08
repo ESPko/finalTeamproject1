@@ -4,11 +4,22 @@
 <mapper namespace="bitc.fullstack503.team1_server.mapper.MemberMapper">
     <select id="getMemberList" resultType="bitc.fullstack503.team1_server.dto.UserDTO">
         select idx, nick_name, department, position from user
-        order by position desc
+        order by department desc, position desc
     </select>
 
     <insert id="addMember" parameterType="bitc.fullstack503.team1_server.dto.UserDTO">
         insert into user (id, pass, nick_name, department, position)
         values(#{id}, #{pass},#{nickName},#{department},#{position})
     </insert>
+
+    <update id="updateMember" parameterType="bitc.fullstack503.team1_server.dto.UserDTO">
+        update user
+        set department = #{department} , position = #{position}
+        where idx = #{idx}
+    </update>
+
+    <delete id="deleteMember" parameterType="bitc.fullstack503.team1_server.dto.UserDTO">
+        delete from user
+        where idx = #{idx};
+    </delete>
 </mapper>

@@ -8,4 +8,8 @@ public interface MemberService {
   List<UserDTO> getMemberList();
 
   UserDTO addMember(UserDTO userDTO);
+
+  UserDTO updateMember(UserDTO userDTO);
+
+  boolean deleteMember(UserDTO userDTO);
 }

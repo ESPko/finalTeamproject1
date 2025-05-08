@@ -3,10 +3,7 @@ package bitc.fullstack503.team1_server.controller;
 import bitc.fullstack503.team1_server.dto.UserDTO;
 import bitc.fullstack503.team1_server.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,6 +22,28 @@ public class MemberController {
   public UserDTO addMember(@RequestBody UserDTO userDTO){
     memberService.addMember(userDTO);
     return userDTO;
+  }
 
+  @PutMapping("/updateMember")
+  public UserDTO updateMember(@RequestBody UserDTO userDTO){
+
+    return memberService.updateMember(userDTO);
+  }
+
+  @DeleteMapping("/deleteMember")
+  public UserDTO deleteMember(@RequestBody UserDTO userDTO){
+    boolean result = memberService.deleteMember(userDTO);
+
+    UserDTO response = new UserDTO();
+
+    if(result){
+      response.setId(userDTO.getId());
+      System.out.println("직원 삭제 완료");
+    }
+    else{
+      response.setId(userDTO.getId());
+      System.out.println("직원 삭제 실패");
+    }
+    return response;
   }
 }

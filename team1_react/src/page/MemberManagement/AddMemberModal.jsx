@@ -48,7 +48,7 @@ function AddMemberModal({isOpen, onClose, onAdd}) {
             className="w-full border border-gray-300 rounded px-3 py-2">
             <option value="직급 선택">직급 선택</option>
             <option value="부장">부장</option>
-            <option value="구매팀장">구매팀장</option>
+            <option value="구매팀장">구매 담당자</option>
             <option value="사원">사원</option>
 
           </select>

@@ -23,4 +23,14 @@ public class MemberServiceImpl implements MemberService {
     memberMapper.addMember(userDTO);
     return userDTO;
   }
+
+  @Override
+  public UserDTO updateMember(UserDTO userDTO) {
+    return memberMapper.updateMember(userDTO);
+  }
+
+  @Override
+  public boolean deleteMember(UserDTO userDTO) {
+    return memberMapper.deleteMember(userDTO);
+  }
 }
