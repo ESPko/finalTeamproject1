@@ -1,4 +1,4 @@
-import StoragePage from '../components/layout/StoragePage.jsx';
+import StoragePage from './storage/StoragePage.jsx';
 
 function TestPage1() {
   return (
