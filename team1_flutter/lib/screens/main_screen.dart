@@ -1,14 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:test2/screens/history_screen.dart';
-import 'package:test2/screens/item_list_screen.dart';
 import 'package:test2/screens/login_screen.dart';
-import 'package:test2/screens/qr_scanner_screen.dart';
-import 'package:test2/screens/search_filter_screen.dart';
+import 'package:test2/screens/dash_board_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
-
 
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -17,19 +14,16 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
-  // 네비게이션 바에 표시될 화면들
   final List<Widget> _screens = [
-    ItemListScreen(),  // 아이템리스트 (메인)
-    SearchFilterScreen(),  // 검색/필터
-    QRScannerScreen(),  // QR 스캔
-    HistoryScreen(),  // 이력
-    LoginScreen(),  // 프로필/설정
+    DashBoardScreen(),
+    HistoryScreen(),
+    LoginScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screens[_selectedIndex],
+      body: _screens[_selectedIndex],  // 현재 선택된 화면을 표시
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           boxShadow: [
@@ -59,20 +53,12 @@ class _MainScreenState extends State<MainScreen> {
               label: '대시보드',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              label: '검색',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.qr_code_scanner),
-              label: '스캔',
-            ),
-            BottomNavigationBarItem(
               icon: Icon(Icons.history),
-              label: '이력',
+              label: '출고기록',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
-              label: '프로필',
+              label: '로그인',
             ),
           ],
         ),

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="bitc.fullstack503.team1_server.mapper.kdh.MemberMapper">
+    <select id="getMemberList" resultType="bitc.fullstack503.team1_server.dto.UserDTO">
+        select idx, nick_name, department, position from user
+        order by position desc
+    </select>
+
+    <insert id="addMember" parameterType="bitc.fullstack503.team1_server.dto.UserDTO">
+        insert into user (id, pass, nick_name, department, position)
+        values(#{id}, #{pass},#{nickName},#{department},#{position})
+    </insert>
+</mapper>

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:test2/screens/dash_board_screen.dart';
 import 'package:test2/screens/qr_scanner_screen.dart';
-import '../screens/home_screen.dart';
+import 'package:test2/screens/stock_check.dart';
 import '../screens/item_list_screen.dart';
 import '../screens/login_screen.dart'; // 추가
 import '../screens/main_screen.dart'; // 추가
@@ -16,14 +17,18 @@ final Map<String, WidgetBuilder> appRoutes = {
   '/': (context) => const MainScreen(), // 기존 홈 화면 (필요시 유지)
 
   // 아이템 목록 화면 경로
-  '/items': (context) => const ItemListScreen(),
+  // '/items': (context) => const ItemListScreen(),
 
   // QR 스캐너 화면 경로
   '/scan': (context) => const QRScannerScreen(),
 
   // 검색 및 필터링 화면
-  '/search': (context) => const SearchFilterScreen(), // 추가
+  // '/search': (context) => const SearchFilterScreen(), // 추가
 
   // 이력 조회 화면
   '/history': (context) => const HistoryScreen(), // 추가
+
+  '/dashboard': (context) => const DashBoardScreen(), // 추가,
+
+  '/stockcheck': (context) => const StockCheck(), // 추가,'
 };

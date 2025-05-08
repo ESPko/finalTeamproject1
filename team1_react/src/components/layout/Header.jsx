@@ -6,7 +6,7 @@ import { FiUser } from '@react-icons/all-files/fi/FiUser.js';
 
 
 
-function Header() {
+function Header({ toggleLayout }) {
   const { user } = useAuth();
   const [token, setToken] = useState(localStorage.getItem('token') || '');
 
@@ -27,7 +27,13 @@ function Header() {
 
 
       <div className="flex items-center space-x-4">
-
+        {/* 버튼 클릭 시 toggleLayout 함수 호출 */}
+        <button
+          className="text-white"
+          onClick={toggleLayout}
+        >
+          배경색 변경
+        </button>
         <HeaderIcons />
 
         <div className="flex items-center space-x-2 backdrop-blur bg-white/5 px-3 py-1.5 rounded-full text-white text-sm font-medium border border-white/20 shadow transition-colors duration-300 hover:bg-white/20">

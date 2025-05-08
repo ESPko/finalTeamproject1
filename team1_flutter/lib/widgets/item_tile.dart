@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart'; // QR 코드 생성 패키지
-import 'package:test2/screens/ItemDetailScreen.dart'; // 아이템 상세 화면
+import 'package:test2/screens/item_detail_screen.dart'; // 아이템 상세 화면
 import '../models/item.dart'; // Item 모델 클래스 import
 
 // 아이템 하나를 나타내는 위젯
@@ -52,7 +52,7 @@ class ItemTile extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => ItemDetailScreen(itemId: item.id.toString()), // 아이템 ID 전달
+                        builder: (_) => ItemDetailScreen(itemId: item.idx), // 아이템 ID 전달
                       ),
                     );
                   },
@@ -60,10 +60,10 @@ class ItemTile extends StatelessWidget {
               ),
               const SizedBox(width: 10), // 아이콘과 QR 사이 여백
               // QR 코드 생성기
-              QrImageView(
-                data: 'http://10.100.203.16:8080/api/items/${item.id}/dispatch', // QR에 인코딩될 URL
-                version: QrVersions.auto, // 자동 버전 설정
-                size: 80.0, // QR 코드 크기 → 변경 예시 아래 참고
+    QrImageView(
+    data: 'http://10.100.203.16:8080/api/items/${item.idx}/dispatch-quantity', // <- 수정된 경로
+    version: QrVersions.auto,
+    size: 80.0,
               ),
             ],
           ),

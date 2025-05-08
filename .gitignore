@@ -109,3 +109,4 @@ app.*.map.json
 /android/app/release
 
 
+team1_server/local.properties

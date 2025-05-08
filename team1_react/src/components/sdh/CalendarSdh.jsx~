@@ -1,0 +1,48 @@
+import React, { useEffect, useState } from 'react';
+import 'react-date-range/dist/styles.css';
+import 'react-date-range/dist/theme/default.css';
+import { DateRange, DefinedRange } from 'react-date-range/src';
+import { ko } from 'date-fns/locale';
+
+function CalendarSdh ()
+{
+  const today = new Date();
+  const sevenDaysAgo = new Date(today);
+  sevenDaysAgo.setDate(today.getDate() - 6);
+  
+  const [state, setState] = useState([
+    {
+      startDate: sevenDaysAgo,
+      endDate: today,
+      key: 'selection',
+    },
+  ]);
+  
+  useEffect(() => {
+    console.log(state);
+  }, [state]);
+  
+  return (
+    <>
+      <div className="tw-py-[14px] tw-flex tw-items-center tw-flex-wrap tw-gap-[8px]">
+        {/* 날짜 네비게이션 */}
+        
+        <div className={'flex'}>
+          <DateRange
+            editableDateInputs={true}
+            onChange={item => setState([item.selection])}
+            moveRangeOnFirstSelection={false}
+            ranges={state}
+            locale={ko}
+          />
+          <DefinedRange
+            onChange={item => setState([item.selection])}
+            ranges={state}
+          />
+        </div>
+      </div>
+    </>
+  );
+}
+
+export default CalendarSdh;
