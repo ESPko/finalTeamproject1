@@ -29,13 +29,14 @@ public class LoginserviceImpl implements LoginService {
 
         if (user != null && user.getPass().equals(request.getPass())) {
             String token = jwtUtil.generateToken(user.getId());
-            return new LoginResponse(token, user);
+
+            // 로그인 성공 시, 생성된 로그인 응답을 로그로 출력
+            LoginResponse loginResponse = new LoginResponse(token, user);
+            System.out.println("LoginResponse 생성됨: " + loginResponse);
+
+            return loginResponse;
         }
 
         throw new RuntimeException("Invalid credentials");
     }
-
-
-
-
 }

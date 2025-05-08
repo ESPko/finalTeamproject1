@@ -3,6 +3,7 @@ import 'package:test2/core/app_routes.dart';
 import 'theme/app_theme.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized(); // 이 줄 필수!
   runApp(const InventoryApp());
 }
 
@@ -14,7 +15,7 @@ class InventoryApp extends StatelessWidget {
     return MaterialApp(
       theme: AppTheme.lightTheme,
       debugShowCheckedModeBanner: false,
-      initialRoute: '/',
+      initialRoute: '/login',
       routes: appRoutes, // 정의된 라우트 맵 사용
     );
   }

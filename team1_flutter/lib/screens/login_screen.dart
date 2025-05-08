@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -19,7 +22,8 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('로그인'),
-        elevation: 0,),
+        elevation: 0,
+      ),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
@@ -113,15 +117,49 @@ class _LoginScreenState extends State<LoginScreen> {
       });
 
       try {
-        // 로그인 API 호출
-        // final response = await AuthService.login(_emailController.text, _passwordController.text);
+        final response = await http.post(
+          Uri.parse('http://10.100.203.16:8080/api/login'), // 실제 디바이스 IP로 변경
+          headers: {'Content-Type': 'application/json'},
+          body: json.encode({
+            'id': _emailController.text,
+            'pass': _passwordController.text,
+          }),
+        );
 
-        // 성공 시 메인 화면으로 이동
-        await Future.delayed(Duration(seconds: 2)); // API 호출 시뮬레이션
-        Navigator.pushReplacementNamed(context, '/main'); // 라우트 이름 사용
+        print('Status Code: ${response.statusCode}');
+        print('Raw Response Body: ${response.body}');
+
+        if (response.statusCode == 200) {
+          final responseBody = json.decode(response.body);
+          print('Decoded Response: $responseBody');
+
+          final token = responseBody['token'];
+          final user = responseBody['user'];
+
+          print('Extracted token: $token');
+          print('Extracted user: $user');
+
+          if (token != null && user != null) {
+            await saveToken(token);
+            await saveUserInfo(user); // 여기에 유저 정보를 저장
+            print('Navigating to dashboard...');
+            Navigator.pushNamed(context, '/');  // 성공 시 홈 화면으로 이동
+          } else {
+            print('Token or user is null');
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('로그인 실패: 유효한 응답이 아닙니다.')),
+            );
+          }
+        } else {
+          final errorMessage = json.decode(response.body)['message'] ?? '로그인 실패';
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(errorMessage)),
+          );
+        }
       } catch (e) {
+        print('예외 발생: $e');
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('로그인에 실패했습니다. 다시 시도해주세요.')),
+          SnackBar(content: Text('로그인 중 오류 발생: $e')),
         );
       } finally {
         setState(() {
@@ -130,4 +168,25 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     }
   }
+
+  // 토큰 저장 함수
+  Future<void> saveToken(String token) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('jwt_token', token);
+    print('Token saved: $token'); // 저장된 토큰 확인
+  }
+
+  // 토큰 가져오기 함수
+  Future<String?> getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('jwt_token');
+  }
+
+  // 유저 정보 저장 함수
+  Future<void> saveUserInfo(Map<String, dynamic> userInfo) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('user', json.encode(userInfo));
+    print('✅ Full user info saved: $userInfo');
+  }
+
 }
