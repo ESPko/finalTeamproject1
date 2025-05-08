@@ -35,7 +35,4 @@ public class LoginserviceImpl implements LoginService {
         throw new RuntimeException("Invalid credentials");
     }
 
-
-
-
 }

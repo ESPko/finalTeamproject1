@@ -1,4 +1,5 @@
-import bitc.fullstack503.team1_server.security.JwtUtil;
+package bitc.fullstack503.team1_server.security;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
