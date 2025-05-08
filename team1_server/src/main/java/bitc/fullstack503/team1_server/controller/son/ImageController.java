@@ -1,4 +1,4 @@
-package bitc.fullstack503.team1_server.controller;
+package bitc.fullstack503.team1_server.controller.son;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;

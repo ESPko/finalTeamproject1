@@ -1,7 +1,7 @@
-package bitc.fullstack503.team1_server.service;
+package bitc.fullstack503.team1_server.service.kdh;
 
 import bitc.fullstack503.team1_server.dto.UserDTO;
-import bitc.fullstack503.team1_server.mapper.MemberMapper;
+import bitc.fullstack503.team1_server.mapper.kdh.MemberMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

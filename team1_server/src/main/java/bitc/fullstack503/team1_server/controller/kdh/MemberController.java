@@ -1,7 +1,7 @@
-package bitc.fullstack503.team1_server.controller;
+package bitc.fullstack503.team1_server.controller.kdh;
 
 import bitc.fullstack503.team1_server.dto.UserDTO;
-import bitc.fullstack503.team1_server.service.MemberService;
+import bitc.fullstack503.team1_server.service.kdh.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

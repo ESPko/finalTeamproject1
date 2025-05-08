@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
-<mapper namespace="bitc.fullstack503.team1_server.mapper.AxiosMapper">
-    <!-- 파라미터가 없는 GET 방식 통신 (전체 검색) -->
-    <select id="selectEmployeeList" resultType="bitc.fullstack503.team1_server.dto.UserDTO">
-        select * from user;
-    </select>
-</mapper>

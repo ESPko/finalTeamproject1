@@ -1,4 +1,0 @@
-package bitc.fullstack503.team1_server.service;
-public interface InventoryService
-{
-}

@@ -1,4 +1,4 @@
-package bitc.fullstack503.team1_server.mapper;
+package bitc.fullstack503.team1_server.mapper.kdh;
 
 import bitc.fullstack503.team1_server.dto.UserDTO;
 import org.apache.ibatis.annotations.Mapper;
