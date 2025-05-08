@@ -22,21 +22,33 @@ class _ConfirmDispatchDialogState extends State<ConfirmDispatchDialog> {
   }
 
   Future<Map<String, dynamic>> fetchItemInfo() async {
-    final uri = Uri.parse(widget.qrUrl);
-    final segments = uri.pathSegments;
-    final id = segments.contains('items') ? segments[segments.indexOf('items') + 1] : null;
+    try {
+      final uri = Uri.parse(widget.qrUrl);
+      final segments = uri.pathSegments;
 
-    if (id == null) throw Exception('올바르지 않은 URL입니다.');
+// "items" 다음 인덱스가 존재하고, 해당 값이 정수인지 확인
+      String? id;
+      final itemsIndex = segments.indexOf('items');
+      if (itemsIndex != -1 && itemsIndex + 1 < segments.length) {
+        id = segments[itemsIndex + 1];
+      }
 
-    final itemUrl = '${uri.origin}/api/items/$id';
+      if (id == null || int.tryParse(id) == null) {
+        throw Exception('올바르지 않은 URL입니다. (item ID가 누락되었거나 유효하지 않음)');
+      }
 
-    final response = await http.get(Uri.parse(itemUrl));
 
-    if (response.statusCode == 200) {
-      final decoded = utf8.decode(response.bodyBytes);
-      return json.decode(decoded);
-    } else {
-      throw Exception('상품 정보를 불러올 수 없습니다.');
+      final itemUrl = '${uri.origin}/api/items/$id';
+      final response = await http.get(Uri.parse(itemUrl));
+
+      if (response.statusCode == 200) {
+        final decoded = utf8.decode(response.bodyBytes);
+        return json.decode(decoded);
+      } else {
+        throw Exception('상품 정보를 불러올 수 없습니다. (상태 코드: ${response.statusCode})');
+      }
+    } catch (e) {
+      throw Exception('QR URL 처리 중 오류 발생: $e');
     }
   }
 
@@ -48,12 +60,11 @@ class _ConfirmDispatchDialogState extends State<ConfirmDispatchDialog> {
     );
 
     if (response.statusCode != 200) {
-      throw Exception('출고 요청 실패: ${response.statusCode}');
+      throw Exception('출고 요청 실패 (상태 코드: ${response.statusCode})');
     }
   }
 
   Future<void> showResultDialog(int parsed) async {
-    // 다이얼로그를 띄운 후 QR 스캐닝 화면으로 이동
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
@@ -62,8 +73,7 @@ class _ConfirmDispatchDialogState extends State<ConfirmDispatchDialog> {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop(); // 다이얼로그 닫기
-              // QR 스캐닝 화면으로 돌아가기
+              Navigator.of(context).pop(); // 결과 다이얼로그 닫기
               Navigator.of(context).popUntil((route) => route.settings.name == '/dashboard');
             },
             child: const Text('확인'),
@@ -72,7 +82,6 @@ class _ConfirmDispatchDialogState extends State<ConfirmDispatchDialog> {
       ),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -129,7 +138,7 @@ class _ConfirmDispatchDialogState extends State<ConfirmDispatchDialog> {
               await dispatchQuantity(parsed);
               if (!mounted) return;
               Navigator.of(context).pop(); // 다이얼로그 닫기
-              showResultDialog(parsed); // 결과 다이얼로그 표시
+              showResultDialog(parsed);   // 결과 다이얼로그 표시
             } catch (e) {
               if (!mounted) return;
               showDialog(

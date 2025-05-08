@@ -281,9 +281,17 @@ class CustomSearchBar extends StatelessWidget {
             onTap: () {
               Navigator.pushNamed(context, '/scan');
             },
-            child: CustomQRIcon(
-              size: 24,
-              color: const Color(0xFF4F67FF),
+            behavior: HitTestBehavior.translucent, // 빈 공간도 터치 가능하게 함
+            child: Container(
+              padding: const EdgeInsets.all(12), // 터치 영역 확장
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.transparent, // 배경 투명 (필요 시 색상 지정)
+              ),
+              child: CustomQRIcon(
+                size: 24,
+                color: const Color(0xFF4F67FF),
+              ),
             ),
           ),
         ],

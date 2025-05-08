@@ -38,9 +38,9 @@ public class ItemController {
   // ✅ QR 스캔으로 비품 출고
 
   // 수정된 코드
-  @PatchMapping("/{id}/dispatch-quantity")
+  @PatchMapping("/{idx}/dispatch-quantity")
   public ResponseEntity<ItemDTO> dispatchItemQuantity(
-    @PathVariable("id") int id,
+    @PathVariable("idx") int idx,
     @RequestBody Map<String, Integer> request) {
 
     Integer quantityToSubtract = request.get("quantityToSubtract");
@@ -49,7 +49,7 @@ public class ItemController {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "차감 수량은 1 이상이어야 합니다.");
     }
 
-    ItemDTO item = itemService.getItemByCode(id);
+    ItemDTO item = itemService.getItemByCode(idx);
     if (item == null) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 ID의 아이템을 찾을 수 없습니다.");
     }
@@ -64,7 +64,7 @@ public class ItemController {
     itemService.updateItem(item); // void 반환
 
     // 차감된 최신 정보 반환
-    ItemDTO updatedItem = itemService.getItemByCode(id);
+    ItemDTO updatedItem = itemService.getItemByCode(idx);
 
     return ResponseEntity.ok(updatedItem);
   }
