@@ -30,22 +30,48 @@ function AxiosTest() {
     localStorage.removeItem('token');
   };
 
+  // 스프링 서버와 통신 테스트(토큰없음)
+  const sendDataTest = () => {
+    axios.get("http://localhost:8080/api")
+      .then(res => {
+        console.log('axios를 사용한 비동기 통신에 성공')
+        console.log(res.data)
+      })
+      .catch(err => {
+        console.log("비동기 통신 중 오류가 발생했습니다.")
+        console.log(err)
+      })
+  }
 
-    const sendDataTest = () => {
-        axios.get("http://localhost:8080/user")
-          .then(res => {
-              console.log('axios를 사용한 비동기 통신에 성공')
-              console.log(res.data)
-          })
-          .catch(err => {
-              console.log("비동기 통신 중 오류가 발생했습니다.")
-              console.log(err)
-          })
-    }
+  // 스프링 서버와 통신 테스트(토큰있음)
+  const sendDataTokenTest = () => {
+    const token = localStorage.getItem("token"); // 토큰 가져오기
+    console.log("보낼 토큰:", token); // 디버깅용 로그
 
-    return (
+    axios.get("http://localhost:8080/api", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then(res => {
+        console.log('axios를 사용한 비동기 통신에 성공');
+        console.log(res.data);
+      })
+      .catch(err => {
+        console.log("비동기 통신 중 오류가 발생했습니다.");
+        console.log(err);
+      });
+  };
+
+
+
+
+  return (
 
       <div style={{ padding: '20px' }}>
+        <h1>토큰 : {token}</h1>
+        <button type={'button'} className={'btn btn-secondary me-2'} onClick={sendDataTest}>Spring RestAPI 서버 접속 테스트</button>
+        <button type={'button'} className={'btn btn-secondary me-2'} onClick={sendDataTokenTest}>Spring RestAPI 서버 접속 테스트</button>
         {token ? (
           <div>
             <h2>환영합니다!</h2>

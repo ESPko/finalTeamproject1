@@ -6,17 +6,21 @@ import bitc.fullstack503.team1_server.service.kms.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@RequestMapping("/api")
 @RestController
 public class LoginController {
 
     @Autowired
     private LoginService loginService;
 
-    @PostMapping("api/login")
+    @GetMapping({"", "/"})
+    public Object index() {
+        return "Board API Server 접속";
+    }
+
+    @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
             LoginResponse response = loginService.login(request);
@@ -26,5 +30,7 @@ public class LoginController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }
+
+
 
 }

@@ -3,6 +3,7 @@ import Side from './theme/Side.jsx';
 import Header2 from './theme/Header2.jsx';
 import Side2 from './theme/Side2.jsx';
 import Header from './components/layout/Header.jsx';
+import AxiosTest from './components/AxiosTest.jsx';
 
 function App() {
   // 컴포넌트를 전환할 상태 변수
@@ -18,6 +19,7 @@ function App() {
       {/* 조건에 따라 Header와 Side 또는 Header2와 Side2를 렌더링 */}
       {isDefault ? (
         <>
+          {/*<AxiosTest />*/}
           <Header toggleLayout={toggleLayout} />
           <Side />
         </>
