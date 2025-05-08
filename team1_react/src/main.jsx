@@ -42,40 +42,22 @@ createRoot(document.getElementById('root')).render(
             }
           >
             <Route index element={<MainPage />} />
-            <Route path="/test1" element={<TestPage1 />} />
-            <Route path="/test2" element={<TestPage2 />} />
-            <Route path="/test3" element={<TestPage3 />} />
-            <Route path="/test4" element={<TestPage4 />} />
-            <Route path="/test5" element={<TestPage5 />} />
-            <Route path="/test6" element={<TestPage6 />} />
+            <Route path={'/test1'} element={< ProductSearch/>} />
+            <Route path={'/test2'} element={<StoragePage />} />
+            <Route path={'/test3'} element={<TestPage3 />} />
+            <Route path={'/test4'} element={<TestPage4 />} />
+            <Route path={'/test5'} element={<EquipmentInformation />} />
+            <Route path={'/test6'} element={<LocationInfo />} />
+            <Route path={'/test7'} element={<ClientList />} />
+            <Route path={'/test8'} element={<InventoryPage />} />
+            <Route path={'/test9'} element={<TestPage6 />} />
+            <Route path={'/test10'} element={<MemberManagement />} />
           </Route>
+
+          <Route path="/login" element={<Login4 />} />
+          <Route path="*" element={<ErrorPage />} />
         </Routes>
       </AuthProvider>
-
-      <Routes>
-        <Route path="/" element={<App />}>
-          <Route index element={<MainPage />} />
-          <Route path={'/test1'} element={< ProductSearch/>} />
-          <Route path={'/test2'} element={<StoragePage />} />
-          <Route path={'/test3'} element={<TestPage3 />} />
-          <Route path={'/test4'} element={<TestPage4 />} />
-          <Route path={'/test5'} element={<EquipmentInformation />} />
-          <Route path={'/test6'} element={<LocationInfo />} />
-          <Route path={'/test7'} element={<ClientList />} />
-          <Route path={'/test8'} element={<InventoryPage />} />
-          <Route path={'/test9'} element={<TestPage6 />} />
-          <Route path={'/test10'} element={<MemberManagement />} />
-
-
-
-        </Route>
-
-        <Route path="/login" element={<Login4 />} />
-        <Route path="*" element={<ErrorPage />} />
-      </Routes>
-
-
-
 
 
     </BrowserRouter>
