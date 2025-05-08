@@ -5,7 +5,7 @@
     <select id="getProductSearchList" resultType="bitc.fullstack503.team1_server.dto.ItemDTO">
         select idx, image, name, standard, quantity, warehouse_name
         from item
-        where approve = 0
+        where approve = 1
         order by quantity desc;
     </select>
 </mapper>
