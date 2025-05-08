@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../models/item.dart';
+import '../widgets/item_card.dart';
+
 class ConfirmDispatchDialog extends StatefulWidget {
   final String qrUrl;
 
@@ -12,7 +15,7 @@ class ConfirmDispatchDialog extends StatefulWidget {
 }
 
 class _ConfirmDispatchDialogState extends State<ConfirmDispatchDialog> {
-  late Future<Map<String, dynamic>> itemFuture;
+  late Future<Item> itemFuture;
   final TextEditingController _quantityController = TextEditingController();
 
   @override
@@ -21,12 +24,11 @@ class _ConfirmDispatchDialogState extends State<ConfirmDispatchDialog> {
     itemFuture = fetchItemInfo();
   }
 
-  Future<Map<String, dynamic>> fetchItemInfo() async {
+  Future<Item> fetchItemInfo() async {
     try {
       final uri = Uri.parse(widget.qrUrl);
       final segments = uri.pathSegments;
 
-// "items" 다음 인덱스가 존재하고, 해당 값이 정수인지 확인
       String? id;
       final itemsIndex = segments.indexOf('items');
       if (itemsIndex != -1 && itemsIndex + 1 < segments.length) {
@@ -37,13 +39,13 @@ class _ConfirmDispatchDialogState extends State<ConfirmDispatchDialog> {
         throw Exception('올바르지 않은 URL입니다. (item ID가 누락되었거나 유효하지 않음)');
       }
 
-
       final itemUrl = '${uri.origin}/api/items/$id';
       final response = await http.get(Uri.parse(itemUrl));
 
       if (response.statusCode == 200) {
         final decoded = utf8.decode(response.bodyBytes);
-        return json.decode(decoded);
+        final jsonData = json.decode(decoded);
+        return Item.fromJson(jsonData);
       } else {
         throw Exception('상품 정보를 불러올 수 없습니다. (상태 코드: ${response.statusCode})');
       }
@@ -87,7 +89,7 @@ class _ConfirmDispatchDialogState extends State<ConfirmDispatchDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text('출고 수량 입력'),
-      content: FutureBuilder<Map<String, dynamic>>(
+      content: FutureBuilder<Item>(
         future: itemFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -97,13 +99,11 @@ class _ConfirmDispatchDialogState extends State<ConfirmDispatchDialog> {
           }
 
           final item = snapshot.data!;
-          final name = item['name'];
-          final quantity = item['quantity'];
 
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('$name (재고: $quantity개)'),
+              ItemCard(item: item),
               const SizedBox(height: 16),
               TextField(
                 controller: _quantityController,

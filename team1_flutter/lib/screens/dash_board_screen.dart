@@ -164,48 +164,54 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
   }
 
   Widget _buildSummaryCard() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Color(0xFF4F67FF),
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.3), blurRadius: 10, offset: Offset(0, 5))],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          RichText(
-            text: TextSpan(
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, '/stockcheck');
+      },
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Color(0xFF4F67FF),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.3), blurRadius: 10, offset: Offset(0, 5))],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(text: '오늘  ', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
+                  TextSpan(text: '$today', style: TextStyle(fontSize: 16, color: Colors.white)),
+                ],
+              ),
+            ),
+            SizedBox(height: 20),
+            Row(
               children: [
-                TextSpan(text: '오늘  ', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
-                TextSpan(text: '$today', style: TextStyle(fontSize: 16, color: Colors.white)),
+                _buildSummaryText(getTotalStock().toString()),
+                _buildVerticalDivider(),
+                _buildSummaryText('0'),
+                _buildVerticalDivider(),
+                _buildSummaryText('0'),
               ],
             ),
-          ),
-          SizedBox(height: 20),
-          Row(
-            children: [
-              _buildSummaryText(getTotalStock().toString()),
-              _buildVerticalDivider(),
-              _buildSummaryText('0'),
-              _buildVerticalDivider(),
-              _buildSummaryText('0'),
-            ],
-          ),
-          Row(
-            children: [
-              _buildSummaryLabel('총재고'),
-              _buildVerticalDivider(),
-              _buildSummaryLabel('총입고'),
-              _buildVerticalDivider(),
-              _buildSummaryLabel('총출고'),
-            ],
-          ),
-        ],
+            Row(
+              children: [
+                _buildSummaryLabel('총재고'),
+                _buildVerticalDivider(),
+                _buildSummaryLabel('총입고'),
+                _buildVerticalDivider(),
+                _buildSummaryLabel('총출고'),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
+
 
   Widget _buildSummaryText(String text) {
     return Flexible(
