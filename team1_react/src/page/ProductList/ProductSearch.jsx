@@ -1,28 +1,43 @@
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ProductSearchItem from './ProductSearchItem.jsx';
 import NoResultProduct from './NoResultProduct.jsx';
 import ProductListDetail from './ProductSearchDetail.jsx';
 import Topline from '../../components/layout/Topline.jsx';
 import { SearchIcon } from 'lucide-react';
+import axios from 'axios';
 
 function ProductSearch() {
   const [search, setSearch] = useState(``)
 
-  // 비품 더미 데이터
-  const [products] = useState([
-    {id:1, name: '비품1',amount: 1, location:'창고 1', standardStock: 10},
-    {id:2, name: '비품2',amount: 7, location:'창고 4', standardStock: 10},
-    {id:3, name: '비품3',amount: 5, location:'창고 2', standardStock: 10},
-    {id:4, name: '비품4',amount: 3, location:'창고 3', standardStock: 10},
-    {id:5, name: '비품5',amount: 10, location:'창고 1', standardStock: 10},
-  ])
+  const [products,setProduct] = useState([])
+
   // 제품 상세보기를 위한 제품 선택
   const [selectedProduct, setSelectedProduct] = useState(null)
 
   const [filteredProducts,setFilteredProducts] = useState(products)
 
   const [selectedWarehouse, setSelectedWarehouse] =useState('위치 선택')
+
+  useEffect(() => {
+    axios.get('http://localhost:8080/productSearch')
+      .then(res => {
+        const mappedData = res.data.map((ps, index) => ({
+          idx:ps.idx,
+          image:ps.image,
+          name:ps.name,
+          standard:ps.standard,
+          quantity:ps.quantity,
+          warehouseName:ps.warehouseName
+        }));
+        setProduct(mappedData)
+        setFilteredProducts(mappedData)
+      })
+      .catch(err => {
+        console.error(err)
+      })
+  }, []);
+
 
   const changSearch = (e) =>{
     setSearch(e.target.value);
@@ -31,7 +46,7 @@ function ProductSearch() {
   // 검색
   const searchProduct = () =>{
     const filtered = products.filter(product => product.name.toLowerCase().includes(search.toLowerCase()) &&
-      (selectedWarehouse === '모든 창고' || product.location === selectedWarehouse));
+      (selectedWarehouse === '모든 창고' || product.warehouseName === selectedWarehouse));
     setFilteredProducts(filtered)
     setSelectedProduct(null)
   }
@@ -40,7 +55,7 @@ function ProductSearch() {
   const warehouseSelect = (warehouse) => {
     setSelectedWarehouse(warehouse);
 
-    const filtered = products.filter(product => (warehouse === '모든 창고' || product.location === warehouse) && product.name.toLowerCase().includes(search.toLowerCase())
+    const filtered = products.filter(product => (warehouse === '모든 창고' || product.warehouseName === warehouse) && product.name.toLowerCase().includes(search.toLowerCase())
     )
     setFilteredProducts(filtered)
     setSelectedProduct(null)
@@ -66,7 +81,7 @@ function ProductSearch() {
                         warehouseSelect(e.target.value)
                       }}
                       className="w-full border border-gray-300 rounded px-3 py-2">
-                      {['모든 창고', '창고 1','창고 2','창고 3','창고 4',].map((name) => (
+                      {['모든 창고', '창고1','창고2','창고3','창고4',].map((name) => (
                         <option key={name} value={name}>{name}</option>
                       ))}
                     </select>
@@ -103,6 +118,7 @@ function ProductSearch() {
                       <NoResultProduct />
                     )}
                   </div>
+                  <div className="w-px bg-gray-500 "/>
 
                   <div className="w-1/2 mt-12 p-3">
                     {/* 상세 보기 */}
