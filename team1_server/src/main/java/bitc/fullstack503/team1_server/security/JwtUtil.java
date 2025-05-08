@@ -11,7 +11,7 @@ public class JwtUtil {
 
     private final String secret = "my-very-long-secret-key-that-is-at-least-64-bytes-long-1234567890-ABCDEFG";
 
-    private final long expiration = 36000000L; // 1시간
+    private final long expiration = 36000000L; // 10시간
 
     public String generateToken(String username) {
         return Jwts.builder()
