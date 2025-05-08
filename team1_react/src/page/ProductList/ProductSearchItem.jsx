@@ -1,6 +1,6 @@
 function ProductSearchItem({products, onSelectedProduct}) {
 
-  const totalAmount = products.reduce((sum,product) => sum + (product.amount ?? 0),0)
+  const totalAmount = products.reduce((sum,product) => sum + (product.quantity ?? 0),0)
 
 
   return (
@@ -10,33 +10,30 @@ function ProductSearchItem({products, onSelectedProduct}) {
         <p className="font-bold">총 {totalAmount} 개</p>
       </div>
       <ul className="w-full ">
-          {products.map((product) =>(
+        {products.map((product) =>(
 
-            <li key={product.id} className="border border-gray-300">
-              <div className="flex items-center ">
-                <img
-                  src="src/productImg/pencil.png"
-                  alt="product"
-                  className="w-[50px] h-[50px] mr-5 ml-2 mb-2 mt-2"
-                />
+          <li key={product.idx} className="border border-gray-300">
+            <div className="flex items-center ">
+              <img src={product.image} alt={product.name} className="w-16 h-16 object-cover mr-4"
+              />
 
-                <div className="flex flex-col">
-                  <button
-                    className="text-black hover:underline text-left"
-                    onClick={() => onSelectedProduct(product)}>
-                    {product.name}
-                  </button>
-                  <p className="text-sm text-gray-500">적정 재고: {product.standardStock}</p>
-                </div>
-                <div className="ml-auto p-2">
-                  <p className={`${product.amount <product.standardStock ? 'text-red-500': 'text-indigo-500'} font-bold` }>{product.amount ??0}개</p>
-                </div>
+              <div className="flex flex-col">
+                <button
+                  className="text-black hover:underline text-left"
+                  onClick={() => onSelectedProduct(product)}>
+                  {product.name}
+                </button>
+                <p className="text-sm text-gray-500">적정 재고: {product.standard}</p>
               </div>
-            </li>
-          ))}
+              <div className="ml-auto p-2">
+                <p className={`${product.quantity <product.standard ? 'text-red-500': 'text-indigo-500'} font-bold` }>{product.quantity ??0}개</p>
+              </div>
+            </div>
+          </li>
+        ))}
 
-        </ul>
-      </div>
+      </ul>
+    </div>
 
   );
 }
