@@ -1,20 +1,45 @@
 import AddMemberModal from './AddMemberModal.jsx';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Topline from '../../components/layout/Topline.jsx';
+import axios from 'axios';
 
 function MemberManagement() {
-  const [employees, setEmployees] = useState([
-    { id: 1, name: '직원1', department: '구매부', role: '부장' },
-    { id: 2, name: '직원2', department: '구매부', role: '구매팀장' },
-    { id: 3, name: '직원3', department: '구매부', role: '사원' },
-    { id: 4, name: '직원4', department: '구매부', role: '사원' },
-    { id: 5, name: '직원5', department: '구매부', role: '사원' },
-  ]);
+  const [employees, setEmployees] = useState([]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const roleOption = ['부장', '구매팀장', '사원'];
+  const roleOption = ['부장', '구매 담당자', '사원'];
   const departmentOption = ['경영부', '기획부', '마케팅부', '생산부', '구매부'];
+
+  const roleMap = {
+    0:'사원',
+    1:'구매 담당자',
+    2:'부장'
+  }
+
+  const reserveRoleMap ={
+    '사원':0,
+    '구매담당자':1,
+    '부장':2
+  }
+
+  useEffect(() => {
+    axios.get('http://localhost:8080/member')
+      .then(res => {
+        const mappedData = res.data.map((user,index) => ({
+          id:user.idx,
+          name: user.nickName,
+          department: user.department,
+          role:roleMap[user.position],
+        }));
+        setEmployees(mappedData)
+      })
+      .catch(err => {
+        console.error(err)
+      })
+  }, []);
+
+
 
   const changeRole = (id, newRole) => {
     setEmployees(prev =>
@@ -33,13 +58,32 @@ function MemberManagement() {
   };
 
   const AddMember = (newMember) => {
-    // 고유한 ID 생성을 위한 것
-    const newId = Date.now();
-    setEmployees(prev => [
-      ...prev,
-      { id: newId, ...newMember },
-    ]);
-    setIsModalOpen(false);
+    const requestData = {
+      id:newMember.userId,
+      pass:newMember.userPw,
+      nickName:newMember.name,
+      department:newMember.department,
+      position:reserveRoleMap[newMember.role],
+    }
+    axios.post('http://localhost:8080/addMember',requestData)
+      .then(res =>{
+        const {id, nickName, department,position} = res.data;
+        const roleMap = ['사원','구매 담당자', '부장'];
+
+        setEmployees(prev => [
+          ...prev,
+          {
+            id:id,
+            name:nickName,
+            department:department,
+            role:roleMap[position]
+          }
+        ])
+          setIsModalOpen(false);
+      })
+      .catch(err => {
+        console.error(err)
+      })
   };
   return (
     <div className=" flex-1 p-6 overflow-y-auto">
@@ -47,18 +91,18 @@ function MemberManagement() {
            style={{ padding: '0px 40px 80px 40px' }}>
         <div>
           <Topline
-            title="비품"
+            title="직원 관리"
             actions={
               <button
                 onClick={() => setIsModalOpen(true)}
                 className="bg-blue-600 text-white px-4 py-2 rounded"
               >
-                비품 추가
+                직원 추가
               </button>
             }
           >
             <div>
-              <div className="overflow-auto w-max pretty-scrollbar flex-auto m-3 mt-4 text-center">
+              <div className="overflow-auto max-w-full pretty-scrollbar flex-auto m-3 mt-4 text-center">
                 <div className="flex justify-end items-center mb-4">
 
 

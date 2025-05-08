@@ -13,7 +13,7 @@ function AddMemberModal({isOpen, onClose, onAdd}) {
     if (!name.trim()) return
     const newMember = {role, name, department, userId,userPw}
     onAdd(newMember)
-    onclose()
+    onClose()
   }
 
   return (
@@ -26,8 +26,8 @@ function AddMemberModal({isOpen, onClose, onAdd}) {
         <div className="mb-4 mt-5">
           <div className="font-semibold mb-2">부서</div>
           <select
-          value={role}
-          onChange={(e) => setRole(e.target.value)}
+          value={department}
+          onChange={(e) => setDepartment(e.target.value)}
           className="w-full border border-gray-300 rounded px-3 py-2">
             <option value="부선 선택">부서 선택</option>
             <option value="경영부">경영부</option>
@@ -43,8 +43,8 @@ function AddMemberModal({isOpen, onClose, onAdd}) {
         <div className="mb-4 mt-5">
           <div className="font-semibold mb-2">직급</div>
           <select
-            value={department}
-            onChange={(e) => setDepartment(e.target.value)}
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
             className="w-full border border-gray-300 rounded px-3 py-2">
             <option value="직급 선택">직급 선택</option>
             <option value="부장">부장</option>
