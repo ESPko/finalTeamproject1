@@ -22,36 +22,32 @@ import InventoryPage from './page/sdh/ currentSituation/InventoryPage';
 import ApprovalPage from './components/layout/ApprovalPage.jsx';
 import StoragePage from './components/layout/StoragePage.jsx';
 import StatusPage from './page/sdh/ currentSituation/StatusPage.jsx';
+import { AuthProvider } from './contexts/AuthContext'; // 추가
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />}>
-          <Route index element={<MainPage />} />
-          <Route path={'/test1'} element={< ProductSearch/>} />
-          <Route path={'/test2'} element={<StoragePage />} />
-          <Route path={'/test3'} element={<TestPage3 />} />
-          <Route path={'/test4'} element={<TestPage4 />} />
-          <Route path={'/test5'} element={<EquipmentInformation />} />
-          <Route path={'/test6'} element={<LocationInfo />} />
-          <Route path={'/test7'} element={<ClientList />} />
-          <Route path={'/test8'} element={<InventoryPage />} />
-          <Route path={'/test9'} element={<StatusPage />} />
-          <Route path={'/test10'} element={<MemberManagement />} />
+      <AuthProvider> {/* ✅ 여기에 AuthProvider로 감싸기 */}
+        <Routes>
+          <Route path="/" element={<App />}>
+            <Route index element={<MainPage />} />
+            <Route path="/test1" element={<ProductSearch />} />
+            <Route path="/test2" element={<StoragePage />} />
+            <Route path="/test3" element={<TestPage3 />} />
+            <Route path="/test4" element={<TestPage4 />} />
+            <Route path="/test5" element={<EquipmentInformation />} />
+            <Route path="/test6" element={<LocationInfo />} />
+            <Route path="/test7" element={<ClientList />} />
+            <Route path="/test8" element={<InventoryPage />} />
+            <Route path="/test9" element={<StatusPage />} />
+            <Route path="/test10" element={<MemberManagement />} />
+          </Route>
 
-
-
-        </Route>
-
-        <Route path="/login" element={<Login4 />} />
-        <Route path="*" element={<ErrorPage />} />
-      </Routes>
-
-
-
-
-
+          <Route path="/login" element={<Login4 />} />
+          <Route path="*" element={<ErrorPage />} />
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   </StrictMode>
-)
+);
+
