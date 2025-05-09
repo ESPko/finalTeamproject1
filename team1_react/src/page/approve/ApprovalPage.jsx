@@ -37,7 +37,6 @@ function ApprovalPage() {
   }, []);
 
   // 검색
-
   useEffect(() => {
     setFilteredProducts(approveProduct);
   }, [approveProduct]);
@@ -46,6 +45,7 @@ function ApprovalPage() {
     setSearch(e.target.value);
   };
 
+  // 이름 끝까지 다 안치고 일부분만 쳐도 결과가 나오게 함
   const searchProduct = () =>{
     const filtered = approveProduct.filter(product => product.name.toLowerCase().includes(search.toLowerCase()))
     setFilteredProducts(filtered)

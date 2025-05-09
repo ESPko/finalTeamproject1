@@ -17,7 +17,7 @@ function ProductSearch() {
 
   const [filteredProducts,setFilteredProducts] = useState(products)
 
-  const [selectedWarehouse, setSelectedWarehouse] =useState('위치 선택')
+  const [selectedWarehouse, setSelectedWarehouse] =useState('모든 창고')
 
   useEffect(() => {
     axios.get('http://localhost:8080/productSearch')

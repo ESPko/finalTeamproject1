@@ -10,4 +10,8 @@ public interface MemberMapper {
   List<UserDTO> getMemberList();
 
   void addMember(UserDTO userDTO);
+
+  UserDTO updateMember(UserDTO userDTO);
+
+  boolean deleteMember(UserDTO userDTO);
 }
