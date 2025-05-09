@@ -62,17 +62,21 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                       ),
                     const SizedBox(height: 30),
 
-                    _buildInfoBox(context, '아이템 정보', [
-                      _buildInfoRow('아이템 이름', item.name),
-                      _buildInfoRow('카테고리', item.category),
-                      _buildInfoRow('공급처', item.vendorName),
-                      _buildInfoRow('창고 이름', item.warehouseName),
+                    _buildInfoBox(context, '위치 정보', [
+                      _buildInfoRow('',item.warehouseName),
+                      _buildInfoRow('',item.warehouseLocation),
                     ]),
 
-                    _buildInfoBox(context, '재고 및 규격', [
-                      _buildInfoRow('수량', '${item.quantity}'),
-                      _buildInfoRow('규격', '${item.standard}'),
-                      _buildInfoRow('가격', '${item.price}'),
+                    _buildInfoBox(context, '아이템 정보', [
+                      _buildInfoRow('아이템 ', item.name),
+                      _buildInfoRow('카테고리 ', item.category),
+                      _buildInfoRow('공급처 ', item.vendorName),
+                    ]),
+
+                    _buildInfoBox(context, '재고 및 가격', [
+                      _buildInfoRow('재고 ', '${item.quantity}'),
+                      _buildInfoRow('적정재고 ', '${item.standard}'),
+                      _buildInfoRow('가격 ', '${item.price}'),
                     ]),
                   ],
                 ),
@@ -111,10 +115,21 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-          Text(value, style: const TextStyle(fontSize: 16)),
+          Text(
+            title,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          ),
+          // Expanded 위젯을 사용하여 value 텍스트가 넘치지 않게 처리
+          Expanded(
+            child: Text(
+              value,
+              style: const TextStyle(fontSize: 16),
+              softWrap: true,  // 자동 줄바꿈
+            ),
+          ),
         ],
       ),
     );
   }
+
 }

@@ -143,6 +143,7 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 const SizedBox(height: 8),
+                Text('${item.warehouseName}', style: const TextStyle(fontSize: 16, color: Colors.deepPurpleAccent)),
                 Text('현재재고 ${item.quantity}', style: const TextStyle(fontSize: 14)),
                 Text(
                   '적정재고 ${item.standard}',

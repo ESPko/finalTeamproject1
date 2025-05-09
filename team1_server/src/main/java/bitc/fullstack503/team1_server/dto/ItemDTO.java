@@ -22,4 +22,5 @@ public class ItemDTO
   private int price;
   private String image;
   private LocalDateTime time;
+  private String warehouseLocation;
 }

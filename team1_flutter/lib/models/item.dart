@@ -12,6 +12,7 @@ class Item {
   final int price; // 가격
   final String image; // 이미지 URL
   final DateTime time; // 등록 시간
+  final String warehouseLocation;
 
   Item({
     required this.idx,
@@ -27,6 +28,7 @@ class Item {
     required this.price,
     required this.image,
     required this.time,
+    required this.warehouseLocation,
   });
 
   factory Item.fromJson(Map<String, dynamic> json) {
@@ -44,6 +46,7 @@ class Item {
       price: json['price'] ?? 0, // null이면 0으로 처리
       image: json['image'] ?? '', // null이면 빈 문자열로 처리
       time: json['time'] != null ? DateTime.parse(json['time']) : DateTime.now(), // null이면 현재 시간으로 처리
+      warehouseLocation: json['warehouseLocation'] ?? '', // null이면 빈 문자열로 처리
     );
   }
 
@@ -62,6 +65,7 @@ class Item {
       'price': price,
       'image': image,
       'time': time.toIso8601String(),
+      'warehouseLocation': warehouseLocation,
     };
   }
 }
