@@ -67,8 +67,8 @@ class _ConfirmDispatchDialogState extends State<ConfirmDispatchDialog> {
     }
   }
 
-  Future<bool?> showResultDialog(BuildContext context, int parsed) {
-    return showDialog<bool>(
+  Future<void> showResultDialog(BuildContext context, int parsed) async {
+    await showDialog<void>(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext dialogContext) {
@@ -78,7 +78,7 @@ class _ConfirmDispatchDialogState extends State<ConfirmDispatchDialog> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(dialogContext).pop(true);
+                Navigator.of(dialogContext).pop(); // 결과 다이얼로그 닫기
               },
               child: const Text('확인'),
             ),
@@ -143,13 +143,10 @@ class _ConfirmDispatchDialogState extends State<ConfirmDispatchDialog> {
               await dispatchQuantity(parsed);
               if (!mounted) return;
 
-              final confirmed = await showResultDialog(context, parsed);
-              if (confirmed == true && mounted) {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => DashBoardScreen()),
-                );
-              }
+              await showResultDialog(context, parsed); // 결과 다이얼로그 표시
+              if (!mounted) return;
+
+              Navigator.of(context).pop(true); // 출고 성공 상태 반환
             } catch (e) {
               if (!mounted) return;
               showDialog(
