@@ -34,7 +34,7 @@ public class WarehouseController {
         }
     }
 
-    @PutMapping("/updateLocation/{id}")
+    @PutMapping("/{idx}")
     public String updateLocation(@PathVariable int idx, @RequestBody WarehouseDTO warehouseDTO) {
         try {
             warehouseService.updateLocation(idx, warehouseDTO);

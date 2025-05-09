@@ -2,13 +2,11 @@ import { useState } from 'react';
 import axios from 'axios';
 
 function ClientAdd({ onClose, onSuccess }) {
-  const [client, setClient] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    location: '',
-    memo: '',
-  });
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [location, setLocation] = useState('');
+  const [memo, setMemo] = useState('');
 
   const handleChange = (e) => {
     setClient({ ...client, [e.target.name]: e.target.value });

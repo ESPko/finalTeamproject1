@@ -12,6 +12,7 @@ function ClientList() {
   const [selectedClient, setSelectedClient] = useState(null);
   const [clientDetailModal, setClientDetailModal] = useState(false);
   const [updatedClient, setUpdatedClient] = useState(null);
+  const [client, setClient] = useState(null);
 
   const fetchClients = () => {
     axios.get('http://localhost:8080/vendor/vendorList')
@@ -26,6 +27,7 @@ function ClientList() {
   const clientClick = (client) => {
     setSelectedClient(client);
     setUpdatedClient(client); // 수정할 값을 초기화
+    setClient(client);
     setClientDetailModal(true);
   };
 
@@ -88,10 +90,48 @@ function ClientList() {
           </Topline>
 
           {/* 거래처 추가 모달 */}
+          {/*<Modal*/}
+          {/*  isOpen={clientAdd}*/}
+          {/*  onClose={() => setClientAdd(false)}*/}
+          {/*  title="거래처 추가"*/}
+          {/*>*/}
+          {/*  <ClientAdd*/}
+          {/*    onClose={() => setClientAdd(false)}*/}
+          {/*    onSuccess={fetchClients}*/}
+          {/*  />*/}
+          {/*</Modal>*/}
+
           <Modal
             isOpen={clientAdd}
             onClose={() => setClientAdd(false)}
             title="거래처 추가"
+            footer={(
+              <>
+                <button
+                  className="bg-blue-600 text-white px-4 py-2 rounded"
+                  onClick={() => {
+                    axios.post(`http://localhost:8080/vendor/vendorAdd`, client)
+                      .then(() => {
+                        alert('수정 완료');
+                        setClientDetailModal(false);
+                        fetchClients();
+                      });
+                    // 여기에서 추가 로직을 처리
+                    alert('추가되었습니다.');
+                    setClientAdd(false); // 모달 닫기
+                    fetchClients(); // 목록 갱신
+                  }}
+                >
+                  추가
+                </button>
+                <button
+                  className="bg-gray-600 text-white px-4 py-2 rounded"
+                  onClick={() => setClientAdd(false)} // 취소 클릭 시 모달 닫기
+                >
+                  취소
+                </button>
+              </>
+            )}
           >
             <ClientAdd
               onClose={() => setClientAdd(false)}

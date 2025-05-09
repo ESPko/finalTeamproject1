@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 
 function LocationDetail({ locationInfo, onClose, onUpdate }) {
   const [localName, setLocalName] = useState('');
   const [localMemo, setLocalMemo] = useState('');
   const [localAddress, setLocalAddress] = useState('');
 
-  // 위치 정보 초기화
   useEffect(() => {
     if (locationInfo) {
       setLocalName(locationInfo.name);
@@ -20,18 +18,12 @@ function LocationDetail({ locationInfo, onClose, onUpdate }) {
       name: localName,
       memo: localMemo,
       location: localAddress,
+      idx: locationInfo.idx // 수정된 항목의 idx 값 포함
     };
 
-    axios.put(`http://localhost:8080/warehouse/updateLocation/${locationInfo.idx}`, updatedLocation)
-      .then(() => {
-        alert('위치가 성공적으로 수정되었습니다.');
-        onUpdate(); // 위치 목록 갱신
-        onClose(); // 모달 닫기
-      })
-      .catch((error) => {
-        console.error('위치 수정 실패:', error);
-        alert('위치 수정에 실패했습니다.');
-      });
+    // 수정된 위치 정보를 부모에게 전달하여 상태 업데이트
+    onUpdate(updatedLocation);
+    onClose(); // 모달을 닫음
   };
 
   if (!locationInfo) {
@@ -40,11 +32,8 @@ function LocationDetail({ locationInfo, onClose, onUpdate }) {
 
   return (
     <div className="space-y-6">
-      {/* 이름 입력 */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          이름<span className="text-red-500 ml-1">*</span>
-        </label>
+        <label className="block text-sm font-medium text-gray-700 mb-1">이름<span className="text-red-500 ml-1">*</span></label>
         <input
           type="text"
           className="w-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 rounded px-3 py-2 text-sm"
@@ -53,11 +42,8 @@ function LocationDetail({ locationInfo, onClose, onUpdate }) {
         />
       </div>
 
-      {/* 주소 입력 */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          주소<span className="text-red-500 ml-1">*</span>
-        </label>
+        <label className="block text-sm font-medium text-gray-700 mb-1">주소<span className="text-red-500 ml-1">*</span></label>
         <input
           type="text"
           className="w-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 rounded px-3 py-2 text-sm"
@@ -66,7 +52,6 @@ function LocationDetail({ locationInfo, onClose, onUpdate }) {
         />
       </div>
 
-      {/* 메모 입력 */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">메모</label>
         <input
@@ -75,6 +60,11 @@ function LocationDetail({ locationInfo, onClose, onUpdate }) {
           value={localMemo}
           onChange={(e) => setLocalMemo(e.target.value)}
         />
+      </div>
+
+      <div className="flex justify-end space-x-4 mt-4">
+        <button className="bg-gray-200 text-gray-700 px-4 py-2 rounded" onClick={onClose}>취소</button>
+        <button className="bg-blue-600 text-white px-4 py-2 rounded" onClick={handleSave}>수정</button>
       </div>
     </div>
   );
