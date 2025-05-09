@@ -13,6 +13,7 @@ function ClientList() {
   const [clientDetailModal, setClientDetailModal] = useState(false);
   const [updatedClient, setUpdatedClient] = useState(null);
 
+
   const fetchClients = () => {
     axios.get('http://localhost:8080/vendor/vendorList')
       .then(response => setClients(response.data))
@@ -91,7 +92,7 @@ function ClientList() {
           <Modal
             isOpen={clientAdd}
             onClose={() => setClientAdd(false)}
-            title="거래처 추가"
+            title="매입처 추가"
           >
             <ClientAdd
               onClose={() => setClientAdd(false)}
@@ -103,7 +104,7 @@ function ClientList() {
           <Modal
             isOpen={clientDetailModal}
             onClose={() => setClientDetailModal(false)}
-            title="거래처 수정"
+            title="매입처 수정"
             footer={
               <>
                 <button

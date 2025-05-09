@@ -97,7 +97,7 @@ function ClientAdd({ onClose, onSuccess }) {
         </div>
     </div>
 
-      <div className="flex justify-end space-x-2 px-4 py-2">
+      <div className="flex justify-end space-x-2 px-4 py-2 border-t">
         <button onClick={handleSubmit} className="bg-blue-600 text-white px-4 py-2 rounded">추가</button>
         <button onClick={onClose} className="bg-gray-200 text-gray-700 px-4 py-2 rounded">취소</button>
       </div>
