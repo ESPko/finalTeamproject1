@@ -23,8 +23,16 @@ function MemberManagement() {
     '부장':2
   }
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    if(user?.position !== 2){
+      alert("접근 권한이 없습니다.")
+      window.location.href = "/";
+    }
+
     axios.get('http://localhost:8080/member')
       .then(res => {
+
         const mappedData = res.data.map((user,index) => ({
           idx:user.idx,
           id:user.id,
