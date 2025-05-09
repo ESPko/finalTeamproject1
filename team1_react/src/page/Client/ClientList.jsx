@@ -14,21 +14,24 @@ function ClientList() {
   const [updatedClient, setUpdatedClient] = useState(null);
   const [client, setClient] = useState(null);
 
+  // 클라이언트 목록을 가져오는 함수
   const fetchClients = () => {
     axios.get('http://localhost:8080/vendor/vendorList')
       .then(response => setClients(response.data))
       .catch(console.error);
   };
 
+  // 페이지 로드시 클라이언트 목록을 불러옴
   useEffect(() => {
     fetchClients();
   }, []);
 
+  // 거래처 클릭 시 처리
   const clientClick = (client) => {
     setSelectedClient(client);
     setUpdatedClient(client); // 수정할 값을 초기화
     setClient(client);
-    setClientDetailModal(true);
+    setClientDetailModal(true); // 거래처 수정 모달 열기
   };
 
   return (
@@ -39,7 +42,7 @@ function ClientList() {
             title="매입처"
             actions={
               <button
-                onClick={() => setClientAdd(true)}
+                onClick={() => setClientAdd(true)} // 매입처 추가 버튼 클릭 시 모달 열기
                 className="bg-blue-600 text-white px-4 py-2 rounded"
               >
                 매입처 추가
@@ -74,7 +77,7 @@ function ClientList() {
                   </tr>
                   </thead>
                   <tbody>
-                  {clients.map((client ) => (
+                  {clients.map((client) => (
                     <tr key={client.idx} onClick={() => clientClick(client)} className="border-b border-gray-200 text-center">
                       <td className="py-2 px-4 w-[200px]">{client.name}</td>
                       <td className="py-2 px-4 w-[200px]">{client.phone}</td>
@@ -90,17 +93,6 @@ function ClientList() {
           </Topline>
 
           {/* 거래처 추가 모달 */}
-          {/*<Modal*/}
-          {/*  isOpen={clientAdd}*/}
-          {/*  onClose={() => setClientAdd(false)}*/}
-          {/*  title="거래처 추가"*/}
-          {/*>*/}
-          {/*  <ClientAdd*/}
-          {/*    onClose={() => setClientAdd(false)}*/}
-          {/*    onSuccess={fetchClients}*/}
-          {/*  />*/}
-          {/*</Modal>*/}
-
           <Modal
             isOpen={clientAdd}
             onClose={() => setClientAdd(false)}
@@ -110,16 +102,22 @@ function ClientList() {
                 <button
                   className="bg-blue-600 text-white px-4 py-2 rounded"
                   onClick={() => {
-                    axios.post(`http://localhost:8080/vendor/vendorAdd`, client)
+                    // 거래처 추가 로직
+                    axios.post('http://localhost:8080/vendor/vendorAdd', client, {
+                      headers: {
+                        'Content-Type': 'application/json', // 요청 헤더에 Content-Type을 설정
+                      }
+                    })
                       .then(() => {
-                        alert('수정 완료');
-                        setClientDetailModal(false);
-                        fetchClients();
+                        alert('추가되었습니다.');
+                        setClientAdd(false); // 모달 닫기
+                        fetchClients(); // 목록 갱신
+                      })
+                      .catch((error) => {
+                        console.error('Error: ', error.response.data);  // 에러 내용을 출력하여 확인
+                        console.log(client);  // client 객체 출력
+                        alert('추가 중 오류가 발생했습니다.');
                       });
-                    // 여기에서 추가 로직을 처리
-                    alert('추가되었습니다.');
-                    setClientAdd(false); // 모달 닫기
-                    fetchClients(); // 목록 갱신
                   }}
                 >
                   추가
@@ -144,16 +142,21 @@ function ClientList() {
             isOpen={clientDetailModal}
             onClose={() => setClientDetailModal(false)}
             title="거래처 수정"
-            footer={
+            footer={(
               <>
                 <button
                   className="bg-blue-600 text-white px-4 py-2 rounded"
                   onClick={() => {
+                    // 거래처 수정 로직
                     axios.put(`http://localhost:8080/vendor/${updatedClient.idx}`, updatedClient)
                       .then(() => {
                         alert('수정 완료');
-                        setClientDetailModal(false);
-                        fetchClients();
+                        setClientDetailModal(false); // 모달 닫기
+                        fetchClients(); // 목록 갱신
+                      })
+                      .catch((error) => {
+                        alert('수정 중 오류가 발생했습니다.');
+                        console.error(error);
                       });
                   }}
                 >
@@ -163,13 +166,14 @@ function ClientList() {
                   className="bg-red-600 text-white px-4 py-2 rounded"
                   onClick={() => {
                     if (window.confirm('정말 삭제하시겠습니까?')) {
+                      // 거래처 삭제 로직
                       axios.delete(`http://localhost:8080/vendor/${selectedClient.idx}`)
                         .then(() => {
                           alert('삭제 완료');
-                          setClientDetailModal(false);
+                          setClientDetailModal(false); // 모달 닫기
                           fetchClients(); // 삭제 후 목록 갱신
                         })
-                        .catch(error => {
+                        .catch((error) => {
                           alert('삭제 중 오류가 발생했습니다.');
                           console.error(error);
                         });
@@ -179,7 +183,7 @@ function ClientList() {
                   삭제
                 </button>
               </>
-            }
+            )}
           >
             <ClientDetail client={selectedClient} onUpdate={setUpdatedClient} />
           </Modal>
