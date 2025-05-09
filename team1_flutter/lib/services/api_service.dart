@@ -143,7 +143,7 @@ class ApiService {
   Future<Item> dispatchItem(String itemId, int quantityToSubtract, String token) async {
     try {
       final response = await dio.patch(
-        '$baseUrl/$itemId/dispatch-quantity',
+        '$baseUrl/api/items/$itemId/dispatch-quantity',
         data: {
           'quantityToSubtract': quantityToSubtract,
         },

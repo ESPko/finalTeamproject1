@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import '../models/item.dart';
 import '../widgets/item_card.dart';
+import '../widgets/item_card_large.dart';
 
 class ConfirmDispatchDialog extends StatefulWidget {
   final String qrUrl;
@@ -103,7 +104,7 @@ class _ConfirmDispatchDialogState extends State<ConfirmDispatchDialog> {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              ItemCard(item: item),
+              ItemCardLarge(item: item),
               const SizedBox(height: 16),
               TextField(
                 controller: _quantityController,
