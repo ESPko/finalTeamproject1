@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test2/screens/history_screen.dart';
 import 'package:test2/screens/login_screen.dart';
 import 'package:test2/screens/dash_board_screen.dart';
+import 'package:test2/screens/my_page_screen.dart';
 import '../models/user.dart';
 
 class MainScreen extends StatefulWidget {
@@ -66,10 +67,14 @@ class _MainScreenState extends State<MainScreen> {
       _isLoggedIn = false;
     });
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => LoginScreen()),
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('로그아웃되었습니다.')),
     );
+
+    // 현재 선택된 화면을 로그인 화면으로 전환
+    setState(() {
+      _selectedIndex = 2;
+    });
   }
 
   @override
@@ -87,9 +92,9 @@ class _MainScreenState extends State<MainScreen> {
     }
 
     final List<Widget> _screens = [
-      DashBoardScreen(user: _user), // 안전하게 null 체크 후 전달
+      DashBoardScreen(user: _user),
       HistoryScreen(),
-      LoginScreen(),
+      _isLoggedIn ? MypageScreen(user: _user!) : LoginScreen(),
     ];
 
     return Scaffold(
@@ -118,7 +123,7 @@ class _MainScreenState extends State<MainScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            label: _isLoggedIn ? '로그아웃' : '로그인', // 로그인 상태에 따라 버튼 텍스트 변경
+            label: '마이페이지',
           ),
         ],
       ),

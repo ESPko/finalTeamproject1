@@ -5,7 +5,8 @@ import 'package:test2/screens/stock_check.dart';
 import '../models/user.dart';
 import '../screens/login_screen.dart'; // 추가
 import '../screens/main_screen.dart'; // 추가
-import '../screens/history_screen.dart'; // 추가
+import '../screens/history_screen.dart';
+import '../screens/my_page_screen.dart'; // 추가
 
 // 앱의 라우트를 관리하는 Map
 final Map<String, WidgetBuilder> appRoutes = {
@@ -29,4 +30,9 @@ final Map<String, WidgetBuilder> appRoutes = {
 
   // 재고 확인 화면
   '/stockcheck': (context) => const StockCheck(), // 세미콜론 → 쉼표
+
+  '/mypage' : (context) {
+    final user = ModalRoute.of(context)!.settings.arguments as User;
+    return MypageScreen(user: user);
+  },
 };
