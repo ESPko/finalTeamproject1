@@ -19,7 +19,6 @@ function App() {
       {/* 조건에 따라 Header와 Side 또는 Header2와 Side2를 렌더링 */}
       {isDefault ? (
         <>
-          {/*<AxiosTest />*/}
           <Header toggleLayout={toggleLayout} />
           <Side />
         </>
