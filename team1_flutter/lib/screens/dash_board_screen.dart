@@ -7,9 +7,10 @@ import '../services/api_service.dart';
 import '../widgets/custom_qr_icon.dart';
 import 'item_detail_screen.dart';
 
+// 대시보드 화면으로, 로그인한 사용자의 정보를 받아서 전달
 class DashBoardScreen extends StatelessWidget {
-  final User user;
-  const DashBoardScreen({Key? key, required this.user}) : super(key: key);
+  final User? user;
+  const DashBoardScreen({Key? key, this.user}) : super(key: key); // User?로 변경
 
   @override
   Widget build(BuildContext context) {
@@ -18,13 +19,23 @@ class DashBoardScreen extends StatelessWidget {
         title: Text('아이템매니아'),
         elevation: 0,
       ),
-      body: InventoryMainPage(user: user),
+      body: InventoryMainPage(
+        user: user ?? User(
+          idx: 0, // 기본값으로 0을 사용
+          id: 'default_id', // 기본값으로 'default_id' 사용
+          pass: 'default_pass', // 기본값으로 'default_pass' 사용
+          nickName: 'default_nickName', // 기본값으로 'default_nickName' 사용
+          department: 'default_department', // 기본값으로 'default_department' 사용
+          position: 0, // 기본값으로 0을 사용
+        ), // user가 null이면 기본 User 객체 전달
+      ),
     );
   }
 }
 
+// 실제 인벤토리 페이지의 StatefulWidget
 class InventoryMainPage extends StatefulWidget {
-  final User user;
+  final User user; // User 객체를 non-nullable로 처리
   const InventoryMainPage({super.key, required this.user});
 
   @override
@@ -32,27 +43,28 @@ class InventoryMainPage extends StatefulWidget {
 }
 
 class _InventoryMainPageState extends State<InventoryMainPage> {
-  final String today = DateFormat('MM월 dd일').format(DateTime.now());
-  List<Item> _items = [];
-  List<Item> _filteredItems = [];
-  bool _isLoading = true;
-  TextEditingController _searchController = TextEditingController();
+  final String today = DateFormat('MM월 dd일').format(DateTime.now()); // 오늘 날짜
+  List<Item> _items = []; // 전체 아이템 리스트
+  List<Item> _filteredItems = []; // 검색 필터링된 아이템 리스트
+  bool _isLoading = true; // 로딩 여부
+  TextEditingController _searchController = TextEditingController(); // 검색 필드 컨트롤러
 
-  final ApiService apiService = ApiService();
+  final ApiService apiService = ApiService(); // API 서비스 인스턴스
 
   @override
   void initState() {
     super.initState();
-    _fetchItems();
-    _searchController.addListener(_filterItems);
+    _fetchItems(); // 아이템 데이터를 서버에서 받아오기
+    _searchController.addListener(_filterItems); // 검색어 변경 시 필터링 실행
   }
 
+  // 서버에서 아이템 데이터를 비동기로 가져오는 함수
   Future<void> _fetchItems() async {
     try {
-      List<Item> items = await apiService.fetchItems();
+      List<Item> items = await apiService.fetchItems(); // API 호출
       setState(() {
         _items = items;
-        _filteredItems = _items;
+        _filteredItems = _items; // 초기에는 전체 리스트 표시
         _isLoading = false;
       });
     } catch (e) {
@@ -63,31 +75,36 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
     }
   }
 
+  // 검색어에 따라 아이템 필터링
   void _filterItems() {
-    String query = _searchController.text.toLowerCase();
+    String query = _searchController.text.toLowerCase(); // 검색어 소문자 처리
     setState(() {
       _filteredItems = _items.where((item) {
-        return item.name.toLowerCase().contains(query) ||
-            item.vendorName.toLowerCase().contains(query);
+        return item.name.toLowerCase().contains(query) || // 이름 검색
+            item.vendorName.toLowerCase().contains(query); // 공급처명 검색
       }).toList();
     });
   }
 
+  // 총 재고 계산 (filteredItems 기준)
   int getTotalStock() {
     return _filteredItems.fold(0, (sum, item) => sum + (item.quantity ?? 0));
   }
 
+  // 전체 제품 카드를 리스트로 생성
   Widget _buildProductCard() {
     return Column(
       children: _filteredItems.map((item) => _buildProductItemCard(item)).toList(),
     );
   }
 
+  // 개별 제품 카드 UI
   Widget _buildProductItemCard(Item item) {
-    final bool isStockLow = item.quantity < item.standard;
+    final bool isStockLow = item.quantity < item.standard; // 현재 수량이 기준보다 낮은지 여부
 
     return GestureDetector(
       onTap: () {
+        // 상세 페이지로 이동
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -106,15 +123,17 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
         ),
         child: Row(
           children: [
+            // 이미지 영역
             Container(
               width: 80,
               height: 80,
               decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(10)),
               child: item.image.isNotEmpty
-                  ? Image.network(item.image, fit: BoxFit.cover)
-                  : Icon(Icons.image, size: 40, color: Colors.white),
+                  ? Image.network(item.image, fit: BoxFit.cover) // 이미지 있을 경우
+                  : Icon(Icons.image, size: 40, color: Colors.white), // 없을 경우 기본 아이콘
             ),
             SizedBox(width: 16),
+            // 제품명 및 공급처
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,6 +144,7 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
                 ],
               ),
             ),
+            // 수량 정보
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -132,7 +152,7 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
                 Text('현재재고 ${item.quantity}', style: TextStyle(fontSize: 14, color: Colors.black87)),
                 Text(
                   '적정재고 ${item.standard}',
-                  style: TextStyle(fontSize: 14, color: isStockLow ? Colors.red : Colors.black87),
+                  style: TextStyle(fontSize: 14, color: isStockLow ? Colors.red : Colors.black87), // 재고 부족 시 빨간색
                 ),
               ],
             ),
@@ -145,27 +165,29 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
   @override
   Widget build(BuildContext context) {
     return _isLoading
-        ? Center(child: CircularProgressIndicator())
+        ? Center(child: CircularProgressIndicator()) // 로딩 중이면 로딩 스피너 표시
         : SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildSummaryCard(),
+            _buildSummaryCard(), // 요약 카드 (총재고 등)
             SizedBox(height: 16),
-            CustomSearchBar(controller: _searchController),
+            CustomSearchBar(controller: _searchController), // 검색바
             SizedBox(height: 16),
-            _buildProductCard(),
+            _buildProductCard(), // 아이템 리스트
           ],
         ),
       ),
     );
   }
 
+  // 상단 요약 카드 (총재고, 총입고, 총출고)
   Widget _buildSummaryCard() {
     return GestureDetector(
       onTap: () {
+        // 관리자나 매니저만 재고조사 페이지로 이동
         if (widget.user.position == 1 || widget.user.position == 2) {
           Navigator.pushNamed(context, '/stockcheck');
         } else {
@@ -183,6 +205,7 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // 날짜 표시
             RichText(
               text: TextSpan(
                 children: [
@@ -192,13 +215,14 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
               ),
             ),
             SizedBox(height: 20),
+            // 숫자 요약
             Row(
               children: [
-                _buildSummaryText(getTotalStock().toString()),
+                _buildSummaryText(getTotalStock().toString()), // 총재고
                 _buildVerticalDivider(),
-                _buildSummaryText('0'),
+                _buildSummaryText('0'), // 총입고 (임시값)
                 _buildVerticalDivider(),
-                _buildSummaryText('0'),
+                _buildSummaryText('0'), // 총출고 (임시값)
               ],
             ),
             Row(
@@ -240,6 +264,7 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
   }
 }
 
+// 검색 바 위젯
 class CustomSearchBar extends StatelessWidget {
   final TextEditingController controller;
 
@@ -288,7 +313,7 @@ class CustomSearchBar extends StatelessWidget {
           const SizedBox(width: 15),
           GestureDetector(
             onTap: () {
-              Navigator.pushNamed(context, '/scan');
+              Navigator.pushNamed(context, '/scan'); // QR 스캔 페이지로 이동
             },
             behavior: HitTestBehavior.translucent,
             child: Container(

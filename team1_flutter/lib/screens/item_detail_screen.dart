@@ -20,6 +20,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
   void initState() {
     super.initState();
     futureItem = ApiService().fetchItemById(widget.itemId); // 아이템 정보 불러오기
+    print(widget.itemId);
   }
 
   @override

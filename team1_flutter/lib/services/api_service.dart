@@ -5,14 +5,14 @@ import '../models/item.dart';
 import '../models/user.dart'; // User 모델을 임포트합니다.
 
 class ApiService {
-  final String baseUrl = 'http://10.100.203.16:8080/';
+  final String baseUrl = 'http://10.100.203.16:8080';
   final Dio dio = Dio();
 
   // ✅ 로그인 기능
-  Future<String?> login(String email, String password) async {
+  Future<Map<String, dynamic>> login(String email, String password) async {
     try {
       final response = await dio.post(
-        'http://10.100.203.16:8080/api/login',
+        '$baseUrl/api/login',
         data: jsonEncode({
           'id': email,
           'pass': password,
@@ -23,8 +23,11 @@ class ApiService {
       if (response.statusCode == 200) {
         final data = response.data;
         String token = data['token'];
-        // 로그인 성공 후 JWT 토큰을 저장하고 반환
-        return token;
+        Map<String, dynamic> user = data['user'];
+        return {
+          'token': token,
+          'user': user,
+        };
       } else {
         throw Exception('로그인 실패: ${response.statusCode}');
       }
@@ -32,6 +35,7 @@ class ApiService {
       throw Exception('로그인 실패: $e');
     }
   }
+
 
   // ✅ 전체 아이템 목록 조회
   Future<List<Item>> fetchItems() async {
@@ -51,7 +55,7 @@ class ApiService {
         ),
       );
 
-      print('Response data: ${response.data}');
+      // print('Response data: ${response.data}');
       if (response.statusCode == 200) {
         if (response.data == null) {
           throw Exception('아이템 목록이 비어 있습니다.');
@@ -82,7 +86,7 @@ class ApiService {
       }
 
       final response = await dio.get(
-        '$baseUrl/$itemId',
+        '$baseUrl/api/items/$itemId',
         options: Options(
           headers: {
             'Authorization': 'Bearer $token',

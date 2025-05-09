@@ -18,7 +18,7 @@ class _MainScreenState extends State<MainScreen> {
   User? _user;
   bool _isLoading = true;
   String? _error;
-  bool _isLoggedIn = false; // 로그인 여부 상태 추가
+  bool _isLoggedIn = false;
 
   @override
   void initState() {
@@ -28,15 +28,21 @@ class _MainScreenState extends State<MainScreen> {
 
   // 사용자 정보 로딩
   Future<void> _loadUser() async {
+    setState(() {
+      _isLoading = true;
+    });
+
     try {
       final prefs = await SharedPreferences.getInstance();
       final userJson = prefs.getString('user');
-      if (userJson == null) throw Exception('저장된 사용자 정보가 없습니다.');
+      if (userJson == null) {
+        throw Exception('저장된 사용자 정보가 없습니다.');
+      }
 
       final user = User.fromJson(json.decode(userJson));
       setState(() {
         _user = user;
-        _isLoggedIn = true; // 사용자 정보가 있으면 로그인 상태로 설정
+        _isLoggedIn = true;
         _isLoading = false;
       });
     } catch (e) {
@@ -44,18 +50,22 @@ class _MainScreenState extends State<MainScreen> {
         _error = e.toString();
         _isLoading = false;
       });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('로그인 정보 로딩 오류: $_error')),
+      );
     }
   }
 
   // 로그아웃 처리
   Future<void> _logout() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('user'); // 사용자 정보 삭제
+    await prefs.remove('user');
+
     setState(() {
       _user = null;
-      _isLoggedIn = false; // 로그아웃 상태로 변경
+      _isLoggedIn = false;
     });
-    // 로그인 화면으로 이동
+
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => LoginScreen()),
@@ -77,7 +87,7 @@ class _MainScreenState extends State<MainScreen> {
     }
 
     final List<Widget> _screens = [
-      DashBoardScreen(user: _user!), // 유저 정보 전달
+      DashBoardScreen(user: _user), // 안전하게 null 체크 후 전달
       HistoryScreen(),
       LoginScreen(),
     ];
@@ -112,7 +122,6 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ],
       ),
-      // 로그아웃 시 버튼 눌렀을 때 로그아웃 처리
       floatingActionButton: _isLoggedIn
           ? FloatingActionButton(
         onPressed: _logout,
