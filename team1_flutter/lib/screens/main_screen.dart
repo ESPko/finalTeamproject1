@@ -37,7 +37,7 @@ class _MainScreenState extends State<MainScreen> {
       final prefs = await SharedPreferences.getInstance();
       final userJson = prefs.getString('user');
       if (userJson == null) {
-        throw Exception('저장된 사용자 정보가 없습니다.');
+        throw Exception('로그인 정보가 없습니다. 로그인 후 이용해주세요.');
       }
 
       final user = User.fromJson(json.decode(userJson));
@@ -51,9 +51,13 @@ class _MainScreenState extends State<MainScreen> {
         _error = e.toString();
         _isLoading = false;
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('로그인 정보 로딩 오류: $_error')),
-      );
+
+      // WidgetsBinding 사용하여 안전한 스낵바 출력
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('로그인 정보 로딩 오류: $_error')),
+        );
+      });
     }
   }
 
@@ -65,22 +69,20 @@ class _MainScreenState extends State<MainScreen> {
     setState(() {
       _user = null;
       _isLoggedIn = false;
+      _selectedIndex = 2;
     });
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('로그아웃되었습니다.')),
-    );
-
-    // 현재 선택된 화면을 로그인 화면으로 전환
-    setState(() {
-      _selectedIndex = 2;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('로그아웃되었습니다.')),
+      );
     });
   }
 
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return Scaffold(
+      return const Scaffold(
         body: Center(child: CircularProgressIndicator()),
       );
     }
@@ -91,14 +93,16 @@ class _MainScreenState extends State<MainScreen> {
       );
     }
 
-    final List<Widget> _screens = [
-      DashBoardScreen(user: _user),
-      HistoryScreen(),
-      _isLoggedIn ? MypageScreen(user: _user!) : LoginScreen(),
+    final screens = [
+      DashBoardScreen(user: _user), // null 체크는 DashBoardScreen 내부에서도 수행됨
+      const HistoryScreen(),
+      _isLoggedIn
+          ? MypageScreen(user: _user!)
+          : const LoginScreen(),
     ];
 
     return Scaffold(
-      body: _screens[_selectedIndex],
+      body: screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: (index) {
@@ -110,9 +114,9 @@ class _MainScreenState extends State<MainScreen> {
         backgroundColor: Colors.white,
         selectedItemColor: Theme.of(context).primaryColor,
         unselectedItemColor: Colors.grey,
-        selectedIconTheme: IconThemeData(size: 28),
-        unselectedIconTheme: IconThemeData(size: 24),
-        items: [
+        selectedIconTheme: const IconThemeData(size: 28),
+        unselectedIconTheme: const IconThemeData(size: 24),
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.dashboard),
             label: '대시보드',
@@ -130,7 +134,7 @@ class _MainScreenState extends State<MainScreen> {
       floatingActionButton: _isLoggedIn
           ? FloatingActionButton(
         onPressed: _logout,
-        child: Icon(Icons.exit_to_app),
+        child: const Icon(Icons.exit_to_app),
         tooltip: '로그아웃',
       )
           : null,

@@ -74,10 +74,6 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                       _buildInfoRow('규격', '${item.standard}'),
                       _buildInfoRow('가격', '${item.price}'),
                     ]),
-
-                    _buildInfoBox(context, '기타 정보', [
-                      _buildInfoRow('등록 시간', item.time.toLocal().toString()),
-                    ]),
                   ],
                 ),
               );

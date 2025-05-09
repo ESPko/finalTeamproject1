@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:test2/screens/dash_board_screen.dart';
 import 'dart:convert';
 
 import '../models/item.dart';
-import '../widgets/item_card.dart';
 import '../widgets/item_card_large.dart';
 
 class ConfirmDispatchDialog extends StatefulWidget {
@@ -67,22 +67,24 @@ class _ConfirmDispatchDialogState extends State<ConfirmDispatchDialog> {
     }
   }
 
-  Future<void> showResultDialog(int parsed) async {
-    showDialog(
+  Future<bool?> showResultDialog(BuildContext context, int parsed) {
+    return showDialog<bool>(
       context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('출고 완료'),
-        content: Text('$parsed개가 출고되었습니다.'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(); // 결과 다이얼로그 닫기
-              Navigator.of(context).popUntil((route) => route.settings.name == '/dashboard');
-            },
-            child: const Text('확인'),
-          ),
-        ],
-      ),
+      barrierDismissible: false,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: const Text('출고 완료'),
+          content: Text('$parsed개가 출고되었습니다.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop(true);
+              },
+              child: const Text('확인'),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -101,20 +103,22 @@ class _ConfirmDispatchDialogState extends State<ConfirmDispatchDialog> {
 
           final item = snapshot.data!;
 
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ItemCardLarge(item: item),
-              const SizedBox(height: 16),
-              TextField(
-                controller: _quantityController,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  labelText: '차감할 수량',
-                  border: OutlineInputBorder(),
+          return SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ItemCardLarge(item: item),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: _quantityController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: '차감할 수량',
+                    border: OutlineInputBorder(),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         },
       ),
@@ -138,8 +142,14 @@ class _ConfirmDispatchDialogState extends State<ConfirmDispatchDialog> {
             try {
               await dispatchQuantity(parsed);
               if (!mounted) return;
-              Navigator.of(context).pop(); // 다이얼로그 닫기
-              showResultDialog(parsed);   // 결과 다이얼로그 표시
+
+              final confirmed = await showResultDialog(context, parsed);
+              if (confirmed == true && mounted) {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => DashBoardScreen()),
+                );
+              }
             } catch (e) {
               if (!mounted) return;
               showDialog(
