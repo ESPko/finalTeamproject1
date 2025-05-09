@@ -3,7 +3,7 @@
 
 <mapper namespace="bitc.fullstack503.team1_server.mapper.ItemMapper">
     <select id="getItemList" resultType="bitc.fullstack503.team1_server.dto.ItemDTO">
-        select * from item DESC
+        select * from item
     </select>
 
 </mapper>

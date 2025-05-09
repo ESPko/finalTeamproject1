@@ -37,7 +37,7 @@ function EquipmentInformation() {
 
   // ✅ 서버에서 비품 목록 불러오기
   useEffect(() => {
-    axios.get('/item/itemList')
+    axios.get('http://localhost:8080/item/itemList')
       .then((res) => {
         const data = res.data;
         if (Array.isArray(data)) {
