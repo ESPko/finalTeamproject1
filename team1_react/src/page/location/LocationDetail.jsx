@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 
-function LocationDetail({ locationInfo, onClose, onUpdate }) {
+
+function LocationDetail({ locationInfo, onUpdate}) {
   const [localName, setLocalName] = useState('');
   const [localMemo, setLocalMemo] = useState('');
   const [localAddress, setLocalAddress] = useState('');
@@ -15,24 +15,17 @@ function LocationDetail({ locationInfo, onClose, onUpdate }) {
     }
   }, [locationInfo]);
 
-  const handleSave = () => {
-    const updatedLocation = {
-      name: localName,
-      memo: localMemo,
-      location: localAddress,
-    };
-
-    axios.put(`http://localhost:8080/warehouse/updateLocation/${locationInfo.idx}`, updatedLocation)
-      .then(() => {
-        alert('위치가 성공적으로 수정되었습니다.');
-        onUpdate(); // 위치 목록 갱신
-        onClose(); // 모달 닫기
+  useEffect(() => {
+    if (onUpdate && locationInfo) {
+      onUpdate({
+        ...locationInfo,
+        name: localName,
+        memo: localMemo,
+        location : localAddress
       })
-      .catch((error) => {
-        console.error('위치 수정 실패:', error);
-        alert('위치 수정에 실패했습니다.');
-      });
-  };
+    }
+  },[localName, localMemo, localAddress ])
+
 
   if (!locationInfo) {
     return <div>위치 정보를 불러오는 중입니다...</div>;
@@ -76,6 +69,7 @@ function LocationDetail({ locationInfo, onClose, onUpdate }) {
           onChange={(e) => setLocalMemo(e.target.value)}
         />
       </div>
+
     </div>
   );
 }

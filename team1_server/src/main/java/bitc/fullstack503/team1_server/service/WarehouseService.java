@@ -11,5 +11,7 @@ public interface WarehouseService {
 
     void addLocation(WarehouseDTO warehouseDTO);
 
-    void updateLocation(int idx, WarehouseDTO warehouseDTO);
+    void updateLocation( WarehouseDTO warehouseDTO);
+
+    void deleteWarehouse(int idx);
 }

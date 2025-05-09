@@ -28,6 +28,7 @@ function ClientAdd({ onClose, onSuccess }) {
   };
 
   return (
+    <div>
     <div className="space-y-6">
         {/* 이름 */}
         <div>
@@ -94,8 +95,9 @@ function ClientAdd({ onClose, onSuccess }) {
             className="w-full border border-gray-300 rounded-md px-3 py-2 h-28 resize-none"
           />
         </div>
+    </div>
 
-      <div className="flex justify-end gap-2 pt-4">
+      <div className="flex justify-end space-x-2 px-4 py-2">
         <button onClick={handleSubmit} className="bg-blue-600 text-white px-4 py-2 rounded">추가</button>
         <button onClick={onClose} className="bg-gray-200 text-gray-700 px-4 py-2 rounded">취소</button>
       </div>

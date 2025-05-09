@@ -29,7 +29,12 @@ public class WarehouseServiceimpl implements WarehouseService {
     }
 
     @Override
-    public void updateLocation(int idx, WarehouseDTO warehouseDTO) {
-        warehouseMapper.updateLocaiton(idx, warehouseDTO);
+    public void updateLocation( WarehouseDTO warehouseDTO) {
+        warehouseMapper.updateLocation( warehouseDTO);
+    }
+
+    @Override
+    public void deleteWarehouse(int idx) {
+        warehouseMapper.deleteWarehouse(idx);
     }
 }

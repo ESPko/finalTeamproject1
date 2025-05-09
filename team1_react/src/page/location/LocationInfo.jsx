@@ -18,6 +18,8 @@ function LocationInfo() {
 
   const [itemCounts, setItemCounts] = useState({});
 
+  const[updatedLocation,setUpdatedLocation] = useState(null);
+
   // 서버에서 데이터 가져오기
   useEffect(() => {
     axios.get('http://localhost:8080/warehouse/warehouseList')
@@ -54,6 +56,14 @@ function LocationInfo() {
         console.error('위치 목록 불러오기 오류:', err);
       });
   };
+
+  const locationClick = (location) => {
+    setSelectedLocation(location);
+    setUpdatedLocation(location);
+    setLocalDetail(true);
+  }
+
+
 
   return (
     <div className=" flex-1 p-6 overflow-y-auto">
@@ -95,12 +105,32 @@ function LocationInfo() {
                       <td className="py-2 px-4 w-[250px] text-right space-x-2">
                         <button
                           onClick={() => {
-                            setSelectedLocation(location); // 선택된 위치 정보만 설정
-                            setLocalDetail(true); // 모달 열기
+                            locationClick(location)
                           }}
                           className="px-2 py-1 border rounded text-sm hover:bg-gray-100">수정
                         </button>
-                        <button className="px-2 py-1 border rounded text-sm hover:bg-gray-100">삭제</button>
+                        <button
+                          className="px-2 py-1 border rounded text-sm hover:bg-gray-100"
+                          onClick={() => {
+                            if (window.confirm('정말 삭제하시겠습니까?')) {
+                              // 삭제 요청을 보낼 idx를 사용
+                              axios.delete(`http://localhost:8080/warehouse/${location.idx}`)
+                                .then(() => {
+                                  // 삭제 성공 시, locationInfo 상태에서 해당 항목 제거
+                                  setLocationInfo(prevLocationInfo =>
+                                    prevLocationInfo.filter(item => item.idx !== location.idx)
+                                  );
+                                  alert('위치가 성공적으로 삭제되었습니다.');
+                                })
+                                .catch(error => {
+                                  console.error('위치 삭제 오류:', error);
+                                  alert('위치 삭제 실패');
+                                });
+                            }
+                          }}
+                        >
+                          삭제
+                        </button>
                       </td>
                     </tr>
                   ))}
@@ -126,8 +156,16 @@ function LocationInfo() {
               <>
                 <button
                   onClick={() => {
-                    alert('수정 기능은 아직 구현되지 않았습니다.');
-                    setLocalDetail(false);  // 모달 닫기
+                    axios.put(`http://localhost:8080/warehouse/updateLocation/${updatedLocation.idx}`, updatedLocation)
+                      .then((response) => {
+                        alert(response.data);
+                        setLocalDetail(false);  // 수정 모달 닫기
+                        handleAddLocation();  // 위치 목록 갱신
+                      })
+                      .catch((error) => {
+                        console.error('위치 수정 실패:', error);
+                        alert('위치 수정 실패');
+                      });
                   }}
                   className="bg-blue-600 text-white px-4 py-2 rounded"
                 >
@@ -144,8 +182,7 @@ function LocationInfo() {
           >
             <LocationDetail
               locationInfo={selectedLocation}
-              onClose={() => setLocalDetail(false)}
-              onUpdate={handleAddLocation}
+              onUpdate={setUpdatedLocation}
             />
           </Modal>
         </div>

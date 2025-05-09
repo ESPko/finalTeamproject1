@@ -14,9 +14,13 @@
         insert into warehouse (name, location, memo) values (#{name}, #{location}, #{memo});
     </insert>
 
-    <update id="updateLocaiton">
+    <update id="updateLocation">
         update warehouse set name = #{name}, location = #{location}, memo = #{memo} where idx = #{idx}
     </update>
+
+    <delete id="deleteWarehouse">
+        delete from warehouse where idx = #{idx}
+    </delete>
 
 </mapper>
 

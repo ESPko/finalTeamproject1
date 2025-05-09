@@ -34,13 +34,20 @@ public class WarehouseController {
         }
     }
 
-    @PutMapping("/updateLocation/{id}")
+    @PutMapping("/updateLocation/{idx}")
     public String updateLocation(@PathVariable int idx, @RequestBody WarehouseDTO warehouseDTO) {
         try {
-            warehouseService.updateLocation(idx, warehouseDTO);
+            warehouseService.updateLocation(warehouseDTO);
+            System.out.println("위치 수정 완료"); // 로그 추가
             return "위치가 성공적으로 수정되었습니다.";
         } catch (Exception e) {
+            e.printStackTrace();
             return "위치 수정에 실패했습니다.";
         }
+    }
+
+    @DeleteMapping("/{idx}")
+    public void deleteLocation(@PathVariable int idx) {
+        warehouseService.deleteWarehouse(idx);
     }
 }
