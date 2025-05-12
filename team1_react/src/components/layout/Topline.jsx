@@ -1,4 +1,5 @@
-function Topline({ title, actions, children }) {
+function Topline ({ title, actions, children })
+{
   return (
     <div className="px-2 pb-2 h-full flex flex-col">
       {/* 헤더 영역 */}
@@ -6,15 +7,16 @@ function Topline({ title, actions, children }) {
         <div className="text-2xl font-semibold">{title}</div>
         {actions && <div>{actions}</div>}
       </div>
-
+      
       <div className="border-b w-full"></div>
-
+      
       {/* 본문 콘텐츠 영역 */}
-      <div className="overflow-x-auto overflow-h-auto "style={{ maxHeight: 'calc(80vh - 120px)' }}>
+      <div className="overflow-x-auto overflow-h-auto min-h-[500px]" style={{ maxHeight: 'calc(80vh - 120px)' }}>
         <div className="min-w-[1200px]  pb-20">{children}</div>
       </div>
     </div>
   );
 }
+
 export default Topline;
 

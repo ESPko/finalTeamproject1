@@ -1,7 +1,5 @@
-function StatusTableBody ({ products })
-{
-  if (!products || products.length === 0)
-  {
+function StatusTableBody({ products }) {
+  if (!products || products.length === 0) {
     return (
       <tbody>
       <tr>

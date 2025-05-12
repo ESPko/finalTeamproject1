@@ -1,25 +1,32 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, memo } from 'react';
 
 function Location ({ selected, setSelected })
 {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState('');
+  const [locations, setLocations] = useState([]);
   const dropdownRef = useRef(null);
   
-  const locations = ['임시창고1',
-    '임시창고2',
-    '엄청엄청길어져도되는이름테스트용임시창고',
-    '임시창고3',
-    '임시창고4',
-    'ASDASD',
-    'asdASD'];
+  // 서버에서 창고 리스트 불러오기
+  useEffect(() => {
+    const fetchLocations = async () => {
+      try
+      {
+        const res = await fetch('http://localhost:8080/api/warehouses');
+        if (!res.ok) throw new Error('서버 오류');
+        const data = await res.json();
+        const uniqueNames = [...new Set(data.map(item => item.name))];
+        setLocations(uniqueNames);
+      }
+      catch (err)
+      {
+        console.error('창고 목록 불러오기 실패:', err);
+      }
+    };
+    fetchLocations();
+  }, []);
   
-  const filteredLocations = useMemo(() => {
-    return locations.filter((location) =>
-      location.toLowerCase().includes(search.toLowerCase()),
-    );
-  }, [search]);
-  
+  // 바깥 클릭 시 드롭다운 닫기
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target))
@@ -31,10 +38,16 @@ function Location ({ selected, setSelected })
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
   
+  const filteredLocations = useMemo(() => {
+    return locations.filter(location =>
+      location.toLowerCase().includes(search.toLowerCase()),
+    );
+  }, [search, locations]);
+  
   const toggleLocation = (location) => {
-    setSelected((prev) =>
+    setSelected(prev =>
       prev.includes(location)
-        ? prev.filter((item) => item !== location)
+        ? prev.filter(item => item !== location)
         : [...prev, location],
     );
   };
@@ -45,7 +58,7 @@ function Location ({ selected, setSelected })
   return (
     <div className="relative inline-block text-left h-auto" ref={dropdownRef}>
       <button
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={() => setIsOpen(prev => !prev)}
         className={`h-[40px] max-w-[400px] px-4 border overflow-hidden whitespace-nowrap text-ellipsis rounded ${
           selected.length > 0
             ? 'bg-blue-100 text-blue-600 border-blue-300'
@@ -65,11 +78,9 @@ function Location ({ selected, setSelected })
             onChange={(e) => setSearch(e.target.value)}
           />
           <ul className="overflow-y-auto max-h-60 p-0">
-            {filteredLocations.map((location, index) => (
-              <li key={index} className="hover:bg-gray-100">
-                <label
-                  className="flex items-center px-3 py-2 w-full whitespace-nowrap cursor-pointer"
-                >
+            {filteredLocations.map((location) => (
+              <li key={location} className="hover:bg-gray-100">
+                <label className="flex items-center px-3 py-2 w-full whitespace-nowrap cursor-pointer">
                   <input
                     type="checkbox"
                     checked={isChecked(location)}
@@ -87,4 +98,4 @@ function Location ({ selected, setSelected })
   );
 }
 
-export default Location;
+export default memo(Location);
