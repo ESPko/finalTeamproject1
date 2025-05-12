@@ -5,6 +5,9 @@ import bitc.fullstack503.team1_server.mapper.ItemStockMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class ItemStockServiceImpl implements ItemStockService {
@@ -17,14 +20,18 @@ public class ItemStockServiceImpl implements ItemStockService {
   }
 
   @Override
-  public void addItemQuantity(Long idx, int quantityToAdd) {
-    ItemDTO item = itemStockMapper.selectByIdx(idx);
-    if (item == null) {
-      throw new RuntimeException("해당 아이템을 찾을 수 없습니다.");
-    }
+  public void receiveItemWithInfo(Long idx, Map<String, Object> data) {
+    Integer quantityToAdd = (Integer) data.get("quantity");
+    String receivedDate = (String) data.get("receivedDate");
+    String memo = (String) data.get("memo");
 
-    int updatedQuantity = item.getQuantity() + quantityToAdd;
-    item.setQuantity(updatedQuantity);
-    itemStockMapper.update(item);
+    Map<String, Object> paramMap = new HashMap<>();
+    paramMap.put("idx", idx);
+    paramMap.put("quantity", quantityToAdd);
+    paramMap.put("receivedDate", receivedDate);
+    paramMap.put("memo", memo);
+
+    itemStockMapper.updateItemInfo(paramMap);
   }
+
 }

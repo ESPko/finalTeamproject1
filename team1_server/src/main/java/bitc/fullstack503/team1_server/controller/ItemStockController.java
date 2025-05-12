@@ -1,13 +1,14 @@
 package bitc.fullstack503.team1_server.controller;
 
 import bitc.fullstack503.team1_server.dto.ItemDTO;
-import bitc.fullstack503.team1_server.dto.song.ReceiveItemRequest;
 import bitc.fullstack503.team1_server.service.song.ItemStockService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/items")
@@ -19,20 +20,22 @@ public class ItemStockController {
   @PutMapping("/{idx}/receive")
   public ResponseEntity<String> receiveItem(
       @PathVariable Long idx,
-      @RequestBody ReceiveItemRequest request) {
+      @RequestBody Map<String, Object> requestMap) {
 
-    Integer quantityToAdd = request.getQuantity();
+    // 수량 유효성 검사
+    Integer quantityToAdd = (Integer) requestMap.get("quantity");
     if (quantityToAdd == null || quantityToAdd <= 0) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "입고 수량은 1 이상이어야 합니다.");
     }
 
+    // 아이템 존재 여부 확인
     ItemDTO item = itemStockService.getItemByIdx(idx);
     if (item == null) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 ID의 아이템을 찾을 수 없습니다.");
     }
 
-    itemStockService.addItemQuantity(idx, quantityToAdd);
-
+    itemStockService.receiveItemWithInfo(idx, requestMap);  // 서비스 메서드 호출
     return ResponseEntity.ok("입고가 완료되었습니다.");
   }
+
 }
