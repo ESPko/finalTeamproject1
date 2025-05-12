@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-function ProductAdd({ onAddProduct }) {
+function ProductAdd({ onClose, onSuccess }) {
   const [name, setName] = useState('');
   const [category, setCategory] = useState('');
   const [vendorName, setVendorName] = useState('');
@@ -14,6 +14,7 @@ function ProductAdd({ onAddProduct }) {
   const [warehouseList, setWarehouseList] = useState([]);  // 창고 목록 상태 추가
   const [vendorList, setVendorList] = useState([]);  // 창고 목록 상태 추가
 
+  const [imageSrc, setImageSrc] = useState(null);       // 미리보기용
 
   // 창고 목록 가져오기
   useEffect(() => {
@@ -41,25 +42,51 @@ function ProductAdd({ onAddProduct }) {
     fetchVendor();
   }, []);
 
-  // 값 변경 시 상위로 전달
-  useEffect(() => {
-    if (onAddProduct) {
-      onAddProduct({
-        name,
-        category,
-        vendorName,
-        warehouseName,
-        price,
-        standard,
-        image, // 파일 객체도 전달
-      });
-    }
-  }, [name, category, vendorName, warehouseName, price, standard, image]);
-
   // 이미지 선택 핸들러
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    setImage(file);
+    if (file)
+    {
+      const imageUrl = URL.createObjectURL(file);
+      setImageSrc(imageUrl);
+      setImage(file);
+    }
+  };
+
+  const handleUpload = async () => {
+    if (!image)
+    {
+      alert('이미지를 먼저 선택하세요.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('image', image);
+    formData.append('name', name);
+    formData.append('category', category);
+    formData.append('vendorName', vendorName);
+    formData.append('warehouseName', warehouseName);
+    formData.append('price', price);
+    formData.append('standard', standard);
+    console.log('Sending request with data: ', formData);  // 디버깅용
+
+    try
+    {
+      const response = await axios.post('http://localhost:8080/item/add', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      onSuccess();  // 리스트 리로드
+      onClose();    // 모달 닫기
+      console.log("백엔드 응답:", response.data); // 백엔드에서 받은 응답 확인
+      // 백에서 받은 imageUrl로 이미지 업데이트
+      setImageSrc(response.data.imageUrl);
+    }
+    catch (error)
+    {
+      console.error('이미지 업로드 실패:', error);
+    }
   };
 
   return (
@@ -119,12 +146,13 @@ function ProductAdd({ onAddProduct }) {
             </div>
           </div>
 
+
           {/* 오른쪽 이미지 */}
           <div className="md:col-span-1 flex justify-end items-start mt-4 w-full">
             <div className="flex flex-col items-center space-y-2">
-              {/* 파일 선택을 트리거하는 영역 */}
-              <label htmlFor="file-input" className="w-24 h-24 bg-gray-100 border border-dashed rounded-lg flex items-center justify-center text-2xl text-gray-400 cursor-pointer">
-                📷 {/* 클릭하면 파일 선택이 가능 */}
+              {/* 이미지 미리보기 대신 아이콘을 이미지로 변경 */}
+              <label htmlFor="file-input" className="w-24 h-24 bg-gray-100 border-none flex items-center justify-center text-2xl text-gray-400 cursor-pointer">
+                {!imageSrc ? '📷' : <img src={imageSrc} alt="미리보기" className="w-24 h-24 rounded-none" />} {/* 테두리와 둥글기 제거 */}
               </label>
 
               {/* 파일 input */}
@@ -135,17 +163,6 @@ function ProductAdd({ onAddProduct }) {
                 onChange={handleImageChange}
                 className="hidden" // input 요소를 화면에서 숨김
               />
-
-              {/* 미리보기 이미지 */}
-              {image && (
-                <div className="mt-2">
-                  <img
-                    src={URL.createObjectURL(image)}
-                    alt="미리보기"
-                    className="w-24 h-24 bg-gray-100 border border-dashed rounded-lg flex items-center justify-center text-2xl text-gray-400"
-                  />
-                </div>
-              )}
             </div>
           </div>
 
@@ -182,7 +199,7 @@ function ProductAdd({ onAddProduct }) {
               매입가
             </label>
             <input
-              type="number"
+              type="text"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               className="flex-1 border rounded px-3 py-2"
@@ -204,7 +221,7 @@ function ProductAdd({ onAddProduct }) {
               적정 재고
             </label>
             <input
-              type="number"
+              type="text"
               value={standard}
               onChange={(e) => setStandard(e.target.value)}
               className="flex-1 border rounded px-3 py-2"
@@ -214,6 +231,17 @@ function ProductAdd({ onAddProduct }) {
 
         </div>
       </section>
+
+      <div className="flex justify-end">
+        <button
+          className="bg-blue-600 text-white px-4 py-2 rounded"
+          onClick={handleUpload}
+        >
+          승인요청
+        </button>
+      </div>
+
+
     </div>
   );
 }

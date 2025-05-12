@@ -1,19 +1,47 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import QRCode from 'react-qr-code';
 
 function EquipmentDetail({ product }) {
+  const [name, setName] = useState(product?.name || '');
+  const [category, setCategory] = useState(product?.category || '');
+  const [price, setPrice] = useState(product?.price || '');
+  const [standard, setStandard] = useState(product?.standard || '');
+  const [quantity, setQuantity] = useState(product?.quantity || '');
+  const [warehouseName, setWarehouseName] = useState(product?.warehouseName || '');
+  const [vendorName, setVendorName] = useState(product?.vendorName || '');
+  const [image, setImage] = useState(product?.image || null); // 이미지 상태 추가
+  const [time] = useState(product?.time || ''); // time은 수정하지 않음, 읽기 전용
 
-  const [name, setName] = useState(product.name);
-  const [category, setCategory] = useState(product.category);
-  const [price, setPrice] = useState(product.price);
-  const [safetyStock, setSafetyStock] = useState(product.safetyStock);
-  const [totalQuantity, setTotalQuantity] = useState(product.totalQuantity);
-  const [tempWarehouse, setTempWarehouse1] = useState(product.tempWarehouse);
-  const [vendorName, setVendorName] = useState(product.vendorName);
-  const [orderDate, setOrderDate] = useState(product.orderDate);
 
+  useEffect(() => {
+    if (product) {
+      setName(product.name);
+      setCategory(product.category);
+      setPrice(product.price);
+      setStandard(product.standard);
+      setQuantity(product.quantity);
+      setWarehouseName(product.warehouseName);
+      setVendorName(product.vendorName);
+      setImage(product.image); // 이미지 상태 업데이트
+    }
+  }, [product]);
 
-  if (!product) return null;
+  // 이미지 파일 업로드 처리 함수
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(URL.createObjectURL(file)); // 미리보기 URL 생성
+      // 필요에 따라 파일 업로드 로직을 추가할 수 있습니다.
+    }
+  };
 
+  // idx 값을 사용하여 QR 코드 URL 생성
+  const qrCodeUrl = `http://10.100.203.16:8080/api/items/${product.idx}/dispatch-quantity`;
+
+  // 이미지 클릭 시 파일 선택창 열기
+  const handleImageClick = () => {
+    document.getElementById('file-input').click();
+  };
 
   return (
 
@@ -82,8 +110,8 @@ function EquipmentDetail({ product }) {
             <input
               type="text"
               className="flex-1 border rounded px-3 py-2"
-              value={orderDate}
-              onChange={(e) => setOrderDate(e.target.value)}
+              value={time}
+              readOnly
             />
           </div>
 
@@ -101,8 +129,8 @@ function EquipmentDetail({ product }) {
                 <input
                   type="text"
                   className="flex-1 border rounded px-3 py-2"
-                  value={safetyStock}
-                  onChange={(e) => setSafetyStock(e.target.value)}
+                  value={standard}
+                  onChange={(e) => setStandard(e.target.value)}
                 />
               </div>
 
@@ -114,8 +142,8 @@ function EquipmentDetail({ product }) {
                 <input
                   type="text"
                   className="flex-1 border rounded px-3 py-2"
-                  value={totalQuantity}
-                  onChange={(e) => setTotalQuantity(e.target.value)}
+                  value={quantity}
+                  onChange={(e) => setQuantity(e.target.value)}
                 />
               </div>
 
@@ -127,8 +155,8 @@ function EquipmentDetail({ product }) {
                 <input
                   type="text"
                   className="flex-1 border rounded px-3 py-2"
-                  value={tempWarehouse}
-                  onChange={(e) => setTempWarehouse1(e.target.value)}
+                  value={warehouseName}
+                  onChange={(e) => setWarehouseName(e.target.value)}
                 />
               </div>
 
@@ -139,20 +167,39 @@ function EquipmentDetail({ product }) {
 
         </div>
 
+
         {/* 오른쪽 이미지 + QR */}
         <div className="flex flex-col items-end space-y-2">
-          <div className="w-24 h-24 bg-gray-100 border border-dashed rounded-lg flex items-center justify-center text-2xl text-gray-400">
-            📷
+          <div
+            className="w-24 h-24 bg-gray-100 border border-dashed rounded-lg flex items-center justify-center text-2xl text-gray-400 cursor-pointer"
+            onClick={handleImageClick} // 이미지 클릭 시 input 열기
+          >
+            {image ? (
+              <img
+                src={image} // 이미지 미리보기
+                alt="비품 이미지"
+                className="w-full h-full object-cover border rounded-lg"
+              />
+            ) : (
+              <div className="w-full h-full bg-gray-100 border border-dashed rounded-lg flex items-center justify-center text-2xl text-gray-400">
+                📷
+              </div>
+            )}
           </div>
+          {/* 이미지 업로드 input */}
+          <input
+            id="file-input" // input에 id를 부여하여 클릭 시 트리거
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="hidden" // input을 화면에서 숨김
+          />
           <div className="w-24 h-24 bg-gray-100 border border-dashed rounded-lg flex items-center justify-center text-sm text-gray-400">
-            QR Code
+            {/* QR 코드 생성 */}
+            <QRCode value={qrCodeUrl} />
           </div>
         </div>
-
       </div>
-
-
-
   );
 }
 

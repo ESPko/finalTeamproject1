@@ -11,4 +11,20 @@
         values ( #{name}, #{category}, #{vendorName}, #{warehouseName}, #{standard}, #{price}, #{image})
     </insert>
 
+    <!-- 비품 수정 (idx 기준으로 수정) -->
+    <update id="updateItem" parameterType="bitc.fullstack503.team1_server.dto.ItemDTO">
+        UPDATE item
+        SET
+            name = #{name},
+            category = #{category},
+            vendor_name = #{vendorName},
+            warehouse_name = #{warehouseName},
+            quantity = #{quantity},
+            price = #{price},
+            standard = #{standard},
+            image = #{image}
+        WHERE idx = #{idx}
+    </update>
+
+
 </mapper>

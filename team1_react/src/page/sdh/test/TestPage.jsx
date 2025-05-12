@@ -9,7 +9,9 @@ function TestPage ()
   
   const [imageSrc, setImageSrc] = useState(null);       // 미리보기용
   const [imageFile, setImageFile] = useState(null);     // 전송용 원본 파일
-  
+  const [category, setCategory] = useState('');
+  const categories = ['필기구', '사무용품', '생활용품', '가전', '기타'];
+
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
     if (file)
@@ -86,6 +88,23 @@ function TestPage ()
               요청
             </button>
           </div>
+
+        </div>
+        {/*카테고리*/}
+        <div className="flex items-center w-full max-w-md">
+          <label className="w-20 text-sm font-medium text-gray-700 whitespace-nowrap">
+            카테고리
+          </label>
+          <select
+            className="flex-1 border rounded px-3 py-2"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}>
+            <option>선택하세요</option>
+            {categories.map((cat, index) => (
+              <option key={index} value={cat}>{cat}</option>
+            ))}
+          </select>
+
         </div>
       </div>
     

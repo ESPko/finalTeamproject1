@@ -5,13 +5,19 @@ import bitc.fullstack503.team1_server.dto.WarehouseDTO;
 import bitc.fullstack503.team1_server.service.ItemService;
 import bitc.fullstack503.team1_server.service.WarehouseService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/item")
+@CrossOrigin(origins = "*")  // 모든 origin에서 요청을 허용
 public class ItemController {
 
     @Autowired
@@ -24,9 +30,92 @@ public class ItemController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> addItem(@RequestBody ItemDTO itemDTO){
-        itemService.addItem(itemDTO);
-        return ResponseEntity.ok("비품 승인 요청되었습니다.");
+    public ResponseEntity<Map<String, String>> addItem(
+            @RequestParam("image") MultipartFile image,
+            @RequestParam("name") String name,
+            @RequestParam("category") String category,
+            @RequestParam("vendorName") String vendorName,
+            @RequestParam("warehouseName") String warehouseName,
+            @RequestParam("price") String price,
+            @RequestParam("standard") String standard
+    ) {
+        try {
+            // 가격과 표준을 Integer로 변환
+            int priceInt = Integer.parseInt(price);
+            int standardInt = Integer.parseInt(standard);
+
+            // 이미지 업로드 처리
+            String imageUrl = itemService.uploadImage(image);
+
+            // 제품 정보 저장
+            ItemDTO itemDTO = new ItemDTO();
+            itemDTO.setName(name);
+            itemDTO.setCategory(category);
+            itemDTO.setVendorName(vendorName);
+            itemDTO.setWarehouseName(warehouseName);
+            itemDTO.setPrice(priceInt);
+            itemDTO.setStandard(standardInt);
+            itemService.addItem(itemDTO, imageUrl);
+
+            return ResponseEntity.ok(Map.of("message", "비품이 성공적으로 추가되었습니다.", "imageUrl", imageUrl));
+        } catch (IOException e) {
+            return ResponseEntity.status(400).body(Map.of("error", "파일 처리 오류", "message", e.getMessage()));
+        } catch (NumberFormatException e) {
+            return ResponseEntity.status(400).body(Map.of("error", "잘못된 숫자 형식", "message", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of("error", "아이템 추가 실패", "message", e.getMessage()));
+        }
+    }
+
+    // 아이템 수정 (idx로 수정)
+    @PutMapping("/update/{idx}")
+    public ResponseEntity<Map<String, String>> updateItem(
+            @PathVariable int idx,
+            @RequestParam("image") MultipartFile image,
+            @RequestParam("name") String name,
+            @RequestParam("category") String category,
+            @RequestParam("vendorName") String vendorName,
+            @RequestParam("warehouseName") String warehouseName,
+            @RequestParam("price") String price,
+            @RequestParam("standard") String standard
+    ) {
+        try {
+
+            // 파라미터 검증
+            if (name == null || name.isEmpty()) {
+                throw new IllegalArgumentException("상품 이름이 누락되었습니다.");
+            }
+
+            // 가격과 표준을 Integer로 변환
+            int priceInt = Integer.parseInt(price);
+            int standardInt = Integer.parseInt(standard);
+
+            // 이미지 업로드 처리 (수정된 이미지 저장)
+            String imageUrl = itemService.uploadImage(image);
+
+            // 수정할 제품 정보 설정
+            ItemDTO itemDTO = new ItemDTO();
+            itemDTO.setIdx(idx);
+            itemDTO.setName(name);
+            itemDTO.setCategory(category);
+            itemDTO.setVendorName(vendorName);
+            itemDTO.setWarehouseName(warehouseName);
+            itemDTO.setPrice(priceInt);
+            itemDTO.setStandard(standardInt);
+            itemDTO.setImage(imageUrl);
+
+            itemService.updateItem(idx, itemDTO, imageUrl);  // DB에 업데이트
+
+            return ResponseEntity.ok(Map.of("message", "비품이 성공적으로 수정되었습니다."));
+        } catch (IOException e) {
+            return ResponseEntity.status(400).body(Map.of("error", "파일 처리 오류", "message", e.getMessage()));
+        } catch (NumberFormatException e) {
+            return ResponseEntity.status(400).body(Map.of("error", "잘못된 숫자 형식", "message", e.getMessage()));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(400).body(Map.of("error", "잘못된 요청", "message", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of("error", "아이템 수정 실패", "message", e.getMessage()));
+        }
     }
 
 }

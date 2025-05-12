@@ -10,4 +10,7 @@ public interface ItemMapper {
     List<ItemDTO> getItemList();
 
     void insertItem(ItemDTO itemDTO);
+
+    void updateItem(ItemDTO itemDTO);
+
 }

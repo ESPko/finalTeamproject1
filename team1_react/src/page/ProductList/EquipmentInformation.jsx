@@ -30,7 +30,6 @@ function EquipmentInformation() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [detailModalOpen, setDetailModalOpen] = useState(false);
 
-  const [newProduct, setNewProduct] = useState(null)
 
   const handleRowClick = (product) => {
     setSelectedProduct(product);
@@ -56,12 +55,52 @@ function EquipmentInformation() {
       });
   };
 
+  // 비품 수정 요청
+  const handleUpdateProduct = (updatedProduct) => {
+    setSelectedProduct(updatedProduct); // 상태 업데이트
+    setDetailModalOpen(false);  // 모달 닫기
 
-  // ✅ 서버에서 비품 목록 불러오기
+    // FormData로 업데이트 데이터 생성
+    const formData = new FormData();
+    formData.append('name', updatedProduct.name);
+    formData.append('category', updatedProduct.category);
+    formData.append('vendorName', updatedProduct.vendorName);
+    formData.append('warehouseName', updatedProduct.warehouseName);
+    formData.append('quantity', updatedProduct.quantity);
+    formData.append('price', updatedProduct.price);
+    formData.append('standard', updatedProduct.standard);
+
+    // 이미지가 있을 경우에만 추가
+    if (updatedProduct.image) {
+      console.log("이미지 파일:", updatedProduct.image);  // 이미지 값 확인
+      formData.append('image', updatedProduct.image);
+    } else {
+      console.log("이미지가 없습니다.");
+    }
+
+    // 서버로 PUT 요청
+    axios.put(`http://localhost:8080/item/update/${updatedProduct.idx}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',  // FormData로 보내는 경우 Content-Type 설정
+      },
+    })
+      .then(() => {
+        alert('비품이 수정되었습니다.');
+        fetchItems(); // 비품 목록 다시 가져오기
+      })
+      .catch((err) => {
+        console.error('비품 수정 실패:', err);
+        if (err.response) {
+          console.error('서버 응답 오류:', err.response.data); // 서버에서 반환하는 오류 메시지
+        }
+        alert('수정에 실패했습니다.');
+      });
+  };
+
+  // 서버에서 비품 목록 불러오기
   useEffect(() => {
     fetchItems();
   }, []);
-
   return (
     <div className="flex-1 p-6 overflow-y-auto">
       <div className="bg-white rounded shadow p-4 min-x-[100vh] min-h-[90vh]" style={{ padding: '0px 40px 0 40px' }}>
@@ -178,26 +217,11 @@ function EquipmentInformation() {
           <Modal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
-            title="비품 추가"
-            footer={
-              <>
-                <button className="bg-blue-600 text-white px-4 py-2 rounded"
-                        onClick={() => {
-                          axios.post("http://localhost:8080/item/add", newProduct)
-                            .then(() => {
-                              alert('승인 요청 성공');
-                               setIsModalOpen(false);
-                               fetchItems();
-                            })
-                            .catch(() => alert('승인 요청이 실패했습니다.'));
-                        }}
-                >임시 저장</button>
-
-                <button onClick={() => setIsModalOpen(false)} className="bg-gray-200 text-gray-700 px-4 py-2 rounded">취소</button>
-              </>
-            }
-          >
-            <ProductAdd onAddProduct = {setNewProduct} />
+            title="비품 추가" >
+            <ProductAdd
+              onClose={() => setIsModalOpen(false)}
+              onSuccess={fetchItems}
+            />
           </Modal>
 
           {/* 비품 상세보기 모달 */}
@@ -207,8 +231,18 @@ function EquipmentInformation() {
             title="비품 상세보기"
             footer={
               <>
-                <button className="bg-blue-600 text-white px-4 py-2 rounded">수정</button>
-                <button onClick={() => setDetailModalOpen(false)} className="bg-gray-200 text-gray-700 px-4 py-2 rounded">닫기</button>
+                <button
+                  onClick={() => handleUpdateProduct(selectedProduct)}  // 수정 버튼 클릭 시 업데이트
+                  className="bg-blue-600 text-white px-4 py-2 rounded"
+                >
+                  수정
+                </button>
+                <button
+                  onClick={() => setDetailModalOpen(false)}
+                  className="bg-gray-200 text-gray-700 px-4 py-2 rounded"
+                >
+                  닫기
+                </button>
               </>
             }
           >
