@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -34,4 +35,8 @@ public class ItemStockServiceImpl implements ItemStockService {
     itemStockMapper.updateItemInfo(paramMap);
   }
 
+  @Override
+  public List<ItemDTO> getLowStockItems() {
+    return itemStockMapper.selectLowStockItems(); // 이 부분
+  }
 }

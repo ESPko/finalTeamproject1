@@ -1,8 +1,8 @@
-import SafeStockPage from './safeStock/SafeStockPage.jsx';
+import LowStockPage from './lowStock/LowStockPage.jsx';
 
 function TestPage1() {
   return (
-    <SafeStockPage />
+    <LowStockPage />
   );
 }
 

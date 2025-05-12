@@ -22,7 +22,7 @@ import InventoryPage from './page/sdh/ currentSituation/InventoryPage';
 import ApprovalPage from './page/approve/ApprovalPage.jsx';
 import StoragePage from './page/storage/StoragePage.jsx';
 import TestPage from './page/sdh/test/TestPage.jsx';
-import SafeStockPage from './page/safeStock/SafeStockPage.jsx';
+import LowStockPage from './page/lowStock/LowStockPage.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -33,7 +33,7 @@ createRoot(document.getElementById('root')).render(
           <Route path={'/test1'} element={< ProductSearch/>} />
           <Route path={'/test2'} element={<StoragePage />} />
           <Route path={'/test3'} element={<ApprovalPage />} />
-          <Route path={'/test4'} element={<SafeStockPage />} />
+          <Route path={'/test4'} element={<LowStockPage />} />
           <Route path={'/test5'} element={<EquipmentInformation />} />
           <Route path={'/test6'} element={<LocationInfo />} />
           <Route path={'/test7'} element={<ClientList />} />
