@@ -64,6 +64,7 @@ function TestPage1() {
 
   const isButtonDisabled = !selectedItem || inputQuantity <= 0 || !selectedDate;
 
+
   return (
     <div className="flex-1 p-6 overflow-y-auto">
       <div className="bg-white rounded shadow p-4 min-x-[100vh] min-h-[80vh]" style={{ padding: '0px 40px 80px 40px' }}>
@@ -132,19 +133,19 @@ function TestPage1() {
                     <StorageDateSelector selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
                   </div>
 
-                  {/* 메모 (선택 사항) */}
-                  <div className={'mt-[30px]'}>
-                    <textarea
-                      rows={4}
-                      value={memo}
-                      onChange={(e) => setMemo(e.target.value)}
-                      className="w-full border rounded text-sm border-gray-300 p-[8px]"
-                      placeholder="메모 입력 (선택)"
-                    />
-                  </div>
+                  {/*/!* 메모 (선택 사항) *!/*/}
+                  {/*<div className={'mt-[30px]'}>*/}
+                  {/*  <textarea*/}
+                  {/*    rows={4}*/}
+                  {/*    value={memo}*/}
+                  {/*    onChange={(e) => setMemo(e.target.value)}*/}
+                  {/*    className="w-full border rounded text-sm border-gray-300 p-[8px]"*/}
+                  {/*    placeholder="메모 입력 (선택)"*/}
+                  {/*  />*/}
+                  {/*</div>*/}
 
                   {/* 완료 버튼 */}
-                  <div className="pt-2">
+                  <div className="pt-[80px]">
                     <button
                       onClick={handleComplete}
                       disabled={isButtonDisabled}
