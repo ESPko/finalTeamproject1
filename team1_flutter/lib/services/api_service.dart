@@ -218,4 +218,39 @@ class ApiService {
     }
   }
 
+  Future<Map<String, dynamic>> fetchTransactionSummary() async {
+    try {
+      String? token = await getTokenFromSharedPreferences();
+      if (token == null) {
+        throw Exception('토큰이 없습니다. 로그인 후 시도해주세요.');
+      }
+
+      final response = await dio.get(
+        '$baseUrl/api/items/summary',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        if (response.data is String) {
+          // 혹시 JSON이 문자열로 올 경우 파싱
+          return jsonDecode(response.data);
+        } else if (response.data is Map<String, dynamic>) {
+          return response.data;
+        } else {
+          throw Exception('알 수 없는 응답 형식입니다.');
+        }
+      } else {
+        throw Exception('입출고 요약 정보를 불러오지 못했습니다: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('입출고 요약 정보 요청 실패: $e');
+    }
+  }
+
+
 }

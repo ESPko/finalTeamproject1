@@ -67,5 +67,12 @@ public class ItemServiceImpl implements ItemService {
     return itemMapper.getShipmentDetails(userId);
   }
 
+  public int getTodayTotalIn() {
+    return itemMapper.getTodayTotalIn();
+  }
+
+  public int getTodayTotalOut() {
+    return itemMapper.getTodayTotalOut();
+  }
 
 }

@@ -71,4 +71,20 @@
     <result property="warehouseName" column="warehouseName"/>
   </resultMap>
 
+  <!-- 오늘 날짜의 총 입고 수량 -->
+  <select id="getTodayTotalIn" resultType="int">
+    SELECT IFNULL(SUM(`after` - `before`), 0)
+    FROM transaction
+    WHERE transaction = 0
+      AND DATE(`time`) = CURDATE()
+  </select>
+
+  <!-- 오늘 날짜의 총 출고 수량 -->
+  <select id="getTodayTotalOut" resultType="int">
+    SELECT IFNULL(SUM(`before` - `after`), 0)
+    FROM transaction
+    WHERE transaction = 1
+      AND DATE(`time`) = CURDATE()
+  </select>
+
 </mapper>

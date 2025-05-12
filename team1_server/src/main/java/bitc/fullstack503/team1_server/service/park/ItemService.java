@@ -14,4 +14,6 @@ public interface ItemService {
   void insertTransaction(TransactionDTO transaction);
   void decreaseItemQuantity(int itemIdx, String userId, int qtyToDeduct);
   List<ShipmentDetailResponse> getShipmentDetails(@Param("userId") String userId);
+  int getTodayTotalIn();
+  int getTodayTotalOut();
 }

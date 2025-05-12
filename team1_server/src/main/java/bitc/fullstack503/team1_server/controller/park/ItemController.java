@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -86,6 +87,14 @@ public class ItemController {
     System.out.println("출고 내역 조회 결과: " + shipmentDetails);
 
     return shipmentDetails;
+  }
+
+  @GetMapping("/summary")
+  public Map<String, Integer> getTodaySummary() {
+    Map<String, Integer> result = new HashMap<>();
+    result.put("totalIn", itemService.getTodayTotalIn());
+    result.put("totalOut", itemService.getTodayTotalOut());
+    return result;
   }
 
 

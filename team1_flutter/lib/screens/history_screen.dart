@@ -147,13 +147,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                 Text(
                                   '현재 재고: ${history.quantity} / 출고 수량: ${history.releasedQuantity}',
                                   style: TextStyle(
-                                    color: Colors.grey[700],
+                                    color: Colors.deepPurpleAccent[400],
                                     fontSize: 14,
                                   ),
                                 ),
                                 // 창고 및 공급업체 정보
                                 Text(
-                                  '출고장소: ${history.warehouseName}, 공급업체: ${history.vendorName}',
+                                  '출고장소: ${history.warehouseName} / 공급업체: ${history.vendorName}',
                                   style: TextStyle(
                                     color: Colors.grey[700],
                                     fontSize: 14,

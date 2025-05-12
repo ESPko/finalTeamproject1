@@ -6,9 +6,13 @@ import '../services/api_service.dart';
 import '../widgets/custom_qr_icon.dart';
 import 'item_detail_screen.dart';
 
+int totalIn = 0;
+int totalOut = 0;
+
 class DashBoardScreen extends StatelessWidget {
   final User? user;
   const DashBoardScreen({Key? key, this.user}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +54,20 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
     super.initState();
     _fetchItems();
     _searchController.addListener(_filterItems);
+    loadTransactionSummary();
+
+  }
+
+  void loadTransactionSummary() async {
+    try {
+      final data = await apiService.fetchTransactionSummary(); // ApiService 인스턴스를 사용
+      setState(() {
+        totalIn = data['totalIn'];
+        totalOut = data['totalOut'];
+      });
+    } catch (e) {
+      print('입출고 요약 데이터를 불러오는 데 실패: $e');
+    }
   }
 
   Future<void> _fetchItems() async {
@@ -222,9 +240,9 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
               children: [
                 _buildSummaryText(getTotalStock().toString()),
                 _buildVerticalDivider(),
-                _buildSummaryText('0'),
+                _buildSummaryText(totalIn.toString()),         // 총입고
                 _buildVerticalDivider(),
-                _buildSummaryText('0'),
+                _buildSummaryText(totalOut.toString()),        // 총출고
               ],
             ),
             Row(

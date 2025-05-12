@@ -17,4 +17,6 @@ public interface ItemMapper {
   void insertTransaction(TransactionDTO transaction);
   void decreaseItemQuantity(int idx, long quantityToSubtract);
   List<ShipmentDetailResponse> getShipmentDetails(@Param("userId") String userId);
+  int getTodayTotalIn();
+  int getTodayTotalOut();
 }
