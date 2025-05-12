@@ -16,6 +16,7 @@
     "@nivo/pie": "^0.94.0",
     "@nivo/treemap": "^0.94.0",
     "@react-icons/all-files": "^4.1.0",
+    "@tabler/icons-react": "^3.31.0",
     "@tailwindcss/vite": "^4.1.4",
     "axios": "^1.9.0",
     "bootstrap": "^5.3.5",
