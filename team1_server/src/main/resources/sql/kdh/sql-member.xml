@@ -3,7 +3,7 @@
 
 <mapper namespace="bitc.fullstack503.team1_server.mapper.kdh.MemberMapper">
     <select id="getMemberList" resultType="bitc.fullstack503.team1_server.dto.UserDTO">
-        select idx, nick_name, department, position from user
+        select idx, id, nick_name, department, position from user
         order by position desc
     </select>
 

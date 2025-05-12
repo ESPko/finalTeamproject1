@@ -26,6 +26,7 @@ public class MemberServiceImpl implements MemberService {
 
   @Override
   public UserDTO updateMember(UserDTO userDTO) {
+    System.out.println("업데이트 할 멤버 ID : " + userDTO.getId());
     int res = memberMapper.updateMember(userDTO);
     if (res > 0) {
       // 성공적으로 업데이트된 후, userDTO를 반환 (또는 추가 조회)

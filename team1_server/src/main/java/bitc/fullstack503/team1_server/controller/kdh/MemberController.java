@@ -52,6 +52,7 @@ public class MemberController {
   @PutMapping("/updateMember")
   public ResponseEntity<?> updateMember(@RequestBody UserDTO userDTO) {
     try {
+      System.out.println("받은 UserDTO" + userDTO);
       UserDTO updated = memberService.updateMember(userDTO);
       return ResponseEntity.ok(updated);  // 업데이트 후, UserDTO 반환
     } catch (Exception e) {

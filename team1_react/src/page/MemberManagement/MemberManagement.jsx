@@ -27,14 +27,17 @@ function MemberManagement() {
 
     axios.get('http://localhost:8080/member', {headers: {Authorization: `Bearer ${token}`}})
       .then(res => {
-
-        const mappedData = res.data.map((user) => ({
+        console.log("서버에서 받은 데이터: ", res.data)
+        const mappedData = res.data.map((user) => {
+          console.log('매핑된 사용자: ', user);
+          return{
           idx:user.idx,
           id:user.id,
           name: user.nickName,
           department: user.department,
           role:roleMap[user.position],
-        }));
+        }
+        });
         setEmployees(mappedData)
       })
       .catch(err => {
@@ -62,11 +65,12 @@ function MemberManagement() {
     setEmployees(updatedEmployees);
 
     const member = updatedEmployees.find(emp => emp.id === id);
+    console.log('직급 바꿀 직원 : ', member)
     const position = roleToPosition(newRole);
 
     await axios.put('http://localhost:8080/updateMember', {
       idx: member.idx,
-      id:id,
+      id:member.id,
       department: member.department,  // 여기서 최신 department 사용
       position: position
     });
@@ -79,6 +83,7 @@ function MemberManagement() {
     setEmployees(updatedEmployees);
 
     const member = updatedEmployees.find(emp => emp.id === id);
+    console.log('부서 바꿀 직원 : ', member)
     const position = roleToPosition(member.role);
 
     if (!member || member.idx === undefined) {
@@ -87,8 +92,8 @@ function MemberManagement() {
     }
 
     await axios.put('http://localhost:8080/updateMember', {
-      idx: member.idx,  // ✅ 여기에 진짜 숫자 idx 사용
-      id:id,
+      idx: member.idx,
+      id:member.id,
       department: newDepartment,
       position: position
     });
