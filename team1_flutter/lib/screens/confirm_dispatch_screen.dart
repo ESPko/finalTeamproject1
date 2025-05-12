@@ -4,6 +4,7 @@ import 'package:test2/screens/dash_board_screen.dart';
 import 'dart:convert';
 
 import '../models/item.dart';
+import '../services/api_service.dart';
 import '../widgets/item_card_large.dart';
 
 class ConfirmDispatchDialog extends StatefulWidget {
@@ -56,15 +57,29 @@ class _ConfirmDispatchDialogState extends State<ConfirmDispatchDialog> {
   }
 
   Future<void> dispatchQuantity(int quantityToSubtract) async {
-    final response = await http.patch(
-      Uri.parse(widget.qrUrl),
-      headers: {'Content-Type': 'application/json'},
-      body: json.encode({'quantityToSubtract': quantityToSubtract}),
-    );
+    final apiService = ApiService();
 
-    if (response.statusCode != 200) {
-      throw Exception('출고 요청 실패 (상태 코드: ${response.statusCode})');
+    // itemId 추출
+    final uri = Uri.parse(widget.qrUrl);
+    final segments = uri.pathSegments;
+    String? itemId;
+    final itemsIndex = segments.indexOf('items');
+    if (itemsIndex != -1 && itemsIndex + 1 < segments.length) {
+      itemId = segments[itemsIndex + 1];
     }
+
+    if (itemId == null) {
+      throw Exception('itemId를 URL에서 추출할 수 없습니다.');
+    }
+
+    // 토큰 불러오기
+    final token = await apiService.getTokenFromSharedPreferences();
+    if (token == null) {
+      throw Exception('로그인 토큰이 없습니다. 다시 로그인해주세요.');
+    }
+
+    // ApiService의 dispatchItem 사용
+    await apiService.dispatchItem(itemId, quantityToSubtract, token);
   }
 
   Future<void> showResultDialog(BuildContext context, int parsed) async {

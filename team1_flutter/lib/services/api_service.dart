@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/item.dart';
+import '../models/item_history.dart';
 import '../models/user.dart'; // User 모델을 임포트합니다.
 
 class ApiService {
@@ -133,24 +134,47 @@ class ApiService {
     }
   }
 
+  // ✅ 사용자 정보 가져오기
+  Future<User> getStoredUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userJson = prefs.getString('user');
+    if (userJson == null) {
+      throw Exception('저장된 사용자 정보가 없습니다.');
+    }
+    final userMap = json.decode(userJson);
+    final user = User.fromJson(userMap);
+
+    print("저장된 사용자 userId: ${user.id}"); // 저장된 사용자 userId 로그 출력
+    return user;
+  }
+
+
   // 토큰 가져오기 함수
   Future<String?> getTokenFromSharedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('jwt_token');
   }
 
-  // ✅ 수량을 차감하는 PATCH 요청
+  // ✅ 아이템 수량 차감
   Future<Item> dispatchItem(String itemId, int quantityToSubtract, String token) async {
     try {
+      // 로그인된 사용자 정보 가져오기
+      User user = await getStoredUser();
+      print("로그인된 사용자 userId: ${user.id}"); // userId 로그 출력
+
+      // API 요청
       final response = await dio.patch(
         '$baseUrl/api/items/$itemId/dispatch-quantity',
         data: {
           'quantityToSubtract': quantityToSubtract,
+          'userId': user.id, // 로그인된 사용자의 userId 포함
         },
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token', // 로그인 후 받은 토큰을 Authorization 헤더에 포함
-        }),
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token', // 로그인 후 받은 토큰을 Authorization 헤더에 포함
+          },
+        ),
       );
 
       if (response.statusCode == 200) {
@@ -167,13 +191,31 @@ class ApiService {
     }
   }
 
-  Future<User> getStoredUser() async {
-    final prefs = await SharedPreferences.getInstance();
-    final userJson = prefs.getString('user');
-    if (userJson == null) {
-      throw Exception('저장된 사용자 정보가 없습니다.');
+  // ✅ 출고 내역 조회
+  Future<List<ItemHistory>> fetchItemHistory(String token) async {
+    try {
+      final response = await dio.get(
+        '$baseUrl/api/items/getShipmentDetails',  // 출고 내역을 조회하는 엔드포인트
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token', // JWT 토큰을 Authorization 헤더에 포함
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+
+      print('📡 응답 코드: ${response.statusCode}');
+      print('📦 응답 내용: ${response.data}');
+
+      if (response.statusCode == 200) {
+        List<dynamic> data = response.data;
+        return data.map((history) => ItemHistory.fromJson(history)).toList(); // ItemHistory로 변환
+      } else {
+        throw Exception('출고 내역을 불러오는 데 실패했습니다: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('출고 내역을 불러오는 데 실패했습니다: $e');
     }
-    final userMap = json.decode(userJson);
-    return User.fromJson(userMap);
   }
+
 }

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="bitc.fullstack503.team1_server.mapper.park.ItemMapper">
-
+<!-- 전체재고 리스트 쿼리-->
   <select id="getAllItems" resultType="bitc.fullstack503.team1_server.dto.ItemDTO">
     SELECT * FROM item
   </select>
-
+<!-- 비품 상세 쿼리-->
   <select id="getItemByCode" parameterType="int" resultType="bitc.fullstack503.team1_server.dto.ItemDTO">
     SELECT * FROM item WHERE idx = #{idx}
   </select>
-
+<!-- 비품 수량조정 쿼리-->
   <update id="updateItem" parameterType="bitc.fullstack503.team1_server.dto.ItemDTO">
     UPDATE item
     SET name = #{name}, category = #{category}, vendor_name = #{vendorName}, warehouse_name = #{warehouseName},
@@ -17,5 +17,58 @@
         image = #{image}, time = #{time}
     WHERE idx = #{idx}
   </update>
+<!-- 비품 츨고 로그 기록 쿼리-->
+  <insert id="insertTransaction" parameterType="bitc.fullstack503.team1_server.dto.TransactionDTO">
+    INSERT INTO transaction (
+      item_idx,
+      user_id,
+      transaction,
+      `before`,
+      `after`,
+      `time`
+    )
+    VALUES (
+             #{itemIdx},
+             #{userId},
+             #{transaction},
+             #{before},
+             #{after},
+             NOW()
+           )
+  </insert>
+
+  <!-- 출고 내역과 아이템 정보를 조인해서 가져오는 쿼리 -->
+  <select id="getShipmentDetails" resultMap="shipmentDetailResultMap">
+    SELECT
+    t.user_id AS userId,
+    t.item_idx AS itemId,
+    t.time AS releaseDate,
+    i.quantity AS quantity,  <!-- ✅ 수정됨 -->
+    (t.after - t.before) AS releasedQuantity,
+    i.name AS itemName,
+    i.vendor_name AS vendorName,
+    i.warehouse_name AS warehouseName,
+    i.image AS image
+    FROM
+    transaction t
+    JOIN item i ON t.item_idx = i.idx  <!-- ✅ 올바른 JOIN 구문 추가 -->
+    WHERE
+    t.user_id = #{userId}
+    ORDER BY
+    t.time DESC;
+  </select>
+
+  <!-- 결과 매핑 -->
+  <resultMap id="shipmentDetailResultMap" type="bitc.fullstack503.team1_server.dto.ShipmentDetailResponse">
+    <result property="userId" column="userId"/>
+    <result property="itemId" column="itemId"/>
+    <result property="image" column="image"/>
+    <result property="releaseDate" column="releaseDate"/>
+    <result property="quantity" column="quantity"/>
+    <result property="releasedQuantity" column="releasedQuantity"/>
+    <result property="itemName" column="itemName"/>
+    <result property="vendorName" column="vendorName"/>
+    <result property="warehouseName" column="warehouseName"/>
+  </resultMap>
 
 </mapper>

@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../models/user.dart';
 import '../services/api_service.dart';
 import 'dash_board_screen.dart';
 import 'main_screen.dart'; // 홈 화면으로 이동할 실제 화면 import
