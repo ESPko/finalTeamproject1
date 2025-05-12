@@ -34,6 +34,7 @@ function ApproveItemList({ approveProduct, changeApprove }) {
             >{ap.approve === 0 ? '대기'
               : ap.approve === 1 ? '승인'
                 : '거절'}</p>
+
             <div className={'col-span-1 flex items-center'}>
               <button type={'button'}
                       className={'border shadow text-gray-500 border-gray-200 rounded-sm w-[44px] h-[36px] mr-1 hover:bg-gray-200'}

@@ -23,17 +23,12 @@ function MemberManagement() {
     '부장':2
   }
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('user'));
+    const token = localStorage.getItem('token');
 
-    if(user?.position !== 2){
-      alert("접근 권한이 없습니다.")
-      window.location.href = "/";
-    }
-
-    axios.get('http://localhost:8080/member')
+    axios.get('http://localhost:8080/member', {headers: {Authorization: `Bearer ${token}`}})
       .then(res => {
 
-        const mappedData = res.data.map((user,index) => ({
+        const mappedData = res.data.map((user) => ({
           idx:user.idx,
           id:user.id,
           name: user.nickName,
@@ -44,6 +39,8 @@ function MemberManagement() {
       })
       .catch(err => {
         console.error(err)
+        alert("접근 권한이 없습니다.")
+        window.location.href = "/";
 
         })
   }, []);
@@ -59,31 +56,42 @@ function MemberManagement() {
   }
 
   const changeRole = async (id, newRole) => {
-    setEmployees(prev =>
-      prev.map(emp => emp.id === id ? { ...emp, role: newRole } : emp),
+    const updatedEmployees = employees.map(emp =>
+      emp.id === id ? { ...emp, role: newRole } : emp
     );
-    const member = employees.find(emp => emp.id === id);
-    const position =roleToPosition(newRole)
+    setEmployees(updatedEmployees);
+
+    const member = updatedEmployees.find(emp => emp.id === id);
+    const position = roleToPosition(newRole);
 
     await axios.put('http://localhost:8080/updateMember', {
-      idx:id,
-      department: member.department,
-      position:position
-    })
+      idx: member.idx,
+      id:id,
+      department: member.department,  // 여기서 최신 department 사용
+      position: position
+    });
   };
 
   const changeDepartment = async (id, newDepartment) => {
-    setEmployees(prev =>
-      prev.map(emp => emp.id === id ? { ...emp, department: newDepartment } : emp),
+    const updatedEmployees = employees.map(emp =>
+      emp.id === id ? { ...emp, department: newDepartment } : emp
     );
-    const member = employees.find(emp => emp.id ===id)
-    const position = roleToPosition(member.role)
+    setEmployees(updatedEmployees);
 
-    await axios.put('http://localhost:8080/updateMember',{
-      idx:id,
-      department:newDepartment,
-      position:position
-    })
+    const member = updatedEmployees.find(emp => emp.id === id);
+    const position = roleToPosition(member.role);
+
+    if (!member || member.idx === undefined) {
+      console.error("유효하지 않은 member 정보", member);
+      return;
+    }
+
+    await axios.put('http://localhost:8080/updateMember', {
+      idx: member.idx,  // ✅ 여기에 진짜 숫자 idx 사용
+      id:id,
+      department: newDepartment,
+      position: position
+    });
   };
 
   const DeleteMember = (idx) => {

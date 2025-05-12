@@ -11,7 +11,8 @@ public interface MemberMapper {
 
   void addMember(UserDTO userDTO);
 
-  UserDTO updateMember(UserDTO userDTO);
+//  UserDTO updateMember(UserDTO userDTO);
+  int updateMember(UserDTO userDTO);
 
   boolean deleteMember(UserDTO userDTO);
 }

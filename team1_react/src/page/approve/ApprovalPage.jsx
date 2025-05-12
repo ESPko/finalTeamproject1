@@ -6,13 +6,11 @@ import ApproveItemList from './ApproveItemList.jsx';
 
 function ApprovalPage() {
   const [approveProduct, setApproveProduct] = useState([]);
-
-
   const [search, setSearch] = useState(``)
   const [filteredProducts,setFilteredProducts] = useState(approveProduct)
 
-  // API 연결
-  // 저장된 배열로 불러오기
+
+  // 저장된 승인 목록들 불러오기
   useEffect(() => {
     axios.get('http://localhost:8080/approve')
 
@@ -53,17 +51,25 @@ function ApprovalPage() {
 
   // 승인 혹은 거절 버튼 눌렀을 시 approve 값 변경
   const changeApprove = (idx, approveStatus) => {
+    const token = localStorage.getItem('token');
+
     axios.put('http://localhost:8080/updateApprove', {
       idx: idx,
       approve: approveStatus,
-    })
+    },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then(res => {
         console.log('승인 or 거절 완료 : ', res.data);
 
         setApproveProduct(prev => prev.map(item => item.idx === idx ? { ...item, approve: approveStatus } : item));
       })
       .catch(err => {
-        console.log('승인 or 거정 실패 : ', err);
+        console.log('승인 or 거절 실패 : ', err);
+        alert("권한이 없습니다")
       });
   };
 

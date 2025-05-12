@@ -13,7 +13,7 @@
     </insert>
 
     <update id="updateMember" parameterType="bitc.fullstack503.team1_server.dto.UserDTO">
-        update user
+        update `user`
         set department = #{department} , position = #{position}
         where idx = #{idx}
     </update>
