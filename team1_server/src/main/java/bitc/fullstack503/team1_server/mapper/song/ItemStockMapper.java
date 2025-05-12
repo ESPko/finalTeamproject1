@@ -1,4 +1,4 @@
-package bitc.fullstack503.team1_server.mapper;
+package bitc.fullstack503.team1_server.mapper.song;
 
 import bitc.fullstack503.team1_server.dto.ItemDTO;
 import org.apache.ibatis.annotations.*;

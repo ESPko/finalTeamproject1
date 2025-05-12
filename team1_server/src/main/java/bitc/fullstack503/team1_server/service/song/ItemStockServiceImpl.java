@@ -1,7 +1,7 @@
 package bitc.fullstack503.team1_server.service.song;
 
 import bitc.fullstack503.team1_server.dto.ItemDTO;
-import bitc.fullstack503.team1_server.mapper.ItemStockMapper;
+import bitc.fullstack503.team1_server.mapper.song.ItemStockMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

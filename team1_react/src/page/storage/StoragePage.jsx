@@ -82,7 +82,9 @@ function TestPage1() {
                   {/* 입력 필드 */}
                   <div className="flex items-center border-b-gray-100 h-[52px]">
                     <div className="w-[1020px] pl-[30px] p-4">
-                      <StorageProductSearch onSelect={(item) => {
+                      <StorageProductSearch
+                        selectedItem={selectedItem}
+                        onSelect={(item) => {
                         setSelectedItem(item);
                         setInputQuantity(0); // 선택 시 수량 초기화
                       }} />

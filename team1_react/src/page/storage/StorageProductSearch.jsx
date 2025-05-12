@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-function StorageProductSearch({onSelect}) {
+function StorageProductSearch({selectedItem, onSelect}) {
   const [items, setItems] = useState([]);
   const [query, setQuery] = useState('');
   const [filteredItems, setFilteredItems] = useState([]);
@@ -25,6 +25,13 @@ function StorageProductSearch({onSelect}) {
       setFilteredItems(filtered);
     }
   }, [query, items]);
+
+  // selectedItem이 null로 바뀌면 input 초기화
+  useEffect(() => {
+    if (!selectedItem) {
+      setQuery('');
+    }
+  }, [selectedItem]);
 
   const handleSelect = (item) => {
     setQuery(item.name); // 선택한 항목 이름을 input에 표시

@@ -1,4 +1,4 @@
-package bitc.fullstack503.team1_server.controller;
+package bitc.fullstack503.team1_server.controller.song;
 
 import bitc.fullstack503.team1_server.dto.ItemDTO;
 import bitc.fullstack503.team1_server.service.song.ItemStockService;
