@@ -153,7 +153,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                 ),
                                 // 창고 및 공급업체 정보
                                 Text(
-                                  '창고: ${history.warehouseName}, 공급업체: ${history.vendorName}',
+                                  '출고장소: ${history.warehouseName}, 공급업체: ${history.vendorName}',
                                   style: TextStyle(
                                     color: Colors.grey[700],
                                     fontSize: 14,
@@ -170,14 +170,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            '처리자: ${history.userId}',
+                            '사용자: ${history.userId}',
                             style: TextStyle(
                               fontSize: 12,
                               color: Colors.grey[600],
                             ),
                           ),
                           Text(
-                            _formatTime(history.releaseDate),
+                            '출고시간: ${_formatTime(history.releaseDate)}',
                             style: TextStyle(
                               fontSize: 12,
                               color: Colors.grey[600],
