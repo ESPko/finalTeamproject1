@@ -8,7 +8,6 @@ function TestPage1() {
   const [selectedItem, setSelectedItem] = useState(null); // 선택된 제품
   const [inputQuantity, setInputQuantity] = useState(0); // 입력 수량
   const totalQuantity = selectedItem ? selectedItem.quantity + Number(inputQuantity) : 0;
-  const [showMessage, setShowMessage] = useState(false);
   const [selectedDate, setSelectedDate] = useState(''); // 날짜 선택자 상태
   const [memo, setMemo] = useState(''); // 메모 상태
 
@@ -28,11 +27,11 @@ function TestPage1() {
     }
 
     try {
-      const updatedQuantity = selectedItem.quantity + Number(inputQuantity);
+      const updatedQuantity = Number(inputQuantity);
 
       // PUT 요청을 보냄
       const response = await axios.put(
-        `http://localhost:8080/api/items/stock/${selectedItem.idx}/receive`, // 입고 처리 엔드포인트
+        `http://localhost:8080/api/items/${selectedItem.idx}/receive`, // 입고 처리 엔드포인트
         {
           ...selectedItem,
           quantity: updatedQuantity,
@@ -49,9 +48,13 @@ function TestPage1() {
           quantity: updatedQuantity
         }));
 
-        // 성공 메시지 표시
-        setShowMessage(true);
-        setTimeout(() => setShowMessage(false), 3000); // 메시지 3초 후 사라짐
+        alert(`제품이 ${Number(inputQuantity)}개 입고 완료되었습니다.`);
+
+        // 상태 초기화
+        setSelectedItem(null);
+        setInputQuantity(0);
+        setSelectedDate('');
+        setMemo('');
       }
     } catch (error) {
       alert("입고 처리 중 오류가 발생했습니다. 다시 시도해주세요.");
@@ -147,12 +150,6 @@ function TestPage1() {
                     >
                       입고 완료
                     </button>
-
-                    {showMessage && (
-                      <div className="text-sm text-green-600 mt-2">
-                        입고가 완료되었습니다. 총 1개 품목의 제품이 {inputQuantity}개 입고 되었습니다.
-                      </div>
-                    )}
                   </div>
                 </div>
               </div>
