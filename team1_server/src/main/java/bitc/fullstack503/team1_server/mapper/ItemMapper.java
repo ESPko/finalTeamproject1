@@ -8,4 +8,6 @@ import java.util.List;
 @Mapper
 public interface ItemMapper {
     List<ItemDTO> getItemList();
+
+    void insertItem(ItemDTO itemDTO);
 }

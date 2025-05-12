@@ -3,7 +3,12 @@
 
 <mapper namespace="bitc.fullstack503.team1_server.mapper.ItemMapper">
     <select id="getItemList" resultType="bitc.fullstack503.team1_server.dto.ItemDTO">
-        select * from item
+        select * from item ORDER BY idx DESC
     </select>
+
+    <insert id="insertItem" parameterType="bitc.fullstack503.team1_server.dto.ItemDTO">
+        insert into item (name, category, vendor_name, warehouse_name, standard, price, image)
+        values ( #{name}, #{category}, #{vendorName}, #{warehouseName}, #{standard}, #{price}, #{image})
+    </insert>
 
 </mapper>

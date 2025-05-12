@@ -37,4 +37,9 @@ public class WarehouseServiceimpl implements WarehouseService {
     public void deleteWarehouse(int idx) {
         warehouseMapper.deleteWarehouse(idx);
     }
+
+    @Override
+    public List<WarehouseDTO> getWarehouse() {
+        return warehouseMapper.getWarehouse();
+    }
 }

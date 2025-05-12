@@ -14,8 +14,6 @@ public class VendorController {
     @Autowired
     private VendorService vendorService;
 
-
-
     @GetMapping("/vendorList")
     public List<VendorDTO> getVendorList() {
         return vendorService.getVendorList();
@@ -35,6 +33,11 @@ public class VendorController {
     @DeleteMapping("/{idx}")
     public void deleteVendor(@PathVariable int idx) {
         vendorService.deleteVendor(idx);
+    }
+
+    @GetMapping("/name")
+    public List<VendorDTO> getVendorName() {
+        return vendorService.getVendorName();
     }
 
 }

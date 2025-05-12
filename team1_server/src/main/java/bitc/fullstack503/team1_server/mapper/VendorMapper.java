@@ -15,4 +15,6 @@ public interface VendorMapper {
     void insertVendor(VendorDTO vendorDTO);
 
     void deleteVendor(int idx);
+
+    List<VendorDTO> getVendorName();
 }

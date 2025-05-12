@@ -13,4 +13,6 @@ public interface VendorService {
     void insertVendor(VendorDTO vendorDTO);
 
     void deleteVendor(int idx);
+
+    List<VendorDTO> getVendorName();
 }

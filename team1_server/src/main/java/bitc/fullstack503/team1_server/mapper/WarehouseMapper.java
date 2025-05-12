@@ -16,4 +16,6 @@ public interface WarehouseMapper {
     void updateLocation( WarehouseDTO warehouseDTO);
 
     void deleteWarehouse(int idx);
+
+    List<WarehouseDTO> getWarehouse();
 }

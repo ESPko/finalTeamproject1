@@ -50,4 +50,9 @@ public class WarehouseController {
     public void deleteLocation(@PathVariable int idx) {
         warehouseService.deleteWarehouse(idx);
     }
+
+    @GetMapping("/name")
+    public List<WarehouseDTO> getWarehouse(){
+        return warehouseService.getWarehouse();
+    }
 }

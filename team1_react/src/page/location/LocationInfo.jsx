@@ -20,6 +20,8 @@ function LocationInfo() {
 
   const[updatedLocation,setUpdatedLocation] = useState(null);
 
+  const[newLocation,setNewLocation] = useState(null);
+
   // 서버에서 데이터 가져오기
   useEffect(() => {
     axios.get('http://localhost:8080/warehouse/warehouseList')
@@ -141,10 +143,38 @@ function LocationInfo() {
           </Topline>
 
           {/*위치 추가 모달*/}
-          <Modal isOpen={localAdd} onClose={() => setLocalAdd(false)} title="위치 추가">
+          <Modal isOpen={localAdd}
+                 onClose={() => setLocalAdd(false)}
+                 title="위치 추가"
+          footer={
+            <>
+              <button
+                onClick={() => {
+                  axios.post(`http://localhost:8080/warehouse/addLocation`, newLocation)
+                    .then((response) => {
+                      alert(response.data);
+                      setLocalAdd(false);
+                      handleAddLocation();
+                    })
+                    .catch((error) => {
+                      console.error('위치 수정 실패:', error);
+                      alert('위치 수정 실패');
+                    });
+                }}
+                className="bg-blue-600 text-white px-4 py-2 rounded"
+              >
+                추가
+              </button>
+              <button
+                onClick={() => setLocalAdd(false)}
+                className="bg-gray-200 text-gray-700 px-4 py-2 rounded"
+              >
+                취소
+              </button>
+            </>
+          }>
             <LocationAdd
-              onClose={() => setLocalAdd(false)}
-              onAddLocation={handleAddLocation} />
+              onAddLocation={setNewLocation} />
           </Modal>
 
           {/*위치 수정 모달*/}

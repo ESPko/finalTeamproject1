@@ -17,4 +17,11 @@ public class ItemServiceImpl implements ItemService{
     public List<ItemDTO> getItemList() {
         return itemMapper.getItemList();
     }
+
+    @Override
+    public void addItem(ItemDTO itemDTO) {
+        itemMapper.insertItem(itemDTO);
+    }
+
+
 }

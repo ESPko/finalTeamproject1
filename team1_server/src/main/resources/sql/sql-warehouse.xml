@@ -22,5 +22,9 @@
         delete from warehouse where idx = #{idx}
     </delete>
 
+    <select id="getWarehouse" resultType="bitc.fullstack503.team1_server.dto.WarehouseDTO">
+        SELECT idx, name FROM warehouse ORDER BY idx DESC
+    </select>
+
 </mapper>
 

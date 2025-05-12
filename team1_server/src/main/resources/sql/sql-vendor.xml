@@ -22,4 +22,8 @@
     <delete id="deleteVendor">
         delete from vendor where idx = #{idx}
     </delete>
+
+    <select id="getVendorName" resultType="bitc.fullstack503.team1_server.dto.VendorDTO">
+        SELECT idx, name FROM vendor ORDER BY idx DESC
+    </select>
 </mapper>

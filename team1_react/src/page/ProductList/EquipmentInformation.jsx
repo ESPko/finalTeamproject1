@@ -30,13 +30,14 @@ function EquipmentInformation() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [detailModalOpen, setDetailModalOpen] = useState(false);
 
+  const [newProduct, setNewProduct] = useState(null)
+
   const handleRowClick = (product) => {
     setSelectedProduct(product);
     setDetailModalOpen(true);
   };
 
-  // ✅ 서버에서 비품 목록 불러오기
-  useEffect(() => {
+  const fetchItems = () => {
     axios.get('http://localhost:8080/item/itemList')
       .then((res) => {
         const data = res.data;
@@ -53,6 +54,12 @@ function EquipmentInformation() {
         console.error('비품 목록 불러오기 실패:', err);
         setProducts([]);
       });
+  };
+
+
+  // ✅ 서버에서 비품 목록 불러오기
+  useEffect(() => {
+    fetchItems();
   }, []);
 
   return (
@@ -174,12 +181,23 @@ function EquipmentInformation() {
             title="비품 추가"
             footer={
               <>
-                <button className="bg-blue-600 text-white px-4 py-2 rounded">임시 저장</button>
+                <button className="bg-blue-600 text-white px-4 py-2 rounded"
+                        onClick={() => {
+                          axios.post("http://localhost:8080/item/add", newProduct)
+                            .then(() => {
+                              alert('승인 요청 성공');
+                               setIsModalOpen(false);
+                               fetchItems();
+                            })
+                            .catch(() => alert('승인 요청이 실패했습니다.'));
+                        }}
+                >임시 저장</button>
+
                 <button onClick={() => setIsModalOpen(false)} className="bg-gray-200 text-gray-700 px-4 py-2 rounded">취소</button>
               </>
             }
           >
-            <ProductAdd />
+            <ProductAdd onAddProduct = {setNewProduct} />
           </Modal>
 
           {/* 비품 상세보기 모달 */}

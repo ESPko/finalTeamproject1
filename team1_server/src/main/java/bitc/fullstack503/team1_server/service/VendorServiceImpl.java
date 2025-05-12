@@ -33,4 +33,9 @@ public class VendorServiceImpl implements VendorService {
     public void deleteVendor(int idx) {
         vendorMapper.deleteVendor(idx);
     }
+
+    @Override
+    public List<VendorDTO> getVendorName() {
+        return vendorMapper.getVendorName();}
+
 }
