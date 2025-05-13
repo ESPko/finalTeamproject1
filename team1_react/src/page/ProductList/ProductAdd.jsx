@@ -76,7 +76,13 @@ function ProductAdd({ onClose, onSuccess }) {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-      });
+      })
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err)
+        });
       onSuccess();  // 리스트 리로드
       onClose();    // 모달 닫기
       console.log("백엔드 응답:", response.data); // 백엔드에서 받은 응답 확인

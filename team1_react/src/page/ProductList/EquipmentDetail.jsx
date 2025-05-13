@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import QRCode from 'react-qr-code';
 
-function EquipmentDetail({ product }) {
+function EquipmentDetail({ product , updateProduct}) {
   const [name, setName] = useState(product?.name || '');
   const [category, setCategory] = useState(product?.category || '');
   const [price, setPrice] = useState(product?.price || '');
@@ -14,23 +14,27 @@ function EquipmentDetail({ product }) {
 
 
   useEffect(() => {
-    if (product) {
-      setName(product.name);
-      setCategory(product.category);
-      setPrice(product.price);
-      setStandard(product.standard);
-      setQuantity(product.quantity);
-      setWarehouseName(product.warehouseName);
-      setVendorName(product.vendorName);
-      setImage(product.image); // 이미지 상태 업데이트
+    if (updateProduct && product) {
+      updateProduct({
+        ...product,
+        name: name,
+        price: price,
+        quantity: quantity,
+        warehouseName: warehouseName,
+        vendorName: vendorName,
+        image: image || '',
+        category: category,
+        standard: standard
+      })
     }
-  }, [product]);
+  }, [name, price, quantity, warehouseName, vendorName, image, category, standard]);
 
   // 이미지 파일 업로드 처리 함수
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setImage(URL.createObjectURL(file)); // 미리보기 URL 생성
+      setImage(file); // 미리보기 URL 생성
+      // setImage(URL.createObjectURL(file)); // 미리보기 URL 생성
       // 필요에 따라 파일 업로드 로직을 추가할 수 있습니다.
     }
   };
@@ -44,11 +48,9 @@ function EquipmentDetail({ product }) {
   };
 
   return (
-
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* 왼쪽 2/3: 폼 필드 */}
         <div className="md:col-span-2 space-y-4">
-
           {/* 비품명 */}
           <div className="flex items-center w-full max-w-md">
             <label className="w-20 text-sm font-medium text-gray-700 whitespace-nowrap">
@@ -61,7 +63,6 @@ function EquipmentDetail({ product }) {
               onChange={(e) => setName(e.target.value)}
             />
           </div>
-
           {/* 카테고리 */}
           <div className="flex items-center w-full max-w-md">
             <label className="w-20 text-sm font-medium text-gray-700 whitespace-nowrap">
@@ -74,7 +75,6 @@ function EquipmentDetail({ product }) {
               onChange={(e) => setCategory(e.target.value)}
             />
           </div>
-
           {/* 매입가 */}
           <div className="flex items-center w-full max-w-md">
             <label className="w-20 text-sm font-medium text-gray-700 whitespace-nowrap">
@@ -87,8 +87,6 @@ function EquipmentDetail({ product }) {
               onChange={(e) => setPrice(e.target.value)}
             />
           </div>
-
-
           {/* 매입회사 */}
           <div className="flex items-center w-full max-w-md">
             <label className="w-20 text-sm font-medium text-gray-700 whitespace-nowrap">
@@ -101,7 +99,6 @@ function EquipmentDetail({ product }) {
               onChange={(e) => setVendorName(e.target.value)}
             />
           </div>
-
           {/* 매입날짜 */}
           <div className="flex items-center w-full max-w-md">
             <label className="w-20 text-sm font-medium text-gray-700 whitespace-nowrap">
@@ -114,7 +111,6 @@ function EquipmentDetail({ product }) {
               readOnly
             />
           </div>
-
           {/* 수량 */}
           <section>
             <h6 className="text-lg font-semibold mb-4 mt-4 border-b border-gray-300">수량 </h6>
@@ -163,11 +159,7 @@ function EquipmentDetail({ product }) {
 
             </div>
           </section>
-
-
         </div>
-
-
         {/* 오른쪽 이미지 + QR */}
         <div className="flex flex-col items-end space-y-2">
           <div
