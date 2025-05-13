@@ -14,4 +14,5 @@ public interface ItemService {
 
     void updateItem(int idx, ItemDTO itemDTO, String imageUrl);
 
+    String getExistingImageUrl(int idx);
 }

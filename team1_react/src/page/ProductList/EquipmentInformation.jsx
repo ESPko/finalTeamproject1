@@ -1,5 +1,5 @@
 import { FiSettings } from 'react-icons/fi';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import ProductAdd from './ProductAdd';
 import Modal from '../../Modal/Modal.jsx';
 import EquipmentDetail from './EquipmentDetail.jsx';
@@ -9,6 +9,8 @@ import axiosInstance  from '../../api/axiosInstance.jsx';
 
 function EquipmentInformation() {
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]); // 필터링된 제품 목록
+  const [searchTerm, setSearchTerm] = useState(''); // 검색어 상태
   const [showSettings, setShowSettings] = useState(false);
   const [visibleColumns, setVisibleColumns] = useState({
     category: true,
@@ -29,7 +31,7 @@ function EquipmentInformation() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [detailModalOpen, setDetailModalOpen] = useState(false);
-
+  const [updateProduct, setUpdateProduct] = useState(null);
 
   const handleRowClick = (product) => {
     setSelectedProduct(product);
@@ -42,58 +44,20 @@ function EquipmentInformation() {
         const data = res.data;
         if (Array.isArray(data)) {
           setProducts(data);
+          setFilteredProducts(data); // 초기 로딩 시, 필터링된 목록도 설정
         } else if (Array.isArray(data.data)) {
           setProducts(data.data); // 백엔드 응답이 { data: [...] } 형태일 경우
+          setFilteredProducts(data.data); // 필터링된 목록 설정
         } else {
           console.error('예상하지 못한 응답 형식:', data);
           setProducts([]);
+          setFilteredProducts([]); // 초기화
         }
       })
       .catch((err) => {
         console.error('비품 목록 불러오기 실패:', err);
         setProducts([]);
-      });
-  };
-
-  // 비품 수정 요청
-  const handleUpdateProduct = (updatedProduct) => {
-    setSelectedProduct(updatedProduct); // 상태 업데이트
-    setDetailModalOpen(false);  // 모달 닫기
-
-    // FormData로 업데이트 데이터 생성
-    const formData = new FormData();
-    formData.append('name', updatedProduct.name);
-    formData.append('category', updatedProduct.category);
-    formData.append('vendorName', updatedProduct.vendorName);
-    formData.append('warehouseName', updatedProduct.warehouseName);
-    formData.append('quantity', updatedProduct.quantity);
-    formData.append('price', updatedProduct.price);
-    formData.append('standard', updatedProduct.standard);
-
-    // 이미지가 있을 경우에만 추가
-    if (updatedProduct.image) {
-      console.log("이미지 파일:", updatedProduct.image);  // 이미지 값 확인
-      formData.append('image', updatedProduct.image);
-    } else {
-      console.log("이미지가 없습니다.");
-    }
-
-    // 서버로 PUT 요청
-    axiosInstance.put(`/item/update/${updatedProduct.idx}`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',  // FormData로 보내는 경우 Content-Type 설정
-      },
-    })
-      .then(() => {
-        alert('비품이 수정되었습니다.');
-        fetchItems(); // 비품 목록 다시 가져오기
-      })
-      .catch((err) => {
-        console.error('비품 수정 실패:', err);
-        if (err.response) {
-          console.error('서버 응답 오류:', err.response.data); // 서버에서 반환하는 오류 메시지
-        }
-        alert('수정에 실패했습니다.');
+        setFilteredProducts([]); // 오류 발생 시 초기화
       });
   };
 
@@ -101,6 +65,74 @@ function EquipmentInformation() {
   useEffect(() => {
     fetchItems();
   }, []);
+
+  // 검색어에 맞춰 비품 목록 필터링
+  useEffect(() => {
+    if (searchTerm === '') {
+      setFilteredProducts(products); // 검색어가 비어 있으면 전체 제품 표시
+    } else {
+      const lowercasedSearchTerm = searchTerm.toLowerCase();
+      const filtered = products.filter((product) => {
+        return (
+          product.name.toLowerCase().includes(lowercasedSearchTerm) ||
+          product.category.toLowerCase().includes(lowercasedSearchTerm) ||
+          product.vendorName.toLowerCase().includes(lowercasedSearchTerm) ||
+          product.price.toString().includes(lowercasedSearchTerm) ||
+          product.standard.toString().includes(lowercasedSearchTerm) ||
+          product.quantity.toString().includes(lowercasedSearchTerm) ||
+          product.warehouseName.toLowerCase().includes(lowercasedSearchTerm)
+        );
+      });
+      setFilteredProducts(filtered); // 필터링된 목록 설정
+    }
+  }, [searchTerm, products]);
+
+  // 비품 수정 요청
+  const handleUpdateProduct = async () => {
+    if (!updateProduct.image) {
+      alert('이미지를 먼저 선택하세요.');
+      return;
+    }
+
+    // FormData로 업데이트 데이터 생성
+    const formData = new FormData();
+    formData.append('name', updateProduct.name);
+    formData.append('category', updateProduct.category);
+    formData.append('vendorName', updateProduct.vendorName);
+    formData.append('warehouseName', updateProduct.warehouseName);
+    formData.append('quantity', updateProduct.quantity);
+    formData.append('price', updateProduct.price);
+    formData.append('standard', updateProduct.standard);
+    formData.append('image', updateProduct.image);
+
+    try {
+      // axios.put(`http://localhost:8080/item/update`, null, {
+      axiosInstance.put(`/item/update/${updateProduct.idx}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+        .then(() => {
+          alert('비품이 수정되었습니다.');
+          setDetailModalOpen(false)
+          fetchItems(); // 비품 목록 다시 가져오기
+        })
+        .catch((err) => {
+          console.error('비품 수정 실패:', err);
+          if (err.response) {
+            console.error('서버 응답 오류:', err.response.data); // 서버에서 반환하는 오류 메시지
+          }
+          alert('수정에 실패했습니다.');
+        });
+    } catch (err) {
+      console.error('비품 수정 실패:', err);
+      if (err.response) {
+        console.error('서버 응답 오류:', err.response.data); // 서버에서 반환하는 오류 메시지
+      }
+      alert('수정에 실패했습니다.');
+    }
+  };
+
   return (
     <div className="flex-1 p-6 overflow-y-auto">
       <div className="bg-white rounded shadow p-4 min-x-[100vh] min-h-[90vh]" style={{ padding: '0px 40px 0 40px' }}>
@@ -119,7 +151,8 @@ function EquipmentInformation() {
             <div className="relative w-full m-3 mt-4 text-center">
               {/* 검색창 */}
               <div className="flex items-center justify-between m-3">
-                <div className="relative w-full max-w-md min-h-[36px] bg-white border border-[#cbccd3] rounded-md flex items-center transition-all duration-100">
+                <div
+                  className="relative w-full max-w-md min-h-[36px] bg-white border border-[#cbccd3] rounded-md flex items-center transition-all duration-100">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <SearchIcon />
                   </div>
@@ -127,6 +160,8 @@ function EquipmentInformation() {
                     type="text"
                     placeholder="비품명, 속성 검색"
                     className="pl-10 pr-4 py-2 w-full focus:outline-none"
+                    value={searchTerm} // 검색어 상태 반영
+                    onChange={(e) => setSearchTerm(e.target.value)} // 검색어 변경
                   />
                 </div>
 
@@ -184,8 +219,9 @@ function EquipmentInformation() {
                 </tr>
                 </thead>
                 <tbody>
-                {products.map((product, idx) => (
-                  <tr key={idx} onClick={() => handleRowClick(product)} className="border-b border-gray-200 cursor-pointer hover:bg-gray-50">
+                {filteredProducts.map((product, idx) => (
+                  <tr key={idx} onClick={() => handleRowClick(product)}
+                      className="border-b border-gray-200 cursor-pointer hover:bg-gray-50">
                     <td className="w-[120px] bg-white flex justify-center items-center py-2">
                       {product.image ? (
                         <img
@@ -194,7 +230,8 @@ function EquipmentInformation() {
                           className="w-[60px] h-[60px] object-cover border rounded-lg"
                         />
                       ) : (
-                        <div className="w-[60px] h-[60px] bg-gray-100 border border-dashed rounded-lg flex items-center justify-center text-2xl text-gray-400">
+                        <div
+                          className="w-[60px] h-[60px] bg-gray-100 border border-dashed rounded-lg flex items-center justify-center text-2xl text-gray-400">
                           📷
                         </div>
                       )}
@@ -217,7 +254,7 @@ function EquipmentInformation() {
           <Modal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
-            title="비품 추가" >
+            title="비품 추가">
             <ProductAdd
               onClose={() => setIsModalOpen(false)}
               onSuccess={fetchItems}
@@ -232,11 +269,12 @@ function EquipmentInformation() {
             footer={
               <>
                 <button
-                  onClick={() => handleUpdateProduct(selectedProduct)}  // 수정 버튼 클릭 시 업데이트
                   className="bg-blue-600 text-white px-4 py-2 rounded"
+                  onClick={handleUpdateProduct}
                 >
                   수정
                 </button>
+
                 <button
                   onClick={() => setDetailModalOpen(false)}
                   className="bg-gray-200 text-gray-700 px-4 py-2 rounded"
@@ -246,7 +284,7 @@ function EquipmentInformation() {
               </>
             }
           >
-            <EquipmentDetail product={selectedProduct} />
+            <EquipmentDetail product={selectedProduct} updateProduct={setUpdateProduct} />
           </Modal>
         </div>
       </div>

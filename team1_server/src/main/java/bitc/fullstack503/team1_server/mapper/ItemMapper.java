@@ -13,4 +13,5 @@ public interface ItemMapper {
 
     void updateItem(ItemDTO itemDTO);
 
+    String getExistingImageUrl(int idx);
 }

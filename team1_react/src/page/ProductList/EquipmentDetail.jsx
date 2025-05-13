@@ -1,37 +1,45 @@
 import { useEffect, useState } from 'react';
 import QRCode from 'react-qr-code';
 
-function EquipmentDetail({ product }) {
+
+function EquipmentDetail({ product , updateProduct}) {
   const [name, setName] = useState(product?.name || '');
   const [category, setCategory] = useState(product?.category || '');
   const [price, setPrice] = useState(product?.price || '');
   const [standard, setStandard] = useState(product?.standard || '');
-  const [quantity, setQuantity] = useState(product?.quantity || '');
-  const [warehouseName, setWarehouseName] = useState(product?.warehouseName || '');
-  const [vendorName, setVendorName] = useState(product?.vendorName || '');
-  const [image, setImage] = useState(product?.image || null); // 이미지 상태 추가
-  const [time] = useState(product?.time || ''); // time은 수정하지 않음, 읽기 전용
+  const [quantity, setQuantity] = useState(product?.quantity || 0 );
+  const [warehouseName] = useState(product?.warehouseName || '');
+  const [vendorName] = useState(product?.vendorName || '');
+  const [image, setImage] = useState(product?.image || null); // 기존 이미지 URL
+
+  const [imageSrc, setImageSrc] = useState(null);       // 미리보기용
+  const [imageUrl, setImageUrl] = useState(product?.image || ''); // 기존 이미지 URL 상태
 
 
   useEffect(() => {
-    if (product) {
-      setName(product.name);
-      setCategory(product.category);
-      setPrice(product.price);
-      setStandard(product.standard);
-      setQuantity(product.quantity);
-      setWarehouseName(product.warehouseName);
-      setVendorName(product.vendorName);
-      setImage(product.image); // 이미지 상태 업데이트
+    if (updateProduct && product) {
+      updateProduct({
+        ...product,
+        name: name,
+        price: price,
+        quantity: quantity,
+        warehouseName: product.warehouseName,
+        vendorName: product.vendorName,
+        image: imageUrl || image, // 이미지 수정된 경우만 반영
+        category: category,
+        standard: standard
+      })
     }
-  }, [product]);
+  }, [name, price, quantity, warehouseName, vendorName, image, category, standard]);
 
   // 이미지 파일 업로드 처리 함수
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setImage(URL.createObjectURL(file)); // 미리보기 URL 생성
-      // 필요에 따라 파일 업로드 로직을 추가할 수 있습니다.
+      const imageUrl = URL.createObjectURL(file);
+      setImageSrc(imageUrl);
+      setImage(file);
+      setImageUrl(null);
     }
   };
 
@@ -43,12 +51,13 @@ function EquipmentDetail({ product }) {
     document.getElementById('file-input').click();
   };
 
-  return (
+  const categories = ['필기구', '사무용품', '생활용품', '가전', '기타'];
 
+
+  return (
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* 왼쪽 2/3: 폼 필드 */}
         <div className="md:col-span-2 space-y-4">
-
           {/* 비품명 */}
           <div className="flex items-center w-full max-w-md">
             <label className="w-20 text-sm font-medium text-gray-700 whitespace-nowrap">
@@ -61,20 +70,21 @@ function EquipmentDetail({ product }) {
               onChange={(e) => setName(e.target.value)}
             />
           </div>
-
           {/* 카테고리 */}
           <div className="flex items-center w-full max-w-md">
             <label className="w-20 text-sm font-medium text-gray-700 whitespace-nowrap">
               카테고리
             </label>
-            <input
-              type="text"
+            <select
               className="flex-1 border rounded px-3 py-2"
               value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            />
+              onChange={(e) => setCategory(e.target.value)}>
+              <option>선택하세요</option>
+              {categories.map((cat, index) => (
+                <option key={index} value={cat}>{cat}</option>
+              ))}
+            </select>
           </div>
-
           {/* 매입가 */}
           <div className="flex items-center w-full max-w-md">
             <label className="w-20 text-sm font-medium text-gray-700 whitespace-nowrap">
@@ -87,8 +97,6 @@ function EquipmentDetail({ product }) {
               onChange={(e) => setPrice(e.target.value)}
             />
           </div>
-
-
           {/* 매입회사 */}
           <div className="flex items-center w-full max-w-md">
             <label className="w-20 text-sm font-medium text-gray-700 whitespace-nowrap">
@@ -98,23 +106,8 @@ function EquipmentDetail({ product }) {
               type="text"
               className="flex-1 border rounded px-3 py-2"
               value={vendorName}
-              onChange={(e) => setVendorName(e.target.value)}
-            />
+              readOnly            />
           </div>
-
-          {/* 매입날짜 */}
-          <div className="flex items-center w-full max-w-md">
-            <label className="w-20 text-sm font-medium text-gray-700 whitespace-nowrap">
-              매입날짜
-            </label>
-            <input
-              type="text"
-              className="flex-1 border rounded px-3 py-2"
-              value={time}
-              readOnly
-            />
-          </div>
-
           {/* 수량 */}
           <section>
             <h6 className="text-lg font-semibold mb-4 mt-4 border-b border-gray-300">수량 </h6>
@@ -137,12 +130,12 @@ function EquipmentDetail({ product }) {
               {/* 총재고 */}
               <div className="flex items-center w-full max-w-md">
                 <label className="w-20 text-sm font-medium text-gray-700 whitespace-nowrap">
-                  총재고
+                  현재 재고
                 </label>
                 <input
                   type="text"
                   className="flex-1 border rounded px-3 py-2"
-                  value={quantity}
+                  value={quantity === 0 ? '0' : quantity} // '0'일 때도 출력되도록 설정
                   onChange={(e) => setQuantity(e.target.value)}
                 />
               </div>
@@ -156,34 +149,33 @@ function EquipmentDetail({ product }) {
                   type="text"
                   className="flex-1 border rounded px-3 py-2"
                   value={warehouseName}
-                  onChange={(e) => setWarehouseName(e.target.value)}
-                />
+                  readOnly                />
               </div>
 
 
             </div>
           </section>
-
-
         </div>
-
-
         {/* 오른쪽 이미지 + QR */}
         <div className="flex flex-col items-end space-y-2">
           <div
             className="w-24 h-24 bg-gray-100 border border-dashed rounded-lg flex items-center justify-center text-2xl text-gray-400 cursor-pointer"
             onClick={handleImageClick} // 이미지 클릭 시 input 열기
           >
-            {image ? (
+            {imageSrc ? (
               <img
-                src={image} // 이미지 미리보기
+                src={imageSrc} // 미리보기용 URL을 src에 넣음
                 alt="비품 이미지"
                 className="w-full h-full object-cover border rounded-lg"
               />
             ) : (
-              <div className="w-full h-full bg-gray-100 border border-dashed rounded-lg flex items-center justify-center text-2xl text-gray-400">
-                📷
-              </div>
+              image && (
+                <img
+                  src={image} // 기존 이미지를 src로 사용
+                  alt="비품 이미지"
+                  className="w-full h-full object-cover border rounded-lg"
+                />
+              )
             )}
           </div>
           {/* 이미지 업로드 input */}

@@ -7,11 +7,13 @@ import ClientAdd from './ClientAdd.jsx';
 import ClientDetail from './ClientDetail.jsx'; // axios import
 
 function ClientList() {
-  const [clients, setClients] = useState([]);
+  const [clients, setClients] = useState([]); // 전체 클라이언트 목록
+  const [filteredClients, setFilteredClients] = useState([]); // 검색 결과로 필터된 클라이언트 목록
   const [clientAdd, setClientAdd] = useState(false);
   const [selectedClient, setSelectedClient] = useState(null);
   const [clientDetailModal, setClientDetailModal] = useState(false);
   const [updatedClient, setUpdatedClient] = useState(null);
+  const [searchQuery, setSearchQuery] = useState(''); // 검색어 상태
 
 
   const fetchClients = () => {
@@ -20,10 +22,30 @@ function ClientList() {
       .catch(console.error);
   };
 
+  // 검색어에 맞는 클라이언트를 필터링하는 함수
+  const filterClients = (query) => {
+    const lowercasedQuery = query.toLowerCase();
+    const filtered = clients.filter(client => {
+      return (
+        client.name.toLowerCase().includes(lowercasedQuery) ||
+        client.phone.toLowerCase().includes(lowercasedQuery) ||
+        client.email.toLowerCase().includes(lowercasedQuery) ||
+        client.location.toLowerCase().includes(lowercasedQuery)
+      );
+    });
+    setFilteredClients(filtered);
+  };
+
   useEffect(() => {
     fetchClients();
   }, []);
 
+  // 검색어가 변경될 때마다 필터링 적용
+  useEffect(() => {
+    filterClients(searchQuery);
+  }, [searchQuery]);
+
+  // 클라이언트 클릭 시 상세보기 모달 열기
   const clientClick = (client) => {
     setSelectedClient(client);
     setUpdatedClient(client); // 수정할 값을 초기화
@@ -54,8 +76,10 @@ function ClientList() {
                   </div>
                   <input
                     type="text"
-                    placeholder="이름, 바코드, 속성 검색"
+                    placeholder="이름, 전화번호, 이메일, 주소 검색"
                     className="pl-10 pr-4 py-2 w-full focus:outline-none"
+                    value={searchQuery} // 검색어 상태 바인딩
+                    onChange={(e) => setSearchQuery(e.target.value)} // 검색어 입력 시 상태 업데이트
                   />
                 </div>
               </div>
@@ -73,7 +97,7 @@ function ClientList() {
                   </tr>
                   </thead>
                   <tbody>
-                  {clients.map((client ) => (
+                  {filteredClients.map((client) => (
                     <tr key={client.idx} onClick={() => clientClick(client)} className="border-b border-gray-200 text-center">
                       <td className="py-2 px-4 w-[200px]">{client.name}</td>
                       <td className="py-2 px-4 w-[200px]">{client.phone}</td>

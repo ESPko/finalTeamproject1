@@ -26,5 +26,9 @@
         WHERE idx = #{idx}
     </update>
 
+    <select id="getExistingImageUrl" resultType="String">
+        SELECT image FROM item WHERE idx = #{idx}
+    </select>
+
 
 </mapper>

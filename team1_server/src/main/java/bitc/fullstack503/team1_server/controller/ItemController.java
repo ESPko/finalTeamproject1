@@ -40,6 +40,8 @@ public class ItemController {
             @RequestParam("standard") String standard
     ) {
         try {
+
+
             // 가격과 표준을 Integer로 변환
             int priceInt = Integer.parseInt(price);
             int standardInt = Integer.parseInt(standard);
@@ -57,6 +59,7 @@ public class ItemController {
             itemDTO.setStandard(standardInt);
             itemService.addItem(itemDTO, imageUrl);
 
+
             return ResponseEntity.ok(Map.of("message", "비품이 성공적으로 추가되었습니다.", "imageUrl", imageUrl));
         } catch (IOException e) {
             return ResponseEntity.status(400).body(Map.of("error", "파일 처리 오류", "message", e.getMessage()));
@@ -67,17 +70,18 @@ public class ItemController {
         }
     }
 
-    // 아이템 수정 (idx로 수정)
+    //아이템 수정 (idx로 수정)
     @PutMapping("/update/{idx}")
     public ResponseEntity<Map<String, String>> updateItem(
             @PathVariable int idx,
-            @RequestParam("image") MultipartFile image,
-            @RequestParam("name") String name,
-            @RequestParam("category") String category,
-            @RequestParam("vendorName") String vendorName,
-            @RequestParam("warehouseName") String warehouseName,
-            @RequestParam("price") String price,
-            @RequestParam("standard") String standard
+            @RequestParam(required = false, value = "image") MultipartFile image,
+            @RequestParam(required = false, value = "name") String name,
+            @RequestParam(required = false, value = "category") String category,
+            @RequestParam(required = false, value = "vendorName") String vendorName,
+            @RequestParam(required = false, value = "warehouseName") String warehouseName,
+            @RequestParam(required = false, value = "price") String price,
+            @RequestParam(required = false, value = "standard") String standard,
+            @RequestParam(required = false, value = "quantity") String quantity
     ) {
         try {
 
@@ -89,9 +93,14 @@ public class ItemController {
             // 가격과 표준을 Integer로 변환
             int priceInt = Integer.parseInt(price);
             int standardInt = Integer.parseInt(standard);
+            int quantityInt = Integer.parseInt(quantity);
 
-            // 이미지 업로드 처리 (수정된 이미지 저장)
-            String imageUrl = itemService.uploadImage(image);
+            // 기존의 imageUrl을 그대로 사용 (이미지 수정이 없는 경우)
+            String imageUrl = itemService.getExistingImageUrl(idx);  // DB에서 기존 이미지 URL을 가져옴
+            if (image != null && !image.isEmpty()) {
+                // 이미지가 수정된 경우에만 처리
+                imageUrl = itemService.uploadImage(image);
+            }
 
             // 수정할 제품 정보 설정
             ItemDTO itemDTO = new ItemDTO();
@@ -103,8 +112,9 @@ public class ItemController {
             itemDTO.setPrice(priceInt);
             itemDTO.setStandard(standardInt);
             itemDTO.setImage(imageUrl);
+            itemDTO.setQuantity(quantityInt);
 
-            itemService.updateItem(idx, itemDTO, imageUrl);  // DB에 업데이트
+            itemService.updateItem(idx,itemDTO, imageUrl);  // DB에 업데이트
 
             return ResponseEntity.ok(Map.of("message", "비품이 성공적으로 수정되었습니다."));
         } catch (IOException e) {
