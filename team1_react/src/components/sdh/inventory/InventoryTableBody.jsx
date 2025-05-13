@@ -29,9 +29,9 @@ function InventoryTableBody ({ products })
         <td className="cell-style">{product.name}</td>
         <td className="cell-style">{product.warehouseName}</td>
         <td className="cell-style">{product.vendorName}</td>
-        <td className="cell-style">{product.inbound}</td>
-        <td className="cell-style">{product.outbound}</td>
-        <td className="cell-style">{product.adjusted}</td>
+        <td className="cell-style text-blue-600">{product.inbound}</td>
+        <td className="cell-style text-red-600">{product.outbound}</td>
+        <td className="cell-style text-green-600">{product.adjusted}</td>
         <td className="cell-style">{product.totalQuantity}</td>
       </tr>
     ))}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import QRCode from 'react-qr-code';
-import axiosInstance from '../../../api/axiosInstance';
+import axiosInstance from '../../../../api/axiosInstance'; // ✅ 확장자 .jsx 제거 권장
 
 function TestPage ()
 {
@@ -34,7 +34,7 @@ function TestPage ()
     
     try
     {
-      const response = await axiosInstance.post('http://localhost:8080/api/upload', formData, {
+      const response = await axios.post('http://localhost:8080/api/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

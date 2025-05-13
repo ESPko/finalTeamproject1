@@ -16,4 +16,5 @@ public class StatusDTO
   private int afterQuantity;
   @JsonFormat (pattern = "yyyy-MM-dd HH:mm")
   private LocalDateTime date;
+  private int transaction;
 }

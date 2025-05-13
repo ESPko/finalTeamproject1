@@ -64,37 +64,37 @@ function StatusPage ()
   return (
     <div className="flex-1 p-6 overflow-y-auto">
       <div className="bg-white rounded shadow p-4 min-x-[100vh] min-h-[90vh]" style={{ padding: '0px 40px 0 40px' }}>
-        <Topline title="비품 사용 현황">
-          <StatusNavigation
-            selectedDepartments={selectedDepartments}
-            setSelectedDepartments={setSelectedDepartments}
-            selectedOutboundPerson={selectedOutboundPerson}
-            setSelectedOutboundPerson={setSelectedOutboundPerson}
-            startDate={startDate}
-            setStartDate={setStartDate}
-            endDate={endDate}
-            setEndDate={setEndDate}
-            tags={tags}
-            setTags={setTags}
-          />
-          <table className="table-fixed border-collapse">
-            <thead className="bg-white top-0 z-30">
-            <tr className="border-b border-gray-300">
-              <th className="cell-style w-[120px]">사진</th>
-              <th className="cell-style w-[200px]">제품명</th>
-              <th className="cell-style w-[180px]">보관위치</th>
-              <th className="cell-style w-[190px]">거래처</th>
-              <th className="cell-style w-[130px]">부서</th>
-              <th className="cell-style w-[130px]">출고자</th>
-              <th className="cell-style w-[130px]">재고변동</th>
-              <th className="cell-style w-[130px]">수량</th>
-              <th className="cell-style w-[200px]">출고일</th>
-            </tr>
-            </thead>
-            <StatusTableBody products={products} />
-          </table>
-        </Topline>
-      </div>
+          <Topline title="비품 사용 현황">
+            <StatusNavigation
+              selectedDepartments={selectedDepartments}
+              setSelectedDepartments={setSelectedDepartments}
+              selectedOutboundPerson={selectedOutboundPerson}
+              setSelectedOutboundPerson={setSelectedOutboundPerson}
+              startDate={startDate}
+              setStartDate={setStartDate}
+              endDate={endDate}
+              setEndDate={setEndDate}
+              tags={tags}
+              setTags={setTags}
+            />
+            <table className="table-fixed border-collapse">
+              <thead className="bg-white top-0 z-30">
+              <tr className="border-b border-gray-300">
+                <th className="cell-style w-[120px]">사진</th>
+                <th className="cell-style w-[200px]">제품명</th>
+                <th className="cell-style w-[180px]">보관위치</th>
+                <th className="cell-style w-[190px]">거래처</th>
+                <th className="cell-style w-[130px]">부서</th>
+                <th className="cell-style w-[130px]">출고자</th>
+                <th className="cell-style w-[130px]">재고변동</th>
+                <th className="cell-style w-[130px]">수량</th>
+                <th className="cell-style w-[200px]">출고일</th>
+              </tr>
+              </thead>
+              <StatusTableBody products={products} />
+            </table>
+          </Topline>
+        </div>
     </div>
   );
 }
