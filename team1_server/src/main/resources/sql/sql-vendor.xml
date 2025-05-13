@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="bitc.fullstack503.team1_server.mapper.VendorMapper">
+    <select id="getVendorList" resultType="bitc.fullstack503.team1_server.dto.VendorDTO">
+        SELECT idx, name, location, email, phone, memo FROM vendor ORDER BY idx DESC
+    </select>
+
+    <update id="updateVendor" parameterType="bitc.fullstack503.team1_server.dto.VendorDTO">
+        update vendor
+        set name = #{name},
+            phone = #{phone},
+            email = #{email},
+            location= #{location},
+            memo= #{memo}  where idx = #{idx}
+    </update>
+
+    <insert id="insertVendor" parameterType="bitc.fullstack503.team1_server.dto.VendorDTO">
+        insert into vendor (name, phone, email, location, memo) values( #{name}, #{phone}, #{email}, #{location}, #{memo} )
+    </insert>
+
+    <delete id="deleteVendor">
+        delete from vendor where idx = #{idx}
+    </delete>
+
+    <select id="getVendorName" resultType="bitc.fullstack503.team1_server.dto.VendorDTO">
+        SELECT idx, name FROM vendor ORDER BY idx DESC
+    </select>
+</mapper>
