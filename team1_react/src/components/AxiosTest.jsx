@@ -65,6 +65,19 @@ function AxiosTest() {
       });
   };
 
+  // 스프링 서버와 통신 테스트(인스탠스 토큰)
+  const sendDataInstanceTest = () => {
+    axiosInstance.get("/api")
+      .then(res => {
+        console.log('axios를 사용한 비동기 통신에 성공')
+        console.log(res.data)
+      })
+      .catch(err => {
+        console.log("비동기 통신 중 오류가 발생했습니다.")
+        console.log(err)
+      })
+  }
+
 
 
 
@@ -74,8 +87,8 @@ function AxiosTest() {
         <h1>토큰 : {token}</h1>
         <button type={'button'} className={'bg-red-400 btn btn-secondary me-2'} onClick={sendDataTest}>Spring RestAPI 서버 접속 테스트</button>
         <button type={'button'} className={'bg-blue-400 btn btn-secondary me-2'} onClick={sendDataTokenTest}>토큰을 담은 Spring RestAPI 서버 접속 테스트</button>
-        <hr/>
-        br
+        <button type={'button'} className={'bg-green-300 btn btn-secondary me-2'} onClick={sendDataInstanceTest}>인스탠스를 사용한 Spring RestAPI 서버 접속 테스트</button>
+        <br/><br/><br/><br/>
         {token ? (
           <div>
             <h2>환영합니다!</h2>
