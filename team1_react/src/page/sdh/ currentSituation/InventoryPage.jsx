@@ -2,21 +2,22 @@ import { useEffect, useState, useCallback, useMemo } from 'react';
 import InventoryNavigation from '../../../components/sdh/navi/InventoryNavigation.jsx';
 import Topline from '../../../components/layout/Topline.jsx';
 import InventoryTableBody from '../../../components/sdh/inventory/InventoryTableBody.jsx';
+import axiosInstance from '../../../api/axiosInstance'; // ✅ 확장자 .jsx 제거 권장
 
-function InventoryPage ()
-{
+function InventoryPage() {
   const [products, setProducts] = useState([]);
   const [selectedLocations, setSelectedLocations] = useState([]);
   const [selectedCorrespondents, setSelectedCorrespondents] = useState([]);
   const [tags, setTags] = useState([]);
-  
+
   const [startDate, setStartDate] = useState(() => {
     const d = new Date();
     d.setDate(d.getDate() - 6);
     return d;
   });
+
   const [endDate, setEndDate] = useState(() => new Date());
-  
+
   const formatDate = useCallback((date, isStart = true) => {
     const yyyy = date.getFullYear();
     const mm = String(date.getMonth() + 1).padStart(2, '0');
@@ -24,7 +25,7 @@ function InventoryPage ()
     const hhmmss = isStart ? '00:00:00' : '23:59:59';
     return `${yyyy}-${mm}-${dd} ${hhmmss}`;
   }, []);
-  
+
   const requestBody = useMemo(() => ({
     tags,
     selectedLocations,
@@ -32,25 +33,21 @@ function InventoryPage ()
     startDate: formatDate(startDate, true),
     endDate: formatDate(endDate, false),
   }), [tags, selectedLocations, selectedCorrespondents, startDate, endDate, formatDate]);
-  
+
   const fetchInventoryData = useCallback(() => {
-    fetch('http://localhost:8080/api/inventory/search', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(requestBody),
-    })
+    axiosInstance.post('/api/inventory/search', requestBody)
       .then(res => {
-        if (!res.ok) throw new Error('서버 오류');
-        return res.json();
+        setProducts(res.data);
       })
-      .then(data => setProducts(data))
-      .catch(err => console.error('Fetch 실패:', err));
+      .catch(err => {
+        console.error('Axios 요청 실패:', err);
+      });
   }, [requestBody]);
-  
+
   useEffect(() => {
     fetchInventoryData();
   }, [fetchInventoryData]);
-  
+
   return (
     <div className="flex-1 p-6 overflow-y-auto">
       <div className="bg-white rounded shadow p-10 min-x-[100vh] min-h-[80vh]">

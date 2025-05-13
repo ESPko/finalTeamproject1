@@ -1,62 +1,57 @@
 import { useEffect, useMemo, useRef, useState, memo } from 'react';
+import axiosInstance from '../../../api/axiosInstance.jsx';
 
-function Correspondent ({ selected, setSelected })
-{
+function Correspondent({ selected, setSelected }) {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [vendors, setVendors] = useState([]);
   const dropdownRef = useRef(null);
-  
-  // 거래처 목록 불러오기
+
+  // ✅ 거래처 목록 불러오기 (axiosInstance 사용)
   useEffect(() => {
     const fetchVendors = async () => {
-      try
-      {
-        const response = await fetch('http://localhost:8080/api/vendors');
-        if (!response.ok) throw new Error('서버 오류');
-        const data = await response.json();
-        const names = [...new Set(data.map(v => v.name))];
+      try {
+        const res = await axiosInstance.get('/api/vendors');
+        const names = [...new Set(res.data.map(v => v.name))]; // 중복 제거
         setVendors(names);
-      }
-      catch (error)
-      {
-        console.error('거래처 데이터를 불러오는 데 실패했습니다:', error);
+      } catch (err) {
+        console.error('거래처 목록 불러오기 실패:', err);
       }
     };
     fetchVendors();
   }, []);
-  
-  // 검색 필터
+
+  // ✅ 검색 필터링
   const filtered = useMemo(() => {
     return vendors.filter(item =>
-      item.toLowerCase().includes(search.toLowerCase()),
+      item.toLowerCase().includes(search.toLowerCase())
     );
   }, [search, vendors]);
-  
-  // 외부 클릭 시 닫기
+
+  // ✅ 외부 클릭 시 드롭다운 닫기
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target))
-      {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setIsOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-  
+
+  // ✅ 거래처 선택/해제
   const toggle = (item) => {
     setSelected(prev =>
       prev.includes(item)
         ? prev.filter(i => i !== item)
-        : [...prev, item],
+        : [...prev, item]
     );
   };
-  
+
   const isChecked = (item) => selected.includes(item);
   const displayText =
     selected.length > 0 ? `거래처 : ${selected.join(', ')}` : '거래처';
-  
+
   return (
     <div className="relative inline-block text-left h-auto" ref={dropdownRef}>
       <button
@@ -69,7 +64,7 @@ function Correspondent ({ selected, setSelected })
       >
         {displayText}
       </button>
-      
+
       {isOpen && (
         <div className="absolute mt-1 w-fit min-w-[200px] max-w-[400px] bg-white border border-gray-300 rounded-md shadow-lg z-10">
           <input

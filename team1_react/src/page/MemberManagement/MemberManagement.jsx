@@ -1,7 +1,7 @@
 import AddMemberModal from './AddMemberModal.jsx';
 import { useEffect, useState } from 'react';
 import Topline from '../../components/layout/Topline.jsx';
-import axios from 'axios';
+import axiosInstance  from '../../api/axiosInstance.jsx';
 
 function MemberManagement() {
   const [employees, setEmployees] = useState([]);
@@ -25,7 +25,7 @@ function MemberManagement() {
   useEffect(() => {
     const token = localStorage.getItem('token');
 
-    axios.get('http://localhost:8080/member', {headers: {Authorization: `Bearer ${token}`}})
+    axiosInstance.get('member', {headers: {Authorization: `Bearer ${token}`}})
       .then(res => {
         console.log("서버에서 받은 데이터: ", res.data)
         const mappedData = res.data.map((user) => {

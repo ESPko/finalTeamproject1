@@ -1,60 +1,54 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import axiosInstance from '../../../api/axiosInstance.jsx';
 
-function Department ({ selected, setSelected })
-{
+function Department({ selected, setSelected }) {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [departments, setDepartments] = useState([]);
   const dropdownRef = useRef(null);
-  
-  // 서버에서 부서 리스트 불러오기
+
+  // ✅ 서버에서 부서 리스트 가져오기 (axiosInstance 사용)
   useEffect(() => {
-    fetch('http://localhost:8080/api/departments')
+    axiosInstance.get('/api/departments')
       .then(res => {
-        if (!res.ok) throw new Error('서버 오류');
-        return res.json();
-      })
-      .then(data => {
-        // 부서 이름만 추출
-        const names = data.map(item => item.department);
+        const names = res.data.map(item => item.department);
         setDepartments(names);
       })
       .catch(err => {
         console.error('부서 목록 불러오기 실패:', err);
       });
   }, []);
-  
-  // 검색 필터
+
+  // ✅ 검색어 필터링된 부서 목록
   const filteredDepartments = useMemo(() => {
     return departments.filter(dept =>
-      dept.toLowerCase().includes(search.toLowerCase()),
+      dept.toLowerCase().includes(search.toLowerCase())
     );
   }, [search, departments]);
-  
-  // 바깥 클릭 시 드롭다운 닫기
+
+  // ✅ 외부 클릭 시 드롭다운 닫기
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target))
-      {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-  
-  // 부서 선택/해제 토글
+
+  // ✅ 선택 토글
   const toggleDepartment = (dept) => {
     setSelected(prev =>
       prev.includes(dept)
         ? prev.filter(item => item !== dept)
-        : [...prev, dept],
+        : [...prev, dept]
     );
   };
-  
+
   const isChecked = (dept) => selected.includes(dept);
   const displayText = selected.length > 0 ? `부서: ${selected.join(', ')}` : '부서';
-  
+
   return (
     <div className="relative inline-block text-left h-auto" ref={dropdownRef}>
       <button
@@ -67,7 +61,7 @@ function Department ({ selected, setSelected })
       >
         {displayText}
       </button>
-      
+
       {isOpen && (
         <div className="absolute mt-1 w-fit min-w-[200px] max-w-[400px] bg-white border border-gray-300 rounded-md shadow-lg z-10">
           <input

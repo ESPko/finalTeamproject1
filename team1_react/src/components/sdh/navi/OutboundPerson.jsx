@@ -1,58 +1,56 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import axiosInstance from '../../../api/axiosInstance.jsx';
 
-function OutboundPerson ({ selected, setSelected })
-{
+function OutboundPerson({ selected, setSelected }) {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [outboundPersons, setOutboundPersons] = useState([]);
   const dropdownRef = useRef(null);
-  
+
+  // ✅ 출고자 데이터 불러오기
   useEffect(() => {
-    fetch('http://localhost:8080/api/nickNames')
-      .then(res => {
-        if (!res.ok) throw new Error('서버 오류');
-        return res.json();
-      })
-      .then(data => {
-        const names = data.map(item => item.nickName);
+    const fetchOutboundPersons = async () => {
+      try {
+        const response = await axiosInstance.get('/api/nickNames');
+        const names = response.data.map(item => item.nickName);
         setOutboundPersons(names);
-      })
-      .catch(err => {
+      } catch (err) {
         console.error('출고자 목록 불러오기 실패:', err);
-      });
+      }
+    };
+    fetchOutboundPersons();
   }, []);
-  
-  // 검색 필터
+
+  // ✅ 검색 필터
   const filteredOutboundPersons = useMemo(() => {
     return outboundPersons.filter(person =>
-      person.toLowerCase().includes(search.toLowerCase()),
+      person.toLowerCase().includes(search.toLowerCase())
     );
   }, [search, outboundPersons]);
-  
-  // 바깥 클릭 시 드롭다운 닫기
+
+  // ✅ 외부 클릭 시 드롭다운 닫기
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target))
-      {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-  
-  // 출고자 선택/해제 토글
+
+  // ✅ 출고자 선택/해제
   const togglePerson = (person) => {
     setSelected(prev =>
       prev.includes(person)
         ? prev.filter(item => item !== person)
-        : [...prev, person],
+        : [...prev, person]
     );
   };
-  
+
   const isChecked = (person) => selected.includes(person);
   const displayText = selected.length > 0 ? `출고자: ${selected.join(', ')}` : '출고자';
-  
+
   return (
     <div className="relative inline-block text-left h-auto" ref={dropdownRef}>
       <button
@@ -65,7 +63,7 @@ function OutboundPerson ({ selected, setSelected })
       >
         {displayText}
       </button>
-      
+
       {isOpen && (
         <div className="absolute mt-1 w-fit min-w-[200px] max-w-[400px] bg-white border border-gray-300 rounded-md shadow-lg z-10">
           <input

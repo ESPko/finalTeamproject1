@@ -2,9 +2,9 @@ import Topline from '../../../components/layout/Topline.jsx';
 import { useEffect, useState, useMemo } from 'react';
 import StatusNavigation from '../../../components/sdh/navi/StatusNavigation.jsx';
 import StatusTableBody from '../../../components/sdh/inventory/StatusTableBody.jsx';
+import axiosInstance from '../../../api/axiosInstance'; // ✅ axiosInstance import 추가
 
-function StatusPage ()
-{
+function StatusPage() {
   const [selectedDepartments, setSelectedDepartments] = useState([]);
   const [selectedOutboundPerson, setSelectedOutboundPerson] = useState([]);
   const [startDate, setStartDate] = useState(() => {
@@ -15,8 +15,7 @@ function StatusPage ()
   const [endDate, setEndDate] = useState(new Date());
   const [tags, setTags] = useState([]);
   const [products, setProducts] = useState([]);
-  
-  // Date 포맷 함수 메모이제이션
+
   const formatDate = useMemo(() => (date, isStart = true) => {
     const yyyy = date.getFullYear();
     const mm = String(date.getMonth() + 1).padStart(2, '0');
@@ -24,12 +23,12 @@ function StatusPage ()
     const hhmmss = isStart ? '00:00:00' : '23:59:59';
     return `${yyyy}-${mm}-${dd} ${hhmmss}`;
   }, []);
-  
+
   useEffect(() => {
     const fetchProducts = async () => {
       const formattedStart = formatDate(startDate, true);
       const formattedEnd = formatDate(endDate, false);
-      
+
       const requestBody = {
         tags,
         selectedDepartments,
@@ -37,34 +36,32 @@ function StatusPage ()
         startDate: formattedStart,
         endDate: formattedEnd,
       };
-      
-      try
-      {
-        const response = await fetch('http://localhost:8080/api/status/search', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(requestBody),
-        });
-        if (!response.ok) throw new Error('서버 오류');
-        const data = await response.json();
-        setProducts(data);
-      }
-      catch (error)
-      {
-        console.error('Fetch 실패:', error);
+
+      try {
+        const response = await axiosInstance.post('/api/status/search', requestBody); // ✅ axiosInstance 사용
+        setProducts(response.data);
+      } catch (error) {
+        console.error('Axios 요청 실패:', error);
       }
     };
-    
-    // 조건이 변경될 때만 서버 호출
-    if (tags.length || selectedDepartments.length || selectedOutboundPerson.length || startDate || endDate)
-    {
+
+    if (
+      tags.length ||
+      selectedDepartments.length ||
+      selectedOutboundPerson.length ||
+      startDate ||
+      endDate
+    ) {
       fetchProducts();
     }
   }, [tags, selectedDepartments, selectedOutboundPerson, startDate, endDate, formatDate]);
-  
+
   return (
     <div className="flex-1 p-6 overflow-y-auto">
-      <div className="bg-white rounded shadow p-4 min-x-[100vh] min-h-[80vh]" style={{ padding: '0px 40px 80px 40px' }}>
+      <div
+        className="bg-white rounded shadow p-4 min-x-[100vh] min-h-[80vh]"
+        style={{ padding: '0px 40px 80px 40px' }}
+      >
         <div>
           <Topline title="비품 사용 현황">
             <StatusNavigation

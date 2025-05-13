@@ -5,7 +5,9 @@ import NoResultProduct from './NoResultProduct.jsx';
 import ProductListDetail from './ProductSearchDetail.jsx';
 import Topline from '../../components/layout/Topline.jsx';
 import { SearchIcon } from 'lucide-react';
-import axios from 'axios';
+import axiosInstance  from '../../api/axiosInstance.jsx';
+
+
 
 function ProductSearch() {
   const [search, setSearch] = useState(``)
@@ -20,9 +22,9 @@ function ProductSearch() {
   const [selectedWarehouse, setSelectedWarehouse] =useState('모든 창고')
 
   useEffect(() => {
-    axios.get('http://localhost:8080/productSearch')
+    axiosInstance.get('/productSearch')
       .then(res => {
-        const mappedData = res.data.map((ps, index) => ({
+        const mappedData = res.data.map((ps) => ({
           idx:ps.idx,
           image:ps.image,
           name:ps.name,

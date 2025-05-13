@@ -2,7 +2,7 @@ import Topline from '../../components/layout/Topline.jsx';
 import StorageProductSearch from './StorageProductSearch.jsx';
 import { useState } from 'react';
 import StorageDateSelector from './StorageDateSelector.jsx';
-import axios from 'axios';
+import axiosInstance from '../../api/axiosInstance.jsx';
 
 function TestPage1() {
   const [selectedItem, setSelectedItem] = useState(null); // 선택된 제품
@@ -30,8 +30,8 @@ function TestPage1() {
       const updatedQuantity = Number(inputQuantity);
 
       // PUT 요청을 보냄
-      const response = await axios.put(
-        `http://localhost:8080/api/items/${selectedItem.idx}/receive`, // 입고 처리 엔드포인트
+      const response = await axiosInstance.put(
+        `/api/items/${selectedItem.idx}/receive`, // 입고 처리 엔드포인트
         {
           ...selectedItem,
           quantity: updatedQuantity,

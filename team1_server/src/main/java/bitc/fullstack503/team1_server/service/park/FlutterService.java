@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-public interface ItemService {
+public interface FlutterService {
   List<ItemDTO> getAllItems();
   ItemDTO getItemByCode(int idx);
   void updateItem(ItemDTO item);

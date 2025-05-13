@@ -1,8 +1,17 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function LowStockSearch({ items, onSelect }) {
   const [inputValue, setInputValue] = useState('');
   const [suggestions, setSuggestions] = useState([]);
+
+  // 디바운싱을 위한 타이머
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onSelect(inputValue); // 300ms 후에 onSelect 호출
+    }, 300); // 300ms 지연
+
+    return () => clearTimeout(timer); // 이전 타이머를 클리어
+  }, [inputValue, onSelect]); // inputValue가 바뀔 때마다 실행
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -10,25 +19,26 @@ function LowStockSearch({ items, onSelect }) {
 
     if (value.trim() === '') {
       setSuggestions([]);
-      onSelect('');
+      onSelect(''); // 검색어가 비었을 때
       return;
     }
 
+    // 검색어에 맞는 항목 필터링
     const matched = items.filter((item) =>
       item.name.toLowerCase().includes(value.toLowerCase())
     );
-    setSuggestions(matched.slice(0, 5));
+    setSuggestions(matched.slice(0, 5)); // 5개까지만 보여줌
   };
 
   const handleSuggestionClick = (name) => {
     setInputValue(name);
-    setSuggestions([]);
+    setSuggestions([]); // 클릭 후 제안 목록 제거
     onSelect(name);
   };
 
   const handleSearchClick = () => {
     setSuggestions([]);
-    onSelect(inputValue);
+    onSelect(inputValue); // 검색 버튼 클릭 시
   };
 
   return (

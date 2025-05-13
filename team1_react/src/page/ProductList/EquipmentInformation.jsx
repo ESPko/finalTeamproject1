@@ -5,7 +5,7 @@ import Modal from '../../Modal/Modal.jsx';
 import EquipmentDetail from './EquipmentDetail.jsx';
 import Topline from '../../components/layout/Topline.jsx';
 import { SearchIcon } from 'lucide-react';
-import axios from 'axios';
+import axiosInstance  from '../../api/axiosInstance.jsx';
 
 function EquipmentInformation() {
   const [products, setProducts] = useState([]);
@@ -37,7 +37,7 @@ function EquipmentInformation() {
   };
 
   const fetchItems = () => {
-    axios.get('http://localhost:8080/item/itemList')
+    axiosInstance.get('/item/itemList')
       .then((res) => {
         const data = res.data;
         if (Array.isArray(data)) {
@@ -79,7 +79,7 @@ function EquipmentInformation() {
     }
 
     // 서버로 PUT 요청
-    axios.put(`http://localhost:8080/item/update/${updatedProduct.idx}`, formData, {
+    axiosInstance.put(`/item/update/${updatedProduct.idx}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',  // FormData로 보내는 경우 Content-Type 설정
       },

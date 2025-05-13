@@ -3,7 +3,7 @@ import Topline from '../../components/layout/Topline.jsx';
 import Modal from '../../Modal/Modal.jsx';
 import LocationAdd from './LocationAdd.jsx';
 import LocationDetail from './LocationDetail.jsx';
-import axios from 'axios';
+import axiosInstance  from '../../api/axiosInstance.jsx';
 
 function LocationInfo() {
   // 서버에서 받아온 위치 목록 상태
@@ -24,13 +24,13 @@ function LocationInfo() {
 
   // 서버에서 데이터 가져오기
   useEffect(() => {
-    axios.get('http://localhost:8080/warehouse/warehouseList')
+    axiosInstance.get('/warehouse/warehouseList')
       .then((res) => {
         setLocationInfo(res.data);
         // 각 창고에 대한 상품 갯수도 함께 가져오기
         res.data.forEach(location => {
           if (location.name) {  // localName이 존재하는 경우에만 요청
-            axios.get(`http://localhost:8080/warehouse/warehouseItemCount?warehouseName=${location.name}`)
+            axiosInstance.get(`/warehouse/warehouseItemCount?warehouseName=${location.name}`)
               .then(response => {
                 setItemCounts(prevState => ({
                   ...prevState,
@@ -50,7 +50,7 @@ function LocationInfo() {
 
   // 위치 목록 갱신 함수
   const handleAddLocation = () => {
-    axios.get('http://localhost:8080/warehouse/warehouseList')
+    axiosInstance.get('/warehouse/warehouseList')
       .then((res) => {
         setLocationInfo(res.data); // 위치 목록 갱신
       })
@@ -150,7 +150,7 @@ function LocationInfo() {
             <>
               <button
                 onClick={() => {
-                  axios.post(`http://localhost:8080/warehouse/addLocation`, newLocation)
+                  axiosInstance.post(`/warehouse/addLocation`, newLocation)
                     .then((response) => {
                       alert(response.data);
                       setLocalAdd(false);
@@ -186,7 +186,7 @@ function LocationInfo() {
               <>
                 <button
                   onClick={() => {
-                    axios.put(`http://localhost:8080/warehouse/updateLocation/${updatedLocation.idx}`, updatedLocation)
+                    axiosInstance.put(`/warehouse/updateLocation/${updatedLocation.idx}`, updatedLocation)
                       .then((response) => {
                         alert(response.data);
                         setLocalDetail(false);  // 수정 모달 닫기

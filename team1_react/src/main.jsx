@@ -19,11 +19,10 @@ import LocationDetail from './page/location/LocationDetail.jsx';
 import LocationInfo from './page/location/LocationInfo.jsx';
 import ClientList from './page/Client/ClientList.jsx';
 import InventoryPage from './page/sdh/ currentSituation/InventoryPage';
-import ApprovalPage from './components/layout/ApprovalPage.jsx';
-import StoragePage from './components/layout/StoragePage.jsx';
 import StatusPage from './page/sdh/ currentSituation/StatusPage.jsx';
 import { AuthProvider } from './contexts/AuthContext';
-import AxiosTest from './components/AxiosTest.jsx'; // 추가
+import AxiosTest from './components/AxiosTest.jsx';
+import StoragePage from './page/storage/StoragePage.jsx'; // 추가
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

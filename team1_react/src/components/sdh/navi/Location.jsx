@@ -1,60 +1,57 @@
 import { useEffect, useMemo, useRef, useState, memo } from 'react';
+import axiosInstance from '../../../api/axiosInstance.jsx';
 
-function Location ({ selected, setSelected })
-{
+function Location({ selected, setSelected }) {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [locations, setLocations] = useState([]);
   const dropdownRef = useRef(null);
-  
-  // 서버에서 창고 리스트 불러오기
+
+  // ✅ 창고 목록 불러오기 (axios 사용)
   useEffect(() => {
     const fetchLocations = async () => {
-      try
-      {
-        const res = await fetch('http://localhost:8080/api/warehouses');
-        if (!res.ok) throw new Error('서버 오류');
-        const data = await res.json();
-        const uniqueNames = [...new Set(data.map(item => item.name))];
+      try {
+        const res = await axiosInstance.get('/api/warehouses');
+        const uniqueNames = [...new Set(res.data.map(item => item.name))];
         setLocations(uniqueNames);
-      }
-      catch (err)
-      {
+      } catch (err) {
         console.error('창고 목록 불러오기 실패:', err);
       }
     };
     fetchLocations();
   }, []);
-  
-  // 바깥 클릭 시 드롭다운 닫기
+
+  // ✅ 외부 클릭 시 드롭다운 닫기
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target))
-      {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-  
+
+  // ✅ 검색 필터링
   const filteredLocations = useMemo(() => {
     return locations.filter(location =>
-      location.toLowerCase().includes(search.toLowerCase()),
+      location.toLowerCase().includes(search.toLowerCase())
     );
   }, [search, locations]);
-  
+
+  // ✅ 선택/해제 토글
   const toggleLocation = (location) => {
     setSelected(prev =>
       prev.includes(location)
         ? prev.filter(item => item !== location)
-        : [...prev, location],
+        : [...prev, location]
     );
   };
-  
+
   const isChecked = (location) => selected.includes(location);
-  const displayText = selected.length > 0 ? `위치 : ${selected.join(', ')}` : '위치';
-  
+  const displayText =
+    selected.length > 0 ? `위치 : ${selected.join(', ')}` : '위치';
+
   return (
     <div className="relative inline-block text-left h-auto" ref={dropdownRef}>
       <button
@@ -67,7 +64,7 @@ function Location ({ selected, setSelected })
       >
         {displayText}
       </button>
-      
+
       {isOpen && (
         <div className="absolute mt-1 w-fit min-w-[200px] max-w-[400px] bg-white border border-gray-300 rounded-md shadow-lg z-10">
           <input

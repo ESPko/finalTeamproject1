@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 @Mapper
-public interface ItemMapper {
+public interface FlutterMapper {
   List<ItemDTO> getAllItems();
   ItemDTO getItemByCode(int idx);
   void updateItem(ItemDTO item);

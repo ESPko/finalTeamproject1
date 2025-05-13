@@ -1,6 +1,6 @@
 import Topline from '../../components/layout/Topline.jsx';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import axiosInstance  from '../../api/axiosInstance.jsx';
 import ApproveItemList from './ApproveItemList.jsx';
 
 
@@ -12,10 +12,10 @@ function ApprovalPage() {
 
   // 저장된 승인 목록들 불러오기
   useEffect(() => {
-    axios.get('http://localhost:8080/approve')
+    axiosInstance.get('/approve')
 
       .then(res => {
-        const mappedData = res.data.map((ap, index) => ({
+        const mappedData = res.data.map((ap) => ({
           idx: ap.idx,
           time: ap.time,
           image: ap.image,
@@ -53,7 +53,7 @@ function ApprovalPage() {
   const changeApprove = (idx, approveStatus) => {
     const token = localStorage.getItem('token');
 
-    axios.put('http://localhost:8080/updateApprove', {
+    axiosInstance.put('/updateApprove', {
       idx: idx,
       approve: approveStatus,
     },

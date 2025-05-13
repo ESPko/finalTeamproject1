@@ -3,7 +3,7 @@ package bitc.fullstack503.team1_server.controller.park;
 import bitc.fullstack503.team1_server.dto.ItemDTO;
 import bitc.fullstack503.team1_server.dto.ShipmentDetailResponse;
 import bitc.fullstack503.team1_server.security.JwtTokenProvider;
-import bitc.fullstack503.team1_server.service.park.ItemService;
+import bitc.fullstack503.team1_server.service.park.FlutterService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,24 +19,24 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/items")
 @RequiredArgsConstructor
-public class ItemController {
+public class FlutterController {
 
-  private final ItemService itemService;
+  private final FlutterService flutterService;
 
   @GetMapping
   public ResponseEntity<List<ItemDTO>> getAllItems(HttpServletResponse response) {
-    return ResponseEntity.ok(itemService.getAllItems());
+    return ResponseEntity.ok(flutterService.getAllItems());
   }
 
 
   @GetMapping("/{idx}")
   public ItemDTO getItem(@PathVariable int idx) {
-    return itemService.getItemByCode(idx);
+    return flutterService.getItemByCode(idx);
   }
 
   @PutMapping
   public void updateItem(@RequestBody ItemDTO item) {
-    itemService.updateItem(item);
+    flutterService.updateItem(item);
   }
 
   // ✅ QR 스캔으로 비품 출고
@@ -60,10 +60,10 @@ public class ItemController {
     }
 
     // 2. 비즈니스 로직: 수량 차감 + 트랜잭션 기록
-    itemService.decreaseItemQuantity(idx, userId, quantityToSubtract);
+    flutterService.decreaseItemQuantity(idx, userId, quantityToSubtract);
 
     // 3. 변경된 아이템 정보 반환
-    ItemDTO updatedItem = itemService.getItemByCode(idx);
+    ItemDTO updatedItem = flutterService.getItemByCode(idx);
     return ResponseEntity.ok(updatedItem);
   }
 
@@ -81,7 +81,7 @@ public class ItemController {
     String userName = jwtTokenProvider.getUserNameFromToken(token);
 
     // 사용자 이름을 기반으로 출고 내역을 조회
-    List<ShipmentDetailResponse> shipmentDetails = itemService.getShipmentDetails(userName);
+    List<ShipmentDetailResponse> shipmentDetails = flutterService.getShipmentDetails(userName);
 
     // 출고 내역이 제대로 반환되었는지 확인하는 로그 추가
     System.out.println("출고 내역 조회 결과: " + shipmentDetails);
@@ -92,8 +92,8 @@ public class ItemController {
   @GetMapping("/summary")
   public Map<String, Integer> getTodaySummary() {
     Map<String, Integer> result = new HashMap<>();
-    result.put("totalIn", itemService.getTodayTotalIn());
-    result.put("totalOut", itemService.getTodayTotalOut());
+    result.put("totalIn", flutterService.getTodayTotalIn());
+    result.put("totalOut", flutterService.getTodayTotalOut());
     return result;
   }
 

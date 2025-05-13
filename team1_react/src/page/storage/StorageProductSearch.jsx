@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import axiosInstance  from '../../api/axiosInstance.jsx';
+
 
 function StorageProductSearch({selectedItem, onSelect}) {
   const [items, setItems] = useState([]);
@@ -8,7 +9,7 @@ function StorageProductSearch({selectedItem, onSelect}) {
 
   // 처음에 데이터 받아오기
   useEffect(() => {
-    axios.get('http://localhost:8080/api/items')
+    axiosInstance.get('/api/items')
       .then(res => {
         setItems(res.data);
       });

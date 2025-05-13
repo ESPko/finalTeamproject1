@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import axiosInstance  from '../../api/axiosInstance.jsx';
 import Topline from '../../components/layout/Topline.jsx';
 import { SearchIcon } from 'lucide-react';
 import Modal from '../../Modal/Modal.jsx';
@@ -15,7 +15,7 @@ function ClientList() {
 
 
   const fetchClients = () => {
-    axios.get('http://localhost:8080/vendor/vendorList')
+    axiosInstance.get('/vendor/vendorList')
       .then(response => setClients(response.data))
       .catch(console.error);
   };
@@ -110,7 +110,7 @@ function ClientList() {
                 <button
                   className="bg-blue-600 text-white px-4 py-2 rounded"
                   onClick={() => {
-                    axios.put(`http://localhost:8080/vendor/${updatedClient.idx}`, updatedClient)
+                    axiosInstance.put(`/vendor/${updatedClient.idx}`, updatedClient)
                       .then(() => {
                         alert('수정 완료');
                         setClientDetailModal(false);
@@ -124,7 +124,7 @@ function ClientList() {
                   className="bg-red-600 text-white px-4 py-2 rounded"
                   onClick={() => {
                     if (window.confirm('정말 삭제하시겠습니까?')) {
-                      axios.delete(`http://localhost:8080/vendor/${selectedClient.idx}`)
+                      axiosInstance.delete(`/vendor/${selectedClient.idx}`)
                         .then(() => {
                           alert('삭제 완료');
                           setClientDetailModal(false);
