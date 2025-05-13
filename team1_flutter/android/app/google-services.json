@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "458479640546",
+    "project_id": "pushmsg-bb8e9",
+    "storage_bucket": "pushmsg-bb8e9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:458479640546:android:d3b2d764bd9de84b1723bb",
+        "android_client_info": {
+          "package_name": "com.example.test2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrr6c__1MefXoCZlWUUf01-H1rpnwLmtA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
