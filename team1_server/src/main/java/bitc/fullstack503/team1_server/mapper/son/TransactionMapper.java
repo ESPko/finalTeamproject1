@@ -1,0 +1,15 @@
+package bitc.fullstack503.team1_server.mapper.son;
+import bitc.fullstack503.team1_server.dto.ItemDTO;
+import bitc.fullstack503.team1_server.dto.TransactionDTO;
+import org.apache.ibatis.annotations.Mapper;
+@Mapper
+public interface TransactionMapper
+{
+  void insertTransaction (TransactionDTO transactionDTO);
+  
+  int selectItemQuantity (int itemIdx);
+  
+  int selectItemIdxByImage (String image);
+  
+  void insertItemQrByIdx (ItemDTO itemDTO);
+}
