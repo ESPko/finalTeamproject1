@@ -150,7 +150,7 @@ function LocationInfo() {
                           onClick={() => {
                             if (window.confirm('정말 삭제하시겠습니까?')) {
                               // 삭제 요청을 보낼 idx를 사용
-                              axios.delete(`http://localhost:8080/warehouse/${location.idx}`)
+                              axiosInstance.delete(`/warehouse/${location.idx}`)
                                 .then(() => {
                                   // 삭제 성공 시, locationInfo 상태에서 해당 항목 제거
                                   setLocationInfo(prevLocationInfo =>

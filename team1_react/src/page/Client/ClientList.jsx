@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import axiosInstance  from '../../api/axiosInstance.jsx';
+import axiosInstance from '../../api/axiosInstance.jsx';
 import Topline from '../../components/layout/Topline.jsx';
 import { SearchIcon } from 'lucide-react';
 import Modal from '../../Modal/Modal.jsx';
 import ClientAdd from './ClientAdd.jsx';
-import ClientDetail from './ClientDetail.jsx'; // axios import
+import ClientDetail from './ClientDetail.jsx';
 
 function ClientList() {
   const [clients, setClients] = useState([]); // 전체 클라이언트 목록
@@ -15,11 +15,17 @@ function ClientList() {
   const [updatedClient, setUpdatedClient] = useState(null);
   const [searchQuery, setSearchQuery] = useState(''); // 검색어 상태
 
-
+  // 서버에서 클라이언트 목록 가져오기
   const fetchClients = () => {
     axiosInstance.get('/vendor/vendorList')
-      .then(response => setClients(response.data))
-      .catch(console.error);
+      .then(response => {
+        console.log('클라이언트 목록:', response.data); // 응답 데이터 확인
+        setClients(response.data);
+        setFilteredClients(response.data); // 초기 데이터 로드 후 필터된 클라이언트 설정
+      })
+      .catch(error => {
+        console.error('클라이언트 목록 불러오기 오류:', error); // 오류 확인
+      });
   };
 
   // 검색어에 맞는 클라이언트를 필터링하는 함수
@@ -37,13 +43,13 @@ function ClientList() {
   };
 
   useEffect(() => {
-    fetchClients();
+    fetchClients(); // 컴포넌트가 처음 마운트될 때 클라이언트 목록 가져오기
   }, []);
 
   // 검색어가 변경될 때마다 필터링 적용
   useEffect(() => {
-    filterClients(searchQuery);
-  }, [searchQuery]);
+    filterClients(searchQuery); // 검색어에 맞는 클라이언트 필터링
+  }, [searchQuery, clients]); // clients가 변경될 때도 필터링
 
   // 클라이언트 클릭 시 상세보기 모달 열기
   const clientClick = (client) => {
@@ -97,15 +103,21 @@ function ClientList() {
                   </tr>
                   </thead>
                   <tbody>
-                  {filteredClients.map((client) => (
-                    <tr key={client.idx} onClick={() => clientClick(client)} className="border-b border-gray-200 text-center">
-                      <td className="py-2 px-4 w-[200px]">{client.name}</td>
-                      <td className="py-2 px-4 w-[200px]">{client.phone}</td>
-                      <td className="py-2 px-4 w-[240px]">{client.email}</td>
-                      <td className="py-2 px-4 w-[450px]">{client.location}</td>
-                      <td className="py-2 px-4 w-[350px]">{client.memo}</td>
+                  {filteredClients.length > 0 ? (
+                    filteredClients.map((client) => (
+                      <tr key={client.idx} onClick={() => clientClick(client)} className="border-b border-gray-200 text-center">
+                        <td className="py-2 px-4 w-[200px]">{client.name}</td>
+                        <td className="py-2 px-4 w-[200px]">{client.phone}</td>
+                        <td className="py-2 px-4 w-[240px]">{client.email}</td>
+                        <td className="py-2 px-4 w-[450px]">{client.location}</td>
+                        <td className="py-2 px-4 w-[350px]">{client.memo}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="5">검색 결과가 없습니다.</td>
                     </tr>
-                  ))}
+                  )}
                   </tbody>
                 </table>
               </div>

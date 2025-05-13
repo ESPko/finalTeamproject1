@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../../api/axiosInstance.jsx';
 
 function ClientAdd({ onClose, onSuccess }) {
   const [client, setClient] = useState({
@@ -15,7 +15,7 @@ function ClientAdd({ onClose, onSuccess }) {
   };
 
   const handleSubmit = () => {
-    axios.post('http://localhost:8080/vendor/vendorAdd', client)
+    axiosInstance.post('/vendor/vendorAdd', client)
       .then(() => {
         alert('매입처가 추가되었습니다.');
         onSuccess();  // 리스트 리로드

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../../api/axiosInstance.jsx';
 
 function ProductAdd({ onClose, onSuccess }) {
   const [name, setName] = useState('');
@@ -20,7 +20,7 @@ function ProductAdd({ onClose, onSuccess }) {
   useEffect(() => {
     const fetchWarehouse = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/warehouse/name');
+        const response = await axiosInstance.get('/warehouse/name');
         setWarehouseList(response.data);
       } catch (err) {
         console.log('창고 목록을 가져오는 데 실패했습니다:', err);
@@ -33,7 +33,7 @@ function ProductAdd({ onClose, onSuccess }) {
   useEffect(() => {
     const fetchVendor = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/vendor/name');
+        const response = await axiosInstance.get('/vendor/name');
         setVendorList(response.data);
       } catch (err) {
         console.log('창고 목록을 가져오는 데 실패했습니다:', err);
@@ -72,7 +72,7 @@ function ProductAdd({ onClose, onSuccess }) {
 
     try
     {
-      const response = await axios.post('http://localhost:8080/item/add', formData, {
+      const response = await axiosInstance.post('/item/add', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
