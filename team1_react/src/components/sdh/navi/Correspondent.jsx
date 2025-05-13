@@ -1,28 +1,42 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, memo } from 'react';
 
 function Correspondent ({ selected, setSelected })
 {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState('');
+  const [vendors, setVendors] = useState([]);
   const dropdownRef = useRef(null);
   
-  const correspondents = ['임시거래처1',
-    '임시거래처2',
-    '엄청엄청길어져도되는이름테스트용임시거래처',
-    '임시거래처3',
-    '임시거래처4',
-    'ASDASD',
-    'asdASD'];
+  // 거래처 목록 불러오기
+  useEffect(() => {
+    const fetchVendors = async () => {
+      try
+      {
+        const response = await fetch('http://localhost:8080/api/vendors');
+        if (!response.ok) throw new Error('서버 오류');
+        const data = await response.json();
+        const names = [...new Set(data.map(v => v.name))];
+        setVendors(names);
+      }
+      catch (error)
+      {
+        console.error('거래처 데이터를 불러오는 데 실패했습니다:', error);
+      }
+    };
+    fetchVendors();
+  }, []);
   
+  // 검색 필터
   const filtered = useMemo(() => {
-    return correspondents.filter((item) =>
+    return vendors.filter(item =>
       item.toLowerCase().includes(search.toLowerCase()),
     );
-  }, [search]);
+  }, [search, vendors]);
   
+  // 외부 클릭 시 닫기
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target))
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target))
       {
         setIsOpen(false);
       }
@@ -32,20 +46,21 @@ function Correspondent ({ selected, setSelected })
   }, []);
   
   const toggle = (item) => {
-    setSelected((prev) =>
+    setSelected(prev =>
       prev.includes(item)
-        ? prev.filter((i) => i !== item)
+        ? prev.filter(i => i !== item)
         : [...prev, item],
     );
   };
   
   const isChecked = (item) => selected.includes(item);
-  const displayText = selected.length > 0 ? `거래처 : ${selected.join(', ')}` : '거래처';
+  const displayText =
+    selected.length > 0 ? `거래처 : ${selected.join(', ')}` : '거래처';
   
   return (
     <div className="relative inline-block text-left h-auto" ref={dropdownRef}>
       <button
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={() => setIsOpen(prev => !prev)}
         className={`h-[40px] max-w-[400px] px-4 border overflow-hidden whitespace-nowrap text-ellipsis rounded ${
           selected.length > 0
             ? 'bg-blue-100 text-blue-600 border-blue-300'
@@ -65,8 +80,8 @@ function Correspondent ({ selected, setSelected })
             onChange={(e) => setSearch(e.target.value)}
           />
           <ul className="overflow-y-auto max-h-60 p-0">
-            {filtered.map((item, index) => (
-              <li key={index} className="hover:bg-gray-100">
+            {filtered.map((item) => (
+              <li key={item} className="hover:bg-gray-100">
                 <label className="flex items-center px-3 py-2 w-full whitespace-nowrap cursor-pointer">
                   <input
                     type="checkbox"
@@ -85,4 +100,4 @@ function Correspondent ({ selected, setSelected })
   );
 }
 
-export default Correspondent;
+export default memo(Correspondent);

@@ -4,24 +4,32 @@ function OutboundPerson ({ selected, setSelected })
 {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState('');
+  const [outboundPersons, setOutboundPersons] = useState([]);
   const dropdownRef = useRef(null);
   
-  const outboundPersons = [
-    '김철수',
-    '박영희',
-    '출고담당자1',
-    '출고자테스트이름굉장히길게쓰기',
-    '이순신',
-    '홍길동',
-    '관리자A',
-  ];
+  useEffect(() => {
+    fetch('http://localhost:8080/api/nickNames')
+      .then(res => {
+        if (!res.ok) throw new Error('서버 오류');
+        return res.json();
+      })
+      .then(data => {
+        const names = data.map(item => item.nickName);
+        setOutboundPersons(names);
+      })
+      .catch(err => {
+        console.error('출고자 목록 불러오기 실패:', err);
+      });
+  }, []);
   
-  const filtered = useMemo(() => {
-    return outboundPersons.filter((person) =>
+  // 검색 필터
+  const filteredOutboundPersons = useMemo(() => {
+    return outboundPersons.filter(person =>
       person.toLowerCase().includes(search.toLowerCase()),
     );
-  }, [search]);
+  }, [search, outboundPersons]);
   
+  // 바깥 클릭 시 드롭다운 닫기
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target))
@@ -33,10 +41,11 @@ function OutboundPerson ({ selected, setSelected })
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
   
+  // 출고자 선택/해제 토글
   const togglePerson = (person) => {
-    setSelected((prev) =>
+    setSelected(prev =>
       prev.includes(person)
-        ? prev.filter((item) => item !== person)
+        ? prev.filter(item => item !== person)
         : [...prev, person],
     );
   };
@@ -47,7 +56,7 @@ function OutboundPerson ({ selected, setSelected })
   return (
     <div className="relative inline-block text-left h-auto" ref={dropdownRef}>
       <button
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={() => setIsOpen(prev => !prev)}
         className={`h-[40px] max-w-[400px] px-4 border overflow-hidden whitespace-nowrap text-ellipsis rounded ${
           selected.length > 0
             ? 'bg-blue-100 text-blue-600 border-blue-300'
@@ -67,7 +76,7 @@ function OutboundPerson ({ selected, setSelected })
             onChange={(e) => setSearch(e.target.value)}
           />
           <ul className="overflow-y-auto max-h-60 p-0">
-            {filtered.map((person, index) => (
+            {filteredOutboundPersons.map((person, index) => (
               <li key={index} className="hover:bg-gray-100">
                 <label className="flex items-center px-3 py-2 w-full whitespace-nowrap cursor-pointer">
                   <input

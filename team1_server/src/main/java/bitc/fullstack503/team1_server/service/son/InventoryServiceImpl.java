@@ -1,0 +1,56 @@
+package bitc.fullstack503.team1_server.service.son;
+import bitc.fullstack503.team1_server.dto.UserDTO;
+import bitc.fullstack503.team1_server.dto.VendorDTO;
+import bitc.fullstack503.team1_server.dto.WarehouseDTO;
+import bitc.fullstack503.team1_server.dto.son.InventoryDTO;
+import bitc.fullstack503.team1_server.dto.son.InventorySearchRequestDTO;
+import bitc.fullstack503.team1_server.dto.son.StatusDTO;
+import bitc.fullstack503.team1_server.dto.son.StatusRequestDTO;
+import bitc.fullstack503.team1_server.mapper.son.InventoryMapper;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+@Service
+@RequiredArgsConstructor
+public class InventoryServiceImpl implements InventoryService
+{
+  @Autowired
+  private InventoryMapper inventoryMapper;
+  
+  public List<InventoryDTO> searchInventory (InventorySearchRequestDTO request)
+  {
+    return inventoryMapper.searchInventory (request);
+  }
+  
+  public List<WarehouseDTO> selectAllWarehouse ()
+  {
+    return inventoryMapper.selectAllWarehouse ();
+  }
+  
+  @Override
+  public List<VendorDTO> selectAllVendor ()
+  {
+    return inventoryMapper.selectAllVendor ();
+  }
+  
+  @Override
+  public List<StatusDTO> searchStatus (StatusRequestDTO request)
+  {
+    return inventoryMapper.searchStatus (request);
+  }
+  
+  @Override
+  public List<UserDTO> selectAllDepartment ()
+  {
+    return inventoryMapper.selectAllDepartment ();
+  }
+  
+  @Override
+  public List<UserDTO> selectAllNickName ()
+  {
+    return inventoryMapper.selectAllNickName ();
+  }
+}

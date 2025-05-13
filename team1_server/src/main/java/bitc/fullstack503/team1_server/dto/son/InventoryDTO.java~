@@ -1,0 +1,16 @@
+package bitc.fullstack503.team1_server.dto.son;
+import lombok.Data;
+
+import java.util.List;
+@Data
+public class InventoryDTO
+{
+  private String image;
+  private String name;
+  private String tempWarehouse;   // 창고 이름
+  private String vendorName;      // 거래처 이름
+  private int inbound;            // 입고량
+  private int outbound;           // 출고량
+  private int adjusted;           // 조정량
+  private int totalQuantity;      // 종료 재고
+}

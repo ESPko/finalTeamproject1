@@ -3,14 +3,13 @@ import SearchInput from './SearchInput.jsx';
 import OutboundPerson from './OutboundPerson.jsx';
 import Department from './Department.jsx';
 
-function StatusNavigation ({
+function StatusNavigation({
   selectedDepartments, setSelectedDepartments,
   selectedOutboundPerson, setSelectedOutboundPerson,
   startDate, setStartDate,
   endDate, setEndDate,
   tags, setTags,
-})
-{
+}) {
   const navigationItems = [
     {
       component: CalendarNavi,

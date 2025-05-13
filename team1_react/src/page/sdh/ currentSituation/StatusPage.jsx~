@@ -3,8 +3,7 @@ import { useEffect, useState, useMemo } from 'react';
 import StatusNavigation from '../../../components/sdh/navi/StatusNavigation.jsx';
 import StatusTableBody from '../../../components/sdh/inventory/StatusTableBody.jsx';
 
-function StatusPage ()
-{
+function StatusPage() {
   const [selectedDepartments, setSelectedDepartments] = useState([]);
   const [selectedOutboundPerson, setSelectedOutboundPerson] = useState([]);
   const [startDate, setStartDate] = useState(() => {
@@ -38,8 +37,7 @@ function StatusPage ()
         endDate: formattedEnd,
       };
       
-      try
-      {
+      try {
         const response = await fetch('http://localhost:8080/api/status/search', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -48,16 +46,13 @@ function StatusPage ()
         if (!response.ok) throw new Error('서버 오류');
         const data = await response.json();
         setProducts(data);
-      }
-      catch (error)
-      {
+      } catch (error) {
         console.error('Fetch 실패:', error);
       }
     };
     
     // 조건이 변경될 때만 서버 호출
-    if (tags.length || selectedDepartments.length || selectedOutboundPerson.length || startDate || endDate)
-    {
+    if (tags.length || selectedDepartments.length || selectedOutboundPerson.length || startDate || endDate) {
       fetchProducts();
     }
   }, [tags, selectedDepartments, selectedOutboundPerson, startDate, endDate, formatDate]);

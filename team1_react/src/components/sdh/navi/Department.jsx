@@ -4,24 +4,34 @@ function Department ({ selected, setSelected })
 {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState('');
+  const [departments, setDepartments] = useState([]);
   const dropdownRef = useRef(null);
   
-  const departments = [
-    '영업부',
-    '개발팀',
-    '인사팀',
-    '디자인팀',
-    '회계팀',
-    '고객지원팀',
-    '마케팅부',
-  ];
+  // 서버에서 부서 리스트 불러오기
+  useEffect(() => {
+    fetch('http://localhost:8080/api/departments')
+      .then(res => {
+        if (!res.ok) throw new Error('서버 오류');
+        return res.json();
+      })
+      .then(data => {
+        // 부서 이름만 추출
+        const names = data.map(item => item.department);
+        setDepartments(names);
+      })
+      .catch(err => {
+        console.error('부서 목록 불러오기 실패:', err);
+      });
+  }, []);
   
-  const filtered = useMemo(() => {
-    return departments.filter((dept) =>
+  // 검색 필터
+  const filteredDepartments = useMemo(() => {
+    return departments.filter(dept =>
       dept.toLowerCase().includes(search.toLowerCase()),
     );
-  }, [search]);
+  }, [search, departments]);
   
+  // 바깥 클릭 시 드롭다운 닫기
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target))
@@ -33,10 +43,11 @@ function Department ({ selected, setSelected })
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
   
+  // 부서 선택/해제 토글
   const toggleDepartment = (dept) => {
-    setSelected((prev) =>
+    setSelected(prev =>
       prev.includes(dept)
-        ? prev.filter((item) => item !== dept)
+        ? prev.filter(item => item !== dept)
         : [...prev, dept],
     );
   };
@@ -47,7 +58,7 @@ function Department ({ selected, setSelected })
   return (
     <div className="relative inline-block text-left h-auto" ref={dropdownRef}>
       <button
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={() => setIsOpen(prev => !prev)}
         className={`h-[40px] max-w-[400px] px-4 border overflow-hidden whitespace-nowrap text-ellipsis rounded ${
           selected.length > 0
             ? 'bg-blue-100 text-blue-600 border-blue-300'
@@ -67,7 +78,7 @@ function Department ({ selected, setSelected })
             onChange={(e) => setSearch(e.target.value)}
           />
           <ul className="overflow-y-auto max-h-60 p-0">
-            {filtered.map((dept, index) => (
+            {filteredDepartments.map((dept, index) => (
               <li key={index} className="hover:bg-gray-100">
                 <label className="flex items-center px-3 py-2 w-full whitespace-nowrap cursor-pointer">
                   <input

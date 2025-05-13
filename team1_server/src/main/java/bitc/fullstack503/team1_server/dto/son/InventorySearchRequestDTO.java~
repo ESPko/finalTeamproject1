@@ -1,0 +1,13 @@
+package bitc.fullstack503.team1_server.dto.son;
+import lombok.Data;
+
+import java.util.List;
+@Data
+public class InventorySearchRequestDTO
+{
+  private List<String> tags;
+  private List<String> selectedLocations;
+  private List<String> selectedCorrespondents;
+  private String startDate; // "yyyy-MM-dd HH:mm:ss"
+  private String endDate;
+}
