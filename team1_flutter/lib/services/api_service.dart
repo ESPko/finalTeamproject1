@@ -15,11 +15,16 @@ class ApiService {
       final response = await dio.post(
         '$baseUrl/api/login',
         data: jsonEncode({
-          'id': email,
+          'id': email,      // 서버가 기대하는 필드명이 'id', 'pass'인지 확인 필요
           'pass': password,
         }),
-        options: Options(headers: {'Content-Type': 'application/json'}),
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+        }),
       );
+
+      print('📡 로그인 응답 코드: ${response.statusCode}');
+      print('📨 로그인 응답 본문: ${response.data}');
 
       if (response.statusCode == 200) {
         final data = response.data;
@@ -30,12 +35,14 @@ class ApiService {
           'user': user,
         };
       } else {
-        throw Exception('로그인 실패: ${response.statusCode}');
+        throw Exception('❌ 로그인 실패: 상태코드 ${response.statusCode}, 응답: ${response.data}');
       }
     } catch (e) {
-      throw Exception('로그인 실패: $e');
+      print('🔥 예외 발생: $e');
+      throw Exception('로그인 요청 중 오류 발생: $e');
     }
   }
+
 
 
   // ✅ 전체 아이템 목록 조회
@@ -217,7 +224,7 @@ class ApiService {
       throw Exception('출고 내역을 불러오는 데 실패했습니다: $e');
     }
   }
-
+  // 출고내역조회
   Future<Map<String, dynamic>> fetchTransactionSummary() async {
     try {
       String? token = await getTokenFromSharedPreferences();

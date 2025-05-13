@@ -1,11 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../models/user.dart';
 import '../services/api_service.dart';
-import 'dash_board_screen.dart';
 import 'main_screen.dart'; // 홈 화면으로 이동할 실제 화면 import
 
 class LoginScreen extends StatefulWidget {
@@ -21,11 +17,13 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   bool _isLoading = false;
 
+  final ApiService _apiService = ApiService(); // ApiService 객체 생성
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('로그인'),
+        title: const Text('로그인'),
         elevation: 0,
       ),
       backgroundColor: Colors.white,
@@ -117,32 +115,35 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() => _isLoading = true);
 
       try {
-        final apiService = ApiService();
-        final response = await apiService.login(
+        // ApiService를 통해 로그인 요청 처리
+        final data = await _apiService.login(
           _emailController.text,
           _passwordController.text,
         );
 
-        final token = response['token'];
-        final user = response['user'];
+        final token = data['token'];
+        final user = data['user'];
 
         if (token != null && user != null) {
+          // SharedPreferences에 로그인 정보 저장
           final prefs = await SharedPreferences.getInstance();
           await prefs.setString('jwt_token', token);
           await prefs.setString('user', json.encode(user));
 
           print('✅ Token and user saved');
 
+          // 홈 화면으로 이동
           if (!mounted) return;
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (_) => const MainScreen()),
-                (route) => false,
+                (route) => false,  // 기존 화면 제거
           );
         } else {
-          throw Exception('유효하지 않은 로그인 응답입니다.');
+          throw Exception('로그인 응답에 토큰이나 유저 정보가 없습니다.');
         }
       } catch (e) {
+        // 로그인 실패 시 에러 처리
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('로그인 실패: $e')),
         );
