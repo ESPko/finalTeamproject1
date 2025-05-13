@@ -10,7 +10,9 @@ function StorageProductSearch({selectedItem, onSelect}) {
   useEffect(() => {
     axios.get('http://localhost:8080/api/items')
       .then(res => {
-        setItems(res.data);
+        // approve가 1 또는 3인 항목만 저장
+        const approvedItems = res.data.filter(item => item.approve === 1 || item.approve === 3);
+        setItems(approvedItems);
       });
   }, []);
 
@@ -33,11 +35,21 @@ function StorageProductSearch({selectedItem, onSelect}) {
     }
   }, [selectedItem]);
 
-  const handleSelect = (item) => {
-    setQuery(item.name); // 선택한 항목 이름을 input에 표시
-    setFilteredItems([]); // 목록 닫기
-    if (onSelect) {
-      onSelect(item); // 상위 컴포넌트로 선택한 제품 정보 전달
+  const handleSelect = async (item) => {
+    try {
+      // 서버에서 최신 정보 다시 가져오기
+      const response = await axios.get(`http://localhost:8080/api/items/${item.idx}`);
+      const updatedItem = response.data;
+
+      setQuery(updatedItem.name); // input에 최신 이름 표시
+      setFilteredItems([]); // 드롭다운 닫기
+
+      if (onSelect) {
+        onSelect(updatedItem); // 상위 컴포넌트로 최신 데이터 전달
+      }
+    } catch (error) {
+      console.error("제품 정보를 다시 가져오는 중 오류:", error);
+      alert("제품 정보를 불러오는 데 실패했습니다.");
     }
   };
 

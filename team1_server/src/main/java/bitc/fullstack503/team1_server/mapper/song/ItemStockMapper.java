@@ -12,10 +12,15 @@ public interface ItemStockMapper {
   @Select("SELECT * FROM item WHERE idx = #{idx}")
   ItemDTO selectByIdx(@Param("idx") Long idx);  // Long으로 수정
 
-  @Update("UPDATE item SET quantity = #{quantity}, time=#{receivedDate}, memo = #{memo} WHERE idx = #{idx}")
+  @Update("UPDATE item SET quantity = #{quantity} WHERE idx = #{idx}")
   void updateItemInfo(Map<String, Object> paramMap);
 
   // 부족 재고 아이템을 조회하는 쿼리 추가
   @Select("SELECT * FROM item WHERE quantity < standard")
   List<ItemDTO> selectLowStockItems();
+
+  // approve 값을 1로 설정하는 쿼리
+  @Update("UPDATE item SET approve = #{approve} WHERE idx = #{idx}")
+  void updateItemApproval(Map<String, Object> paramMap);
+
 }

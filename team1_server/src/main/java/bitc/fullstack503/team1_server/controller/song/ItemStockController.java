@@ -17,16 +17,16 @@ public class ItemStockController {
 
   private final ItemStockService itemStockService;
 
+  // 입고 처리 (approve 값을 1로 설정)
   @PutMapping("/{idx}/receive")
-  public ResponseEntity<String> receiveItem(
-      @PathVariable Long idx,
-      @RequestBody Map<String, Object> requestMap) {
-
-    // 수량 유효성 검사
-    Integer quantityToAdd = (Integer) requestMap.get("quantity");
-    if (quantityToAdd == null || quantityToAdd <= 0) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "입고 수량은 1 이상이어야 합니다.");
+  public ResponseEntity<String> receiveItem(@PathVariable Long idx, @RequestBody Map<String, Object> requestMap) {
+    Integer approve = (Integer) requestMap.get("approve");
+    if (approve == null) {
+      return ResponseEntity.badRequest().body("approve 값이 누락되었습니다.");
     }
+
+    // 입고 처리 시 approve 값을 1로 변경
+    itemStockService.updateItemApprovalToReceive(idx);
 
     // 아이템 존재 여부 확인
     ItemDTO item = itemStockService.getItemByIdx(idx);
@@ -34,8 +34,12 @@ public class ItemStockController {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 ID의 아이템을 찾을 수 없습니다.");
     }
 
-    itemStockService.receiveItemWithInfo(idx, requestMap);  // 서비스 메서드 호출
+    // 입고 처리
+    itemStockService.receiveItemWithInfo(idx, requestMap);
+
     return ResponseEntity.ok("입고가 완료되었습니다.");
   }
+
+
 
 }

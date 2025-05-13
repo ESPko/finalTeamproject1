@@ -1,11 +1,17 @@
 import Topline from '../../components/layout/Topline.jsx';
 import { useEffect, useState } from 'react';
-import LowStockSearch from './LowStockSearch'; // 컴포넌트 추가
+import LowStockSearch from './LowStockSearch';
+import axios from 'axios'; // 컴포넌트 추가
 
 function LowStockPage() {
   const [lowStockItems, setLowStockItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [orderedItems, setOrderedItems] = useState(() => {
+    // 로컬스토리지에서 기존 데이터 불러오기
+    const stored = localStorage.getItem('orderedItems');
+    return stored ? JSON.parse(stored) : {};
+  });
 
   useEffect(() => {
     fetch('http://localhost:8080/api/lowstock')
@@ -15,10 +21,11 @@ function LowStockPage() {
         setFilteredItems(data); // 기본적으로 전체 항목 표시
       })
       .catch((error) => {
-        console.error("Error fetching low stock items:", error);
+        console.error('Error fetching low stock items:', error);
       });
   }, []);
 
+// 검색 필터링
   const handleSearch = (term) => {
     setSearchTerm(term);
 
@@ -28,16 +35,43 @@ function LowStockPage() {
     }
 
     const matched = lowStockItems.filter((item) =>
-      item.name.toLowerCase().includes(term.toLowerCase())
+      item.name.toLowerCase().includes(term.toLowerCase()),
     );
 
     setFilteredItems(matched);
   };
 
-  const handleApply = () => {
-    // 버튼 클릭 시 StoragePage로 이동
-    window.location.href = '/test2'; // 이동할 페이지의 URL로 변경
+  // 발주 완료 버튼 클릭 시
+  const handleApply = async (idx) => {
+    const confirmed = window.confirm('입고 대기 상태로 변경 하시겠습니까?');
+
+    if (confirmed) {
+      try {
+        // 서버에 approve 컬럼 업데이트 요청
+        const response = await axios.put(`http://localhost:8080/api/lowstock/${idx}/approve`, {
+          approve: 3, // approve 값을 3으로 설정
+        });
+
+        if (response.status === 200) {
+          const updated = {
+            ...orderedItems,
+            [idx]: true,
+          };
+          setOrderedItems(updated);
+
+          // 로컬스토리지에 저장
+          localStorage.setItem('orderedItems', JSON.stringify(updated));
+        } else {
+          alert("입고 대기 상태로 변경하는데 실패했습니다.");
+        }
+      } catch (error) {
+        console.error('입고 대기 상태로 변경 중 오류가 발생했습니다.', error);
+        alert('입고 대기 상태로 변경하는데 오류가 발생했습니다.');
+      }
+    }
   };
+
+
 
   return (
     <main className="flex-1 p-6 overflow-y-auto">
@@ -60,8 +94,9 @@ function LowStockPage() {
                 <div className="col-span-2">위치</div>
                 <div className="col-span-2">기본 안전 재고</div>
                 <div className="col-span-2">현재 재고</div>
-                <div className="col-span-2">부족 재고</div>
+                <div className="col-span-1">부족 재고</div>
                 <div className="col-span-1"></div>
+                <div className="col-span-1 flex justify-center">입고 현황</div>
               </div>
 
               {filteredItems.map((item) => (
@@ -74,7 +109,7 @@ function LowStockPage() {
                         className="w-full h-full object-cover"
                         onError={(e) => {
                           e.target.onerror = null;
-                          e.target.src = 'https://via.placeholder.com/36';
+                          e.target.className = 'hidden';
                         }}
                       />
                     </div>
@@ -83,16 +118,32 @@ function LowStockPage() {
                   <div className="col-span-2">{item.warehouseName}</div>
                   <div className="col-span-2 text-blue-300 font-semibold">{item.standard}</div>
                   <div className="col-span-2 font-semibold">{item.quantity}</div>
-                  <div className="col-span-2 text-red-400 font-semibold">{item.quantity - item.standard}</div>
-                  <div className="col-span-1">
+                  <div className="col-span-1 text-red-400 font-semibold">{item.quantity - item.standard}</div>
+
+                  <div className="col-span-1 flex justify-center">
                     <button
                       type="button"
-                      className="border shadow border-gray-300 rounded-sm w-[44px] h-[36px] mr-1 hover:bg-gray-300"
-                      onClick={handleApply}
+                      className={`border shadow border-gray-200 rounded-sm h-[36px] px-1
+      ${orderedItems[item.idx]
+                        ? 'text-gray-300'
+                        : 'text-gray-400 font-semibold hover:bg-gray-200'}`}
+                      disabled={orderedItems[item.idx]}
+                      onClick={() => handleApply(item.idx)}
                     >
-                      신청
+                      발주 완료
                     </button>
                   </div>
+
+                  <div className="col-span-1 flex items-center justify-center">
+                    {orderedItems[item.idx] && (
+                      <div className="text-gray-400 font-semibold cursor-pointer"
+                      onClick={() => window.location.href = '/test2'}
+                      >
+                        입고 대기 중
+                      </div>
+                    )}
+                  </div>
+
                 </div>
               ))}
             </div>
