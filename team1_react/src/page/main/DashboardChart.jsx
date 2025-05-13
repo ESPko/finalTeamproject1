@@ -32,23 +32,31 @@ function DashboardChart() {
       };
 
       updateTime(); // 처음 한 번 실행
-      const interval = setInterval(updateTime, 1000); // 1초마다 시간 업데이트
+      const timeInterval = setInterval(updateTime, 1000); // 1초마다 시간 업데이트
 
       // 재고 정보 불러오는 부분
-      axiosInstance.get("/todayStock")
-        .then(res => {
-          const data = res.data;
-          // 총 재고
-          setTotalAfter(data.totalAfter);
-          // 총 입고
-          setTotalInput(data.totalInput);
-          // 총 출고
-          setTotalOutput(data.totalOutput);
-        })
-        .catch(err => {
-          console.error("데이터 불러오기 실패 : ",err)
-        })
-      return () => clearInterval(interval)
+      const fetchStockData = () => {
+        axiosInstance.get("/todayStock")
+          .then(res => {
+            const data = res.data;
+            // 총 재고
+            setTotalAfter(data.totalAfter);
+            // 총 입고
+            setTotalInput(data.totalInput);
+            // 총 출고
+            setTotalOutput(data.totalOutput);
+          })
+          .catch(err => {
+            console.error("데이터 불러오기 실패 : ", err)
+          })
+      }
+      fetchStockData();
+      const stockInterval = setInterval(fetchStockData, 1000);
+
+      return () => {
+        clearInterval(timeInterval);
+        clearInterval(stockInterval);
+      };
     }, []);
 
 
