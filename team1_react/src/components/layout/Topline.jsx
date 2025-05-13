@@ -3,7 +3,7 @@ function Topline({ title, actions, children }) {
     <div className="px-2 pb-2 h-full flex flex-col">
       {/* 헤더 영역 */}
       <div className="bg-white w-full min-w-[600px] h-[82px] flex items-center justify-between px-6">
-        <div className="text-2xl font-semibold">{title}</div>
+        <div className="text-2xl font-semibold text-gray-700">{title}</div>
         {actions && <div>{actions}</div>}
       </div>
 
