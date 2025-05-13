@@ -48,7 +48,7 @@ function AxiosTest() {
   // 스프링 서버와 통신 테스트(토큰있음)
   const sendDataTokenTest = () => {
     const token = localStorage.getItem("token"); // 토큰 가져오기
-    console.log("보낼 토큰:", token); // 디버깅용 로그
+    console.log("보낼 토큰:", token);
 
     axios.get("http://localhost:8080/api", {
       headers: {
