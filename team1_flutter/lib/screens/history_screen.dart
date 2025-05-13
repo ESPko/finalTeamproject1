@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../models/item_history.dart'; // ItemHistory 모델 임포트
+import '../services/api_service.dart'; // ApiService 임포트
 
 class HistoryScreen extends StatefulWidget {
   final String? itemId; // 특정 아이템의 이력을 볼 때 ID 전달
@@ -12,7 +14,7 @@ class HistoryScreen extends StatefulWidget {
 
 class _HistoryScreenState extends State<HistoryScreen> {
   bool _isLoading = true;
-  List<Map<String, dynamic>> _histories = [];
+  List<ItemHistory> _histories = []; // ItemHistory 객체 리스트로 변경
 
   @override
   void initState() {
@@ -21,57 +23,38 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 
   Future<void> _loadHistories() async {
-    // 실제로는 API에서 데이터를 가져옴
-    await Future.delayed(Duration(seconds: 1)); // API 호출 시뮬레이션
+    try {
+      String? token = await ApiService().getTokenFromSharedPreferences(); // 토큰 가져오기
 
-    setState(() {
-      _histories = [
-        {
-          'id': '1',
-          'itemId': '001',
-          'itemName': '노트북',
-          'action': '위치 변경',
-          'fromLocation': '개발팀',
-          'toLocation': '마케팅팀',
-          'user': '김철수',
-          'timestamp': DateTime.now().subtract(Duration(days: 2)),
-          'note': '마케팅팀으로 임시 대여'
-        },
-        {
-          'id': '2',
-          'itemId': '001',
-          'itemName': '노트북',
-          'action': '점검',
-          'fromLocation': '개발팀',
-          'toLocation': '개발팀',
-          'user': '이영희',
-          'timestamp': DateTime.now().subtract(Duration(days: 10)),
-          'note': '정기 소프트웨어 업데이트'
-        },
-        {
-          'id': '3',
-          'itemId': '002',
-          'itemName': '모니터',
-          'action': '상태 변경',
-          'fromLocation': '디자인팀',
-          'toLocation': '디자인팀',
-          'user': '박지민',
-          'timestamp': DateTime.now().subtract(Duration(days: 5)),
-          'note': '화면 깜빡임 증상으로 수리 요청'
-        },
-        // ... 더 많은 이력
-      ];
-
-      // 특정 아이템 ID가 있으면 필터링
-      if (widget.itemId != null) {
-        _histories = _histories.where((h) => h['itemId'] == widget.itemId).toList();
+      if (token == null) {
+        throw Exception('로그인 상태가 아닙니다.');
       }
 
-      // 날짜 기준 정렬
-      _histories.sort((a, b) => b['timestamp'].compareTo(a['timestamp']));
+      // 출고 내역을 API에서 가져옵니다.
+      List<ItemHistory> histories = await ApiService().fetchItemHistory(token);
+      print('가져온 출고 이력 개수: ${histories.length}');
+      histories.forEach((h) => print(h.itemName));
 
-      _isLoading = false;
-    });
+      setState(() {
+        // 아이템 ID가 있으면 필터링
+        if (widget.itemId != null) {
+          histories = histories.where((h) => h.itemName == widget.itemId).toList();
+        }
+
+        // 날짜 기준으로 정렬
+        histories.sort((a, b) => b.releaseDate.compareTo(a.releaseDate));
+
+        _histories = histories;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+        print('❌ 에러 발생: $e');
+      });
+      // 에러 처리 (예: 에러 메시지 출력)
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('데이터를 불러오는 데 실패했습니다.')));
+    }
   }
 
   @override
@@ -92,7 +75,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
           // 이전 이력과 날짜가 다르면 날짜 구분선 표시
           bool showDateHeader = index == 0 ||
-              !_isSameDay(_histories[index]['timestamp'], _histories[index - 1]['timestamp']);
+              !_isSameDay(_histories[index].releaseDate, _histories[index - 1].releaseDate);
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,7 +84,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 16, top: 16, bottom: 8),
                   child: Text(
-                    _formatDate(history['timestamp']),
+                    _formatDate(history.releaseDate),
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.grey[700],
@@ -118,84 +101,90 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // 아이템 정보 및 액션
+                      // 비품 이미지 표시 (history.image: 비품 이미지 URL 또는 로컬 이미지)
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // 액션 아이콘
-                          Container(
-                            padding: EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: _getActionColor(history['action']),
-                              shape: BoxShape.circle,
+                          // 비품 이미지 (아이템에 이미지가 있을 경우)
+                          if (history.image != null)
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: Image.network(
+                                history.image!, // history.image URL로 이미지 로드
+                                width: 40,
+                                height: 40,
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                          else
+                            Container(
+                              padding: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: Colors.grey, // 기본 색상으로 설정
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                Icons.history, // 기본 아이콘
+                                color: Colors.white,
+                                size: 16,
+                              ),
                             ),
-                            child: Icon(
-                              _getActionIcon(history['action']),
-                              color: Colors.white,
-                              size: 16,
-                            ),
-                          ),
                           SizedBox(width: 12),
-
-                          // 이력 정보
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                // 액션 제목
+                                // 아이템 이름
                                 Text(
-                                  '${history['action']} - ${history['itemName']}',
+                                  history.itemName,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16,
                                   ),
                                 ),
                                 SizedBox(height: 4),
-
-                                // 위치 정보
+                                // 수량 정보
                                 Text(
-                                  history['fromLocation'] == history['toLocation']
-                                      ? '위치: ${history['fromLocation']}'
-                                      : '${history['fromLocation']} → ${history['toLocation']}',
+                                  '현재 재고: ${history.quantity} / 출고 수량: ${history.releasedQuantity}',
+                                  style: TextStyle(
+                                    color: Colors.deepPurpleAccent[400],
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                // 창고 및 공급업체 정보
+                                Text(
+                                  '출고장소: ${history.warehouseName} / 공급업체: ${history.vendorName}',
                                   style: TextStyle(
                                     color: Colors.grey[700],
                                     fontSize: 14,
                                   ),
                                 ),
-
-                                // 메모가 있으면 표시
-                                if (history['note'] != null)
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 8.0),
-                                    child: Text(
-                                      '메모: ${history['note']}',
-                                      style: TextStyle(
-                                        fontStyle: FontStyle.italic,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ),
                               ],
                             ),
                           ),
                         ],
                       ),
-
                       Divider(height: 24),
-
                       // 사용자 및 시간 정보
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            '처리자: ${history['user']}',
+                            '사용자: ${history.userId}',
                             style: TextStyle(
                               fontSize: 12,
                               color: Colors.grey[600],
                             ),
                           ),
                           Text(
-                            _formatTime(history['timestamp']),
+                            '출고시간: ${_formatTime(history.releaseDate)}',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                          Text(
+                            _formatDate(history.releaseDate),
                             style: TextStyle(
                               fontSize: 12,
                               color: Colors.grey[600],
@@ -226,31 +215,5 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   String _formatTime(DateTime date) {
     return '${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
-  }
-
-  Color _getActionColor(String action) {
-    switch (action) {
-      case '위치 변경':
-        return Colors.blue;
-      case '상태 변경':
-        return Colors.orange;
-      case '점검':
-        return Colors.green;
-      default:
-        return Colors.grey;
-    }
-  }
-
-  IconData _getActionIcon(String action) {
-    switch (action) {
-      case '위치 변경':
-        return Icons.swap_horiz;
-      case '상태 변경':
-        return Icons.update;
-      case '점검':
-        return Icons.check_circle;
-      default:
-        return Icons.history;
-    }
   }
 }

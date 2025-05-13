@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:test2/screens/dash_board_screen.dart';
 import 'dart:convert';
 
 import '../models/item.dart';
-import '../widgets/item_card.dart';
+import '../services/api_service.dart';
+import '../widgets/item_card_large.dart';
 
 class ConfirmDispatchDialog extends StatefulWidget {
   final String qrUrl;
@@ -55,33 +57,49 @@ class _ConfirmDispatchDialogState extends State<ConfirmDispatchDialog> {
   }
 
   Future<void> dispatchQuantity(int quantityToSubtract) async {
-    final response = await http.patch(
-      Uri.parse(widget.qrUrl),
-      headers: {'Content-Type': 'application/json'},
-      body: json.encode({'quantityToSubtract': quantityToSubtract}),
-    );
+    final apiService = ApiService();
 
-    if (response.statusCode != 200) {
-      throw Exception('출고 요청 실패 (상태 코드: ${response.statusCode})');
+    // itemId 추출
+    final uri = Uri.parse(widget.qrUrl);
+    final segments = uri.pathSegments;
+    String? itemId;
+    final itemsIndex = segments.indexOf('items');
+    if (itemsIndex != -1 && itemsIndex + 1 < segments.length) {
+      itemId = segments[itemsIndex + 1];
     }
+
+    if (itemId == null) {
+      throw Exception('itemId를 URL에서 추출할 수 없습니다.');
+    }
+
+    // 토큰 불러오기
+    final token = await apiService.getTokenFromSharedPreferences();
+    if (token == null) {
+      throw Exception('로그인 토큰이 없습니다. 다시 로그인해주세요.');
+    }
+
+    // ApiService의 dispatchItem 사용
+    await apiService.dispatchItem(itemId, quantityToSubtract, token);
   }
 
-  Future<void> showResultDialog(int parsed) async {
-    showDialog(
+  Future<void> showResultDialog(BuildContext context, int parsed) async {
+    await showDialog<void>(
       context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('출고 완료'),
-        content: Text('$parsed개가 출고되었습니다.'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(); // 결과 다이얼로그 닫기
-              Navigator.of(context).popUntil((route) => route.settings.name == '/dashboard');
-            },
-            child: const Text('확인'),
-          ),
-        ],
-      ),
+      barrierDismissible: false,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: const Text('출고 완료'),
+          content: Text('$parsed개가 출고되었습니다.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop(); // 결과 다이얼로그 닫기
+              },
+              child: const Text('확인'),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -100,20 +118,22 @@ class _ConfirmDispatchDialogState extends State<ConfirmDispatchDialog> {
 
           final item = snapshot.data!;
 
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ItemCard(item: item),
-              const SizedBox(height: 16),
-              TextField(
-                controller: _quantityController,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  labelText: '차감할 수량',
-                  border: OutlineInputBorder(),
+          return SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ItemCardLarge(item: item),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: _quantityController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: '차감할 수량',
+                    border: OutlineInputBorder(),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         },
       ),
@@ -137,8 +157,11 @@ class _ConfirmDispatchDialogState extends State<ConfirmDispatchDialog> {
             try {
               await dispatchQuantity(parsed);
               if (!mounted) return;
-              Navigator.of(context).pop(); // 다이얼로그 닫기
-              showResultDialog(parsed);   // 결과 다이얼로그 표시
+
+              await showResultDialog(context, parsed); // 결과 다이얼로그 표시
+              if (!mounted) return;
+
+              Navigator.of(context).pop(true); // 출고 성공 상태 반환
             } catch (e) {
               if (!mounted) return;
               showDialog(

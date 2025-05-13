@@ -23,6 +23,7 @@ public class LoginController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
+
             LoginResponse response = loginService.login(request);
 
             return ResponseEntity.ok(response);

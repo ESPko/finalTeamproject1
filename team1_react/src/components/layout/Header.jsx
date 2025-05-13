@@ -22,7 +22,7 @@ function Header({ toggleLayout }) {
     <header className="flex items-center justify-between bg-[#232428] h-16 px-6">
 
       <Link to="/" className="text-white text-2xl font-bold tracking-wide">
-        JAGOHAE
+        JAEGOHAE
       </Link>
 
 

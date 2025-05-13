@@ -1,5 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../models/user.dart';
+import '../services/api_service.dart';
+import 'dash_board_screen.dart';
+import 'main_screen.dart'; // 홈 화면으로 이동할 실제 화면 import
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -19,25 +26,24 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('로그인'),
-        elevation: 0,),
+        elevation: 0,
+      ),
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
           child: Form(
             key: _formKey,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // 로고 부분
                 Image.asset(
                   'assets/logo.png',
                   height: 100,
                 ),
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
 
-                // 이메일 필드
+                // 이메일
                 TextFormField(
                   controller: _emailController,
                   decoration: InputDecoration(
@@ -45,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    prefixIcon: Icon(Icons.email),
+                    prefixIcon: const Icon(Icons.email),
                   ),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
@@ -55,9 +61,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     return null;
                   },
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
 
-                // 비밀번호 필드
+                // 비밀번호
                 TextFormField(
                   controller: _passwordController,
                   decoration: InputDecoration(
@@ -65,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    prefixIcon: Icon(Icons.lock),
+                    prefixIcon: const Icon(Icons.lock),
                   ),
                   obscureText: true,
                   validator: (value) {
@@ -75,28 +81,28 @@ class _LoginScreenState extends State<LoginScreen> {
                     return null;
                   },
                 ),
-                SizedBox(height: 24),
+                const SizedBox(height: 24),
 
                 // 로그인 버튼
                 ElevatedButton(
                   onPressed: _isLoading ? null : _handleLogin,
-                  child: _isLoading
-                      ? CircularProgressIndicator(color: Colors.white)
-                      : Text('로그인'),
                   style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 16),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
+                  child: _isLoading
+                      ? const CircularProgressIndicator(color: Colors.white)
+                      : const Text('로그인'),
                 ),
 
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextButton(
                   onPressed: () {
                     // 비밀번호 찾기 기능
                   },
-                  child: Text('비밀번호를 잊으셨나요?'),
+                  child: const Text('비밀번호를 잊으셨나요?'),
                 ),
               ],
             ),
@@ -106,27 +112,42 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void _handleLogin() async {
+  Future<void> _handleLogin() async {
     if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isLoading = true;
-      });
+      setState(() => _isLoading = true);
 
       try {
-        // 로그인 API 호출
-        // final response = await AuthService.login(_emailController.text, _passwordController.text);
+        final apiService = ApiService();
+        final response = await apiService.login(
+          _emailController.text,
+          _passwordController.text,
+        );
 
-        // 성공 시 메인 화면으로 이동
-        await Future.delayed(Duration(seconds: 2)); // API 호출 시뮬레이션
-        Navigator.pushReplacementNamed(context, '/main'); // 라우트 이름 사용
+        final token = response['token'];
+        final user = response['user'];
+
+        if (token != null && user != null) {
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setString('jwt_token', token);
+          await prefs.setString('user', json.encode(user));
+
+          print('✅ Token and user saved');
+
+          if (!mounted) return;
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (_) => const MainScreen()),
+                (route) => false,
+          );
+        } else {
+          throw Exception('유효하지 않은 로그인 응답입니다.');
+        }
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('로그인에 실패했습니다. 다시 시도해주세요.')),
+          SnackBar(content: Text('로그인 실패: $e')),
         );
       } finally {
-        setState(() {
-          _isLoading = false;
-        });
+        setState(() => _isLoading = false);
       }
     }
   }

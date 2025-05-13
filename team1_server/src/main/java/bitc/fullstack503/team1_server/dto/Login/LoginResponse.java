@@ -28,4 +28,12 @@ public class LoginResponse {
     public void setUser(UserDTO user) {
         this.user = user;
     }
+
+    @Override
+    public String toString() {
+        return "LoginResponse{" +
+          "token='" + token + '\'' +
+          ", user=" + user +
+          '}';
+    }
 }

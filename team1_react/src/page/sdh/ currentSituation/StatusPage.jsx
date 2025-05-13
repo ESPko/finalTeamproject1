@@ -1,111 +1,82 @@
 import Topline from '../../../components/layout/Topline.jsx';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import StatusNavigation from '../../../components/sdh/navi/StatusNavigation.jsx';
 import StatusTableBody from '../../../components/sdh/inventory/StatusTableBody.jsx';
+import axiosInstance from '../../../api/axiosInstance'; // ✅ axiosInstance import 추가
 
-function StatusPage ()
-{
+function StatusPage() {
+  const [selectedDepartments, setSelectedDepartments] = useState([]);
+  const [selectedOutboundPerson, setSelectedOutboundPerson] = useState([]);
+  const [startDate, setStartDate] = useState(() => {
+    const date = new Date();
+    date.setDate(date.getDate() - 6);
+    return date;
+  });
+  const [endDate, setEndDate] = useState(new Date());
+  const [tags, setTags] = useState([]);
   const [products, setProducts] = useState([]);
-  
-  let data = [
-    {
-      image: 'https://mcipbeidqigprecgqogj.supabase.co/storage/v1/object/public/full503final/image/490bbb10-0802-403b-975f-60713d76d726-pen.jpg',
-      name: '볼펜',
-      tempWarehouse: '임시창고1',
-      vendorName: '회사A',
-      department: '부서A',
-      outboundPerson: '홍길동',
-      beforeQuantity: 3,
-      afterQuantity: 1,
-      date: '2023-01-01 11:22:33',
-    },
-    {
-      image: 'https://i.postimg.cc/6QHKxZB9/4.png',
-      name: 'A4용지',
-      tempWarehouse: '임시창고2',
-      vendorName: '회사A',
-      department: '부서B',
-      outboundPerson: '전우치',
-      beforeQuantity: 6,
-      afterQuantity: 3,
-      date: '2023-01-01 11:44:55',
-    },
-    {
-      name: '임시제품1',
-      totalQuantity: '7',
-      tempWarehouse: '임시창고2',
-      vendorName: '회사B',
-    },
-    {
-      name: '임시제품1',
-      category: '-',
-      price: '1,000',
-      safetyStock: '10',
-      totalQuantity: '7',
-      tempWarehouse: '임시창고2',
-      vendorName: '회사B',
-    },
-    {
-      name: '임시제품1',
-      category: '-',
-      price: '1,000',
-      safetyStock: '10',
-      totalQuantity: '7',
-      tempWarehouse: '임시창고2',
-      vendorName: '회사B',
-    },
-    {
-      name: '임시제품1',
-      category: '-',
-      price: '1,000',
-      safetyStock: '10',
-      totalQuantity: '7',
-      tempWarehouse: '임시창고2',
-      vendorName: '회사B',
-    },
-    {
-      name: '임시제품1',
-      category: '-',
-      price: '1,000',
-      safetyStock: '10',
-      totalQuantity: '7',
-      tempWarehouse: '임시창고2',
-      vendorName: '회사B',
-    },
-    {
-      name: '임시제품1',
-      category: '-',
-      price: '1,000',
-      safetyStock: '10',
-      totalQuantity: '7',
-      tempWarehouse: '임시창고2',
-      vendorName: '회사B',
-    },
-    {
-      name: '임시제품1',
-      category: '-',
-      price: '1,000',
-      safetyStock: '10',
-      totalQuantity: '7',
-      tempWarehouse: '임시창고2',
-      vendorName: '회사B',
-    },
-  ];
-  
-  useEffect(() => {
-    setProducts(data);
+
+  const formatDate = useMemo(() => (date, isStart = true) => {
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    const dd = String(date.getDate()).padStart(2, '0');
+    const hhmmss = isStart ? '00:00:00' : '23:59:59';
+    return `${yyyy}-${mm}-${dd} ${hhmmss}`;
   }, []);
-  
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const formattedStart = formatDate(startDate, true);
+      const formattedEnd = formatDate(endDate, false);
+
+      const requestBody = {
+        tags,
+        selectedDepartments,
+        selectedOutboundPerson,
+        startDate: formattedStart,
+        endDate: formattedEnd,
+      };
+
+      try {
+        const response = await axiosInstance.post('/api/status/search', requestBody); // ✅ axiosInstance 사용
+        setProducts(response.data);
+      } catch (error) {
+        console.error('Axios 요청 실패:', error);
+      }
+    };
+
+    if (
+      tags.length ||
+      selectedDepartments.length ||
+      selectedOutboundPerson.length ||
+      startDate ||
+      endDate
+    ) {
+      fetchProducts();
+    }
+  }, [tags, selectedDepartments, selectedOutboundPerson, startDate, endDate, formatDate]);
+
   return (
-    <div className=" flex-1 p-6 overflow-y-auto">
-      <div className="bg-white rounded shadow p-4 min-x-[100vh]  min-h-[80vh] "
-           style={{ padding: '0px 40px 80px 40px' }}>
+    <div className="flex-1 p-6 overflow-y-auto">
+      <div
+        className="bg-white rounded shadow p-4 min-x-[100vh] min-h-[80vh]"
+        style={{ padding: '0px 40px 80px 40px' }}
+      >
         <div>
-          <Topline
-            title="비품 사용 현황"
-          >
-            <StatusNavigation />
-            <table className=" table-fixed border-collapse">
+          <Topline title="비품 사용 현황">
+            <StatusNavigation
+              selectedDepartments={selectedDepartments}
+              setSelectedDepartments={setSelectedDepartments}
+              selectedOutboundPerson={selectedOutboundPerson}
+              setSelectedOutboundPerson={setSelectedOutboundPerson}
+              startDate={startDate}
+              setStartDate={setStartDate}
+              endDate={endDate}
+              setEndDate={setEndDate}
+              tags={tags}
+              setTags={setTags}
+            />
+            <table className="table-fixed border-collapse">
               <thead className="bg-white top-0 z-30">
               <tr className="border-b border-gray-300">
                 <th className="cell-style w-[120px]">사진</th>
@@ -125,7 +96,6 @@ function StatusPage ()
         </div>
       </div>
     </div>
-  
   );
 }
 

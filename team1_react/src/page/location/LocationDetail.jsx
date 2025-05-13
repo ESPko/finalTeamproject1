@@ -1,10 +1,31 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-function LocationDetail({locationInfo}) {
 
-  const [localName, setLocalName] = useState(locationInfo.localName );
-  const [localMemo, setLocalMemo] = useState(locationInfo.localMemo );
-  const [localAddress, setLocalAddress] = useState(locationInfo.localAddress);
+function LocationDetail({ locationInfo, onUpdate}) {
+  const [localName, setLocalName] = useState('');
+  const [localMemo, setLocalMemo] = useState('');
+  const [localAddress, setLocalAddress] = useState('');
+
+  // 위치 정보 초기화
+  useEffect(() => {
+    if (locationInfo) {
+      setLocalName(locationInfo.name);
+      setLocalMemo(locationInfo.memo);
+      setLocalAddress(locationInfo.location);
+    }
+  }, [locationInfo]);
+
+  useEffect(() => {
+    if (onUpdate && locationInfo) {
+      onUpdate({
+        ...locationInfo,
+        name: localName,
+        memo: localMemo,
+        location : localAddress
+      })
+    }
+  },[localName, localMemo, localAddress ])
+
 
   if (!locationInfo) {
     return <div>위치 정보를 불러오는 중입니다...</div>;
@@ -48,6 +69,7 @@ function LocationDetail({locationInfo}) {
           onChange={(e) => setLocalMemo(e.target.value)}
         />
       </div>
+
     </div>
   );
 }

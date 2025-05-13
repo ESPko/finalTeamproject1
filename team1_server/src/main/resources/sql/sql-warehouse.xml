@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="bitc.fullstack503.team1_server.mapper.WarehouseMapper">
+    <select id="getWarehouseList" resultType="bitc.fullstack503.team1_server.dto.WarehouseDTO">
+        SELECT idx, name, location, memo FROM warehouse ORDER BY idx DESC
+    </select>
+
+    <select id="getWarehouseItemCount" resultType="int">
+        select coalesce(sum(quantity), 0) from item where warehouse_name = #{warehouseName}
+    </select>
+
+    <insert id="insertLocation" parameterType="bitc.fullstack503.team1_server.dto.WarehouseDTO">
+        insert into warehouse (name, location, memo) values (#{name}, #{location}, #{memo});
+    </insert>
+
+    <update id="updateLocation">
+        update warehouse set name = #{name}, location = #{location}, memo = #{memo} where idx = #{idx}
+    </update>
+
+    <delete id="deleteWarehouse">
+        delete from warehouse where idx = #{idx}
+    </delete>
+
+    <select id="getWarehouse" resultType="bitc.fullstack503.team1_server.dto.WarehouseDTO">
+        SELECT idx, name FROM warehouse ORDER BY idx DESC
+    </select>
+
+</mapper>
+

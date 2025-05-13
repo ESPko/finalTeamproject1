@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="bitc.fullstack503.team1_server.mapper.son.InventoryMapper">
+  <select id="searchInventory" resultType="bitc.fullstack503.team1_server.dto.son.InventoryDTO">
+    SELECT
+    i.image AS image,
+    i.name AS name,
+    w.name AS warehouseName,
+    v.name AS vendorName,
+    SUM(CASE WHEN t.transaction = 0 THEN (t.after - t.before) ELSE 0 END) AS inbound,
+    SUM(CASE WHEN t.transaction = 1 THEN (t.before - t.after) ELSE 0 END) AS outbound,
+    SUM(CASE WHEN t.transaction = 2 THEN ABS(t.after - t.before) ELSE 0 END) AS adjusted,
+    i.quantity AS totalQuantity
+    FROM item i
+    JOIN warehouse w ON i.warehouse_name = w.name
+    JOIN vendor v ON i.vendor_name = v.name
+    LEFT JOIN transaction t ON i.idx = t.item_idx
+    WHERE t.time BETWEEN #{request.startDate} AND #{request.endDate}
+    
+    <!-- 태그: AND로 연결 -->
+    <if test="request.tags != null and request.tags.size > 0">
+      AND (
+      <foreach collection="request.tags" item="tag" separator=" AND ">
+        i.name LIKE CONCAT('%', #{tag}, '%')
+      </foreach>
+      )
+    </if>
+    
+    <!-- 위치 AND 거래처 모두 있는 경우 -->
+    <if test="(request.selectedLocations != null and request.selectedLocations.size > 0)
+            and (request.selectedCorrespondents != null and request.selectedCorrespondents.size > 0)">
+      AND (
+      w.name IN
+      <foreach collection="request.selectedLocations" item="loc" open="(" separator="," close=")">
+        #{loc}
+      </foreach>
+      AND
+      v.name IN
+      <foreach collection="request.selectedCorrespondents" item="cor" open="(" separator="," close=")">
+        #{cor}
+      </foreach>
+      )
+    </if>
+    
+    <!-- 위치만 있는 경우 -->
+    <if test="(request.selectedLocations != null and request.selectedLocations.size > 0)
+            and (request.selectedCorrespondents == null or request.selectedCorrespondents.size == 0)">
+      AND w.name IN
+      <foreach collection="request.selectedLocations" item="loc" open="(" separator="," close=")">
+        #{loc}
+      </foreach>
+    </if>
+    
+    <!-- 거래처만 있는 경우 -->
+    <if test="(request.selectedCorrespondents != null and request.selectedCorrespondents.size > 0)
+            and (request.selectedLocations == null or request.selectedLocations.size == 0)">
+      AND v.name IN
+      <foreach collection="request.selectedCorrespondents" item="cor" open="(" separator="," close=")">
+        #{cor}
+      </foreach>
+    </if>
+    
+    GROUP BY i.idx, i.name, w.name, v.name, i.quantity, i.image
+    ORDER BY i.name
+  </select>
+  
+  
+  <select id="selectAllWarehouse" resultType="bitc.fullstack503.team1_server.dto.WarehouseDTO">
+    SELECT name
+    FROM warehouse
+  </select>
+  
+  <select id="selectAllVendor" resultType="bitc.fullstack503.team1_server.dto.VendorDTO">
+    SELECT name
+    FROM vendor
+  </select>
+  
+  <select id="searchStatus" resultType="bitc.fullstack503.team1_server.dto.son.StatusDTO">
+    SELECT
+    i.image AS image,
+    i.name AS name,
+    w.name AS warehouseName,
+    v.name AS vendorName,
+    u.department AS department,
+    u.nick_name AS outboundPerson,
+    t.before AS beforeQuantity,
+    t.after AS afterQuantity,
+    t.time AS date
+    FROM item i
+    JOIN warehouse w ON i.warehouse_name = w.name
+    JOIN vendor v ON i.vendor_name = v.name
+    JOIN transaction t ON i.idx = t.item_idx
+    JOIN user u ON t.user_id = u.id
+    WHERE t.time BETWEEN #{request.startDate} AND #{request.endDate}
+    
+    <!-- 태그: AND 조건 -->
+    <if test="request.tags != null and request.tags.size > 0">
+      AND (
+      <foreach collection="request.tags" item="tag" separator=" AND ">
+        i.name LIKE CONCAT('%', #{tag}, '%')
+      </foreach>
+      )
+    </if>
+    
+    <!-- 부서 AND 출고자 모두 있는 경우 -->
+    <if test="(request.selectedDepartments != null and request.selectedDepartments.size > 0)
+           and (request.selectedOutboundPerson != null and request.selectedOutboundPerson.size > 0)">
+      AND (
+      u.department IN
+      <foreach collection="request.selectedDepartments" item="dep" open="(" separator="," close=")">
+        #{dep}
+      </foreach>
+      AND
+      u.nick_name IN
+      <foreach collection="request.selectedOutboundPerson" item="person" open="(" separator="," close=")">
+        #{person}
+      </foreach>
+      )
+    </if>
+    
+    <!-- 부서만 있는 경우 -->
+    <if test="(request.selectedDepartments != null and request.selectedDepartments.size > 0)
+           and (request.selectedOutboundPerson == null or request.selectedOutboundPerson.size == 0)">
+      AND u.department IN
+      <foreach collection="request.selectedDepartments" item="dep" open="(" separator="," close=")">
+        #{dep}
+      </foreach>
+    </if>
+    
+    <!-- 출고자만 있는 경우 -->
+    <if test="(request.selectedOutboundPerson != null and request.selectedOutboundPerson.size > 0)
+           and (request.selectedDepartments == null or request.selectedDepartments.size == 0)">
+      AND u.nick_name IN
+      <foreach collection="request.selectedOutboundPerson" item="person" open="(" separator="," close=")">
+        #{person}
+      </foreach>
+    </if>
+    
+    ORDER BY t.time DESC
+  </select>
+  
+  
+  <select id="selectAllDepartment" resultType="bitc.fullstack503.team1_server.dto.UserDTO">
+    SELECT DISTINCT department
+    FROM user
+  </select>
+  
+  <select id="selectAllNickName" resultType="bitc.fullstack503.team1_server.dto.UserDTO">
+    SELECT DISTINCT nick_name
+    FROM user
+  </select>
+
+</mapper>

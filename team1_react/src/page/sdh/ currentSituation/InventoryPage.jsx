@@ -1,142 +1,87 @@
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import InventoryNavigation from '../../../components/sdh/navi/InventoryNavigation.jsx';
 import Topline from '../../../components/layout/Topline.jsx';
 import InventoryTableBody from '../../../components/sdh/inventory/InventoryTableBody.jsx';
-import { useEffect, useState } from 'react';
+import axiosInstance from '../../../api/axiosInstance'; // ✅ 확장자 .jsx 제거 권장
 
-function InventoryPage ()
-{
+function InventoryPage() {
   const [products, setProducts] = useState([]);
   const [selectedLocations, setSelectedLocations] = useState([]);
   const [selectedCorrespondents, setSelectedCorrespondents] = useState([]);
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
   const [tags, setTags] = useState([]);
-  
-  let data = [
-    {
-      image: 'https://mcipbeidqigprecgqogj.supabase.co/storage/v1/object/public/full503final/image/490bbb10-0802-403b-975f-60713d76d726-pen.jpg',
-      name: '볼펜',
-      tempWarehouse: '임시창고1',
-      vendorName: '회사A',
-      inbound: 3,
-      outbound: 2,
-      adjusted: 0,
-      totalQuantity: 1,
-    },
-    {
-      name: 'A4용지',
-      inbound: 8,
-      outbound: 2,
-      adjusted: 0,
-      totalQuantity: 6,
-      tempWarehouse: '임시창고2',
-      vendorName: '회사A',
-      image: 'https://i.postimg.cc/6QHKxZB9/4.png',
-    },
-    {
-      name: '임시제품1',
-      totalQuantity: '7',
-      tempWarehouse: '임시창고2',
-      vendorName: '회사B',
-    },
-    {
-      name: '임시제품1',
-      category: '-',
-      price: '1,000',
-      safetyStock: '10',
-      totalQuantity: '7',
-      tempWarehouse: '임시창고2',
-      vendorName: '회사B',
-    },
-    {
-      name: '임시제품1',
-      category: '-',
-      price: '1,000',
-      safetyStock: '10',
-      totalQuantity: '7',
-      tempWarehouse: '임시창고2',
-      vendorName: '회사B',
-    },
-    {
-      name: '임시제품1',
-      category: '-',
-      price: '1,000',
-      safetyStock: '10',
-      totalQuantity: '7',
-      tempWarehouse: '임시창고2',
-      vendorName: '회사B',
-    },
-    {
-      name: '임시제품1',
-      category: '-',
-      price: '1,000',
-      safetyStock: '10',
-      totalQuantity: '7',
-      tempWarehouse: '임시창고2',
-      vendorName: '회사B',
-    },
-    {
-      name: '임시제품1',
-      category: '-',
-      price: '1,000',
-      safetyStock: '10',
-      totalQuantity: '7',
-      tempWarehouse: '임시창고2',
-      vendorName: '회사B',
-    },
-    {
-      name: '임시제품1',
-      category: '-',
-      price: '1,000',
-      safetyStock: '10',
-      totalQuantity: '7',
-      tempWarehouse: '임시창고2',
-      vendorName: '회사B',
-    },
-  ];
-  
-  useEffect(() => {
-    setProducts(data);
+
+  const [startDate, setStartDate] = useState(() => {
+    const d = new Date();
+    d.setDate(d.getDate() - 6);
+    return d;
+  });
+
+  const [endDate, setEndDate] = useState(() => new Date());
+
+  const formatDate = useCallback((date, isStart = true) => {
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    const dd = String(date.getDate()).padStart(2, '0');
+    const hhmmss = isStart ? '00:00:00' : '23:59:59';
+    return `${yyyy}-${mm}-${dd} ${hhmmss}`;
   }, []);
-  
+
+  const requestBody = useMemo(() => ({
+    tags,
+    selectedLocations,
+    selectedCorrespondents,
+    startDate: formatDate(startDate, true),
+    endDate: formatDate(endDate, false),
+  }), [tags, selectedLocations, selectedCorrespondents, startDate, endDate, formatDate]);
+
+  const fetchInventoryData = useCallback(() => {
+    axiosInstance.post('/api/inventory/search', requestBody)
+      .then(res => {
+        setProducts(res.data);
+      })
+      .catch(err => {
+        console.error('Axios 요청 실패:', err);
+      });
+  }, [requestBody]);
+
+  useEffect(() => {
+    fetchInventoryData();
+  }, [fetchInventoryData]);
+
   return (
-    <div className=" flex-1 p-6 overflow-y-auto">
-      <div className="bg-white rounded shadow p-4 min-x-[100vh]  min-h-[80vh] "
-           style={{ padding: '0px 40px 80px 40px' }}>
-        <div>
-          <Topline title="입출고 조회">
-            <InventoryNavigation
-              selectedLocations={selectedLocations}
-              setSelectedLocations={setSelectedLocations}
-              selectedCorrespondents={selectedCorrespondents}
-              setSelectedCorrespondents={setSelectedCorrespondents}
-              startDate={startDate}
-              setStartDate={setStartDate}
-              endDate={endDate}
-              setEndDate={setEndDate}
-              tags={tags}
-              setTags={setTags}
-            />
-            <table className=" table-fixed border-collapse">
-              <thead className="bg-white top-0 z-30">
-              <tr className="border-b border-gray-300">
-                <th className="cell-style w-[120px]">사진</th>
-                <th className="cell-style w-[200px]">제품명</th>
-                <th className="cell-style w-[180px]">보관위치</th>
-                <th className="cell-style w-[190px]">거래처</th>
-                <th className="cell-style w-[130px]">입고량</th>
-                <th className="cell-style w-[130px]">출고량</th>
-                <th className="cell-style w-[130px]">조정량</th>
-                <th className="cell-style w-[130px]">종료재고</th>
-              </tr>
-              </thead>
-              <InventoryTableBody products={products} />
-            </table>
-          </Topline>
-        </div>
+    <div className="flex-1 p-6 overflow-y-auto">
+      <div className="bg-white rounded shadow p-10 min-x-[100vh] min-h-[80vh]">
+        <Topline title="입출고 조회">
+          <InventoryNavigation
+            selectedLocations={selectedLocations}
+            setSelectedLocations={setSelectedLocations}
+            selectedCorrespondents={selectedCorrespondents}
+            setSelectedCorrespondents={setSelectedCorrespondents}
+            startDate={startDate}
+            setStartDate={setStartDate}
+            endDate={endDate}
+            setEndDate={setEndDate}
+            tags={tags}
+            setTags={setTags}
+          />
+          <table className="table-fixed border-collapse">
+            <thead className="bg-white top-0 z-30">
+            <tr className="border-b border-gray-300">
+              <th className="cell-style w-[120px]">사진</th>
+              <th className="cell-style w-[200px]">제품명</th>
+              <th className="cell-style w-[180px]">보관위치</th>
+              <th className="cell-style w-[190px]">거래처</th>
+              <th className="cell-style w-[130px]">입고량</th>
+              <th className="cell-style w-[130px]">출고량</th>
+              <th className="cell-style w-[130px]">조정량</th>
+              <th className="cell-style w-[130px]">현재재고</th>
+            </tr>
+            </thead>
+            <InventoryTableBody products={products} />
+          </table>
+        </Topline>
       </div>
     </div>
-  
   );
 }
 

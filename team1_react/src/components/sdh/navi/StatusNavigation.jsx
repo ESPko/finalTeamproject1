@@ -1,30 +1,47 @@
-import { useState } from 'react';
 import CalendarNavi from './CalendarNavi.jsx';
 import SearchInput from './SearchInput.jsx';
 import OutboundPerson from './OutboundPerson.jsx';
 import Department from './Department.jsx';
 
-function StatusNavigation ()
+function StatusNavigation ({
+  selectedDepartments, setSelectedDepartments,
+  selectedOutboundPerson, setSelectedOutboundPerson,
+  startDate, setStartDate,
+  endDate, setEndDate,
+  tags, setTags,
+})
 {
-  const [selectedDepartments, setSelectedDepartments] = useState([]);
-  const [selectedOutboundPerson, setSelectedOutboundPerson] = useState([]);
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
-  const [tags, setTags] = useState([]);
+  const navigationItems = [
+    {
+      component: CalendarNavi,
+      props: {
+        startDate,
+        endDate,
+        onChangeDate: (start, end) => {
+          setStartDate(start);
+          setEndDate(end);
+        },
+      },
+    },
+    {
+      component: SearchInput,
+      props: { tags, setTags },
+    },
+    {
+      component: Department,
+      props: { selected: selectedDepartments, setSelected: setSelectedDepartments },
+    },
+    {
+      component: OutboundPerson,
+      props: { selected: selectedOutboundPerson, setSelected: setSelectedOutboundPerson },
+    },
+  ];
   
   return (
     <div className="flex flex-wrap items-center gap-2 py-3.5">
-      <CalendarNavi
-        startDate={startDate}
-        endDate={endDate}
-        onChangeDate={(start, end) => {
-          setStartDate(start);
-          setEndDate(end);
-        }}
-      />
-      <SearchInput tags={tags} setTags={setTags} />
-      <Department selected={selectedDepartments} setSelected={setSelectedDepartments} />
-      <OutboundPerson selected={selectedOutboundPerson} setSelected={setSelectedOutboundPerson} />
+      {navigationItems.map(({ component: Component, props }, index) => (
+        <Component key={index} {...props} />
+      ))}
     </div>
   );
 }

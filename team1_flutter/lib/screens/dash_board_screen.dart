@@ -1,29 +1,42 @@
-// dashboard_screen.dart
-
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:test2/models/item.dart';
+import 'package:test2/models/user.dart';
+import '../services/api_service.dart';
 import '../widgets/custom_qr_icon.dart';
-import 'item_detail_screen.dart'; // 상세 페이지 import
+import 'item_detail_screen.dart';
+
+int totalIn = 0;
+int totalOut = 0;
 
 class DashBoardScreen extends StatelessWidget {
-  const DashBoardScreen({Key? key}) : super(key: key);
+  final User? user;
+  const DashBoardScreen({Key? key, this.user}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
+    if (user == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushReplacementNamed(context, '/login');
+      });
+      return Scaffold(); // 빈 화면
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('아이템매니아'),
+        title: const Text('아이템매니아'),
         elevation: 0,
       ),
-      body: InventoryMainPage(),
+      body: InventoryMainPage(user: user!),
     );
   }
 }
 
 class InventoryMainPage extends StatefulWidget {
+  final User user;
+  const InventoryMainPage({super.key, required this.user});
+
   @override
   _InventoryMainPageState createState() => _InventoryMainPageState();
 }
@@ -33,30 +46,43 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
   List<Item> _items = [];
   List<Item> _filteredItems = [];
   bool _isLoading = true;
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
+  final ApiService apiService = ApiService();
 
   @override
   void initState() {
     super.initState();
     _fetchItems();
     _searchController.addListener(_filterItems);
+    loadTransactionSummary();
+
+  }
+
+  void loadTransactionSummary() async {
+    try {
+      final data = await apiService.fetchTransactionSummary(); // ApiService 인스턴스를 사용
+      setState(() {
+        totalIn = data['totalIn'];
+        totalOut = data['totalOut'];
+      });
+    } catch (e) {
+      print('입출고 요약 데이터를 불러오는 데 실패: $e');
+    }
   }
 
   Future<void> _fetchItems() async {
-    final response = await http.get(Uri.parse('http://10.100.203.16:8080/api/items'));
-
-    if (response.statusCode == 200) {
-      List<dynamic> data = json.decode(utf8.decode(response.bodyBytes));
+    try {
+      List<Item> items = await apiService.fetchItems();
       setState(() {
-        _items = data.map((item) => Item.fromJson(item)).toList();
-        _filteredItems = _items;
+        _items = items;
+        _filteredItems = items;
         _isLoading = false;
       });
-    } else {
-      setState(() {
-        _isLoading = false;
-      });
-      throw Exception('아이템 목록을 불러오는 데 실패했습니다.');
+    } catch (e) {
+      setState(() => _isLoading = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('아이템 불러오기 실패: $e')),
+      );
     }
   }
 
@@ -76,7 +102,7 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
 
   Widget _buildProductCard() {
     return Column(
-      children: _filteredItems.map((item) => _buildProductItemCard(item)).toList(),
+      children: _filteredItems.map(_buildProductItemCard).toList(),
     );
   }
 
@@ -88,48 +114,55 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ItemDetailScreen(itemId: item.idx),
+            builder: (_) => ItemDetailScreen(itemId: item.idx),
           ),
         );
       },
       child: Container(
         width: double.infinity,
-        margin: EdgeInsets.only(bottom: 16),
+        margin: const EdgeInsets.only(bottom: 16),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
-          boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.3), blurRadius: 10, offset: Offset(0, 5))],
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              blurRadius: 10,
+              offset: const Offset(0, 5),
+            ),
+          ],
         ),
         child: Row(
           children: [
             Container(
               width: 80,
               height: 80,
-              decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(10)),
-          child: item.image.isNotEmpty
-              ? Image.network(
-            item.image,
-            fit: BoxFit.cover,
-          )
-              : Icon(Icons.image, size: 40, color: Colors.white), // 이미지가 없다면 기본 아이콘 표시
-        ),
-            SizedBox(width: 16),
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: item.image.isNotEmpty
+                  ? Image.network(item.image, fit: BoxFit.cover)
+                  : const Icon(Icons.image, size: 40, color: Colors.white),
+            ),
+            const SizedBox(width: 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(item.name, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  SizedBox(height: 4),
-                  Text(item.vendorName, style: TextStyle(fontSize: 16, color: Colors.black54)),
+                  Text(item.name, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 4),
+                  Text(item.vendorName, style: const TextStyle(fontSize: 16, color: Colors.black54)),
                 ],
               ),
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                SizedBox(height: 8),
-                Text('현재재고 ${item.quantity}', style: TextStyle(fontSize: 14, color: Colors.black87)),
+                const SizedBox(height: 8),
+                Text('${item.warehouseName}', style: const TextStyle(fontSize: 16, color: Colors.deepPurpleAccent)),
+                Text('현재재고 ${item.quantity}', style: const TextStyle(fontSize: 14)),
                 Text(
                   '적정재고 ${item.standard}',
                   style: TextStyle(fontSize: 14, color: isStockLow ? Colors.red : Colors.black87),
@@ -145,7 +178,7 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
   @override
   Widget build(BuildContext context) {
     return _isLoading
-        ? Center(child: CircularProgressIndicator())
+        ? const Center(child: CircularProgressIndicator())
         : SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -153,9 +186,9 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildSummaryCard(),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             CustomSearchBar(controller: _searchController),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             _buildProductCard(),
           ],
         ),
@@ -166,15 +199,27 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
   Widget _buildSummaryCard() {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/stockcheck');
+        if (widget.user.position == 1 || widget.user.position == 2) {
+          Navigator.pushNamed(context, '/stockcheck');
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('접근 권한이 없습니다')),
+          );
+        }
       },
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Color(0xFF4F67FF),
+          color: const Color(0xFF4F67FF),
           borderRadius: BorderRadius.circular(20),
-          boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.3), blurRadius: 10, offset: Offset(0, 5))],
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              blurRadius: 10,
+              offset: const Offset(0, 5),
+            ),
+          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -182,19 +227,22 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
             RichText(
               text: TextSpan(
                 children: [
-                  TextSpan(text: '오늘  ', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
-                  TextSpan(text: '$today', style: TextStyle(fontSize: 16, color: Colors.white)),
+                  const TextSpan(
+                    text: '오늘  ',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                  ),
+                  TextSpan(text: today, style: const TextStyle(fontSize: 16, color: Colors.white)),
                 ],
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Row(
               children: [
                 _buildSummaryText(getTotalStock().toString()),
                 _buildVerticalDivider(),
-                _buildSummaryText('0'),
+                _buildSummaryText(totalIn.toString()),         // 총입고
                 _buildVerticalDivider(),
-                _buildSummaryText('0'),
+                _buildSummaryText(totalOut.toString()),        // 총출고
               ],
             ),
             Row(
@@ -212,11 +260,10 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
     );
   }
 
-
   Widget _buildSummaryText(String text) {
     return Flexible(
       child: Center(
-        child: Text(text, style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white)),
+        child: Text(text, style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white)),
       ),
     );
   }
@@ -230,7 +277,7 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
   }
 
   Widget _buildVerticalDivider() {
-    return Container(
+    return SizedBox(
       height: 50,
       child: VerticalDivider(color: Colors.white, thickness: 1, width: 20),
     );
@@ -239,7 +286,6 @@ class _InventoryMainPageState extends State<InventoryMainPage> {
 
 class CustomSearchBar extends StatelessWidget {
   final TextEditingController controller;
-
   const CustomSearchBar({super.key, required this.controller});
 
   @override
@@ -268,36 +314,23 @@ class CustomSearchBar extends StatelessWidget {
               style: const TextStyle(fontSize: 20),
               decoration: const InputDecoration(
                 hintText: '제품 검색',
-                hintStyle: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 20,
-                ),
+                hintStyle: TextStyle(color: Colors.grey, fontSize: 20),
                 border: InputBorder.none,
                 isDense: true,
               ),
             ),
           ),
-          Container(
-            width: 1,
-            height: 45,
-            color: Colors.grey.shade300,
-          ),
+          Container(width: 1, height: 45, color: Colors.grey.shade300),
           const SizedBox(width: 15),
           GestureDetector(
             onTap: () {
               Navigator.pushNamed(context, '/scan');
             },
-            behavior: HitTestBehavior.translucent, // 빈 공간도 터치 가능하게 함
+            behavior: HitTestBehavior.translucent,
             child: Container(
-              padding: const EdgeInsets.all(12), // 터치 영역 확장
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.transparent, // 배경 투명 (필요 시 색상 지정)
-              ),
-              child: CustomQRIcon(
-                size: 24,
-                color: const Color(0xFF4F67FF),
-              ),
+              padding: const EdgeInsets.all(12),
+              decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.transparent),
+              child: CustomQRIcon(size: 24, color: Color(0xFF4F67FF)),
             ),
           ),
         ],

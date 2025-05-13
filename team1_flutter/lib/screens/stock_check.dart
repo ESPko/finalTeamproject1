@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:test2/models/item.dart';
-import 'package:test2/screens/product_detail_page.dart';
-import 'package:test2/services/api_service.dart';
+import '../models/item.dart';
+import '../services/api_service.dart';
+import '../widgets/item_card_large.dart';
+import 'item_detail_screen.dart';
+import 'product_detail_page.dart';
 
 class StockCheck extends StatefulWidget {
   const StockCheck({Key? key}) : super(key: key);
@@ -13,12 +15,13 @@ class StockCheck extends StatefulWidget {
 
 class _StockCheckState extends State<StockCheck> {
   late Future<List<Item>> _futureItems;
+  final ApiService apiService = ApiService();
   final String today = DateFormat('MM월 dd일').format(DateTime.now());
 
   @override
   void initState() {
     super.initState();
-    _futureItems = ApiService.fetchItems(); // 백엔드에서 전체 리스트 가져오기
+    _futureItems = apiService.fetchItems();
   }
 
   @override
@@ -38,8 +41,7 @@ class _StockCheckState extends State<StockCheck> {
             return Center(child: Text('에러 발생: ${snapshot.error}'));
           } else {
             final allItems = snapshot.data!;
-            final lowStockItems =
-            allItems.where((item) => item.quantity < item.standard).toList();
+            final lowStockItems = allItems.where((item) => item.quantity < item.standard).toList();
 
             return SingleChildScrollView(
               padding: const EdgeInsets.all(16),
@@ -48,7 +50,19 @@ class _StockCheckState extends State<StockCheck> {
                 children: [
                   _buildSummaryCard(allItems.length, lowStockItems.length),
                   const SizedBox(height: 16),
-                  ...lowStockItems.map((item) => _buildProductCard(item)).toList(),
+                  ...lowStockItems.map(
+                        (item) => ItemCardLarge(
+                      item: item,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ItemDetailScreen(itemId: item.idx),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ],
               ),
             );
@@ -100,9 +114,9 @@ class _StockCheckState extends State<StockCheck> {
           ),
           Row(
             children: [
-              _buildSummaryLabel('총재고'),
+              _buildSummaryLabel('전체비품'),
               _buildVerticalDivider(),
-              _buildSummaryLabel('총부족재고'),
+              _buildSummaryLabel('재고부족비품'),
             ],
           ),
         ],
@@ -133,89 +147,12 @@ class _StockCheckState extends State<StockCheck> {
   }
 
   Widget _buildVerticalDivider() {
-    return Container(
+    return SizedBox(
       height: 50,
       child: const VerticalDivider(
         color: Colors.white,
         thickness: 1,
         width: 20,
-      ),
-    );
-  }
-
-  Widget _buildProductCard(Item item) {
-    final isStockLow = item.quantity < item.standard;
-
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ProductDetailPage(product: {
-              'name': item.name,
-              'company': item.company,
-              'currentStock': item.quantity,
-              'optimalStock': item.standard,
-            }),
-          ),
-        );
-      },
-      child: Container(
-        width: double.infinity,
-        margin: const EdgeInsets.only(bottom: 16),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
-              blurRadius: 10,
-              offset: const Offset(0, 5),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Icon(Icons.image, size: 40, color: Colors.white),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(item.name, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 4),
-                  Text(item.vendorName, style: const TextStyle(fontSize: 16, color: Colors.black54)),
-                ],
-              ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                const SizedBox(height: 8),
-                Text(
-                  '현재재고 ${item.quantity}',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: isStockLow ? Colors.red : Colors.black87,
-                  ),
-                ),
-                Text(
-                  '적정재고 ${item.standard}',
-                  style: const TextStyle(fontSize: 14, color: Colors.black87),
-                ),
-              ],
-            ),
-          ],
-        ),
       ),
     );
   }

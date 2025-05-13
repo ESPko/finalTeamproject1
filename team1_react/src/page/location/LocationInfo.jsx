@@ -1,109 +1,76 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Topline from '../../components/layout/Topline.jsx';
 import Modal from '../../Modal/Modal.jsx';
 import LocationAdd from './LocationAdd.jsx';
 import LocationDetail from './LocationDetail.jsx';
+import axiosInstance  from '../../api/axiosInstance.jsx';
 
 function LocationInfo() {
+  // 서버에서 받아온 위치 목록 상태
+  const [locationInfo, setLocationInfo] = useState([]);
 
-  const locationInfo = [
-    {
-      localName: '임시창고1',
-      localAddress: '사상구',
-      localMemo: '-',
-      localTotalCount: '2',
-    },
-    {
-      localName: '임시창고2',
-      localAddress: '수영구',
-      localMemo: '-',
-      localTotalCount: '8',
-    },
-    {
-      localName: '임시창고2',
-      localAddress: '수영구',
-      localMemo: '-',
-      localTotalCount: '8',
-    },
-    {
-      localName: '임시창고2',
-      localAddress: '수영구',
-      localMemo: '-',
-      localTotalCount: '8',
-    },
-    {
-      localName: '임시창고2',
-      localAddress: '수영구',
-      localMemo: '-',
-      localTotalCount: '8',
-    },
-    {
-      localName: '임시창고2',
-      localAddress: '수영구',
-      localMemo: '-',
-      localTotalCount: '8',
-    },
-    {
-      localName: '임시창고2',
-      localAddress: '수영구',
-      localMemo: '-',
-      localTotalCount: '8',
-    },
-    {
-      localName: '임시창고2',
-      localAddress: '수영구',
-      localMemo: '-',
-      localTotalCount: '8',
-    },
-    {
-      localName: '임시창고2',
-      localAddress: '수영구',
-      localMemo: '-',
-      localTotalCount: '8',
-    },
-    {
-      localName: '임시창고2',
-      localAddress: '수영구',
-      localMemo: '-',
-      localTotalCount: '8',
-    },
-    {
-      localName: '임시창고2',
-      localAddress: '수영구',
-      localMemo: '-',
-      localTotalCount: '8',
-    },
-    {
-      localName: '임시창고2',
-      localAddress: '수영구',
-      localMemo: '-',
-      localTotalCount: '8',
-    },
-    {
-      localName: '임시창고2',
-      localAddress: '수영구',
-      localMemo: '-',
-      localTotalCount: '8',
-    },
-    {
-      localName: '임시창고2',
-      localAddress: '수영구',
-      localMemo: '-',
-      localTotalCount: '8',
-    },
-
-
-  ];
-
-  // 위치추가 모달
+  // 위치추가 모달 상태
   const [localAdd, setLocalAdd] = useState(false);
-  // 위치상세보기 모달
+
+  // 위치상세보기 모달 상태
   const [localDetail, setLocalDetail] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState(null);
 
+  const [itemCounts, setItemCounts] = useState({});
+
+  const[updatedLocation,setUpdatedLocation] = useState(null);
+
+  const[newLocation,setNewLocation] = useState(null);
+
+  // 서버에서 데이터 가져오기
+  useEffect(() => {
+    axiosInstance.get('/warehouse/warehouseList')
+      .then((res) => {
+        setLocationInfo(res.data);
+        // 각 창고에 대한 상품 갯수도 함께 가져오기
+        res.data.forEach(location => {
+          if (location.name) {  // localName이 존재하는 경우에만 요청
+            axiosInstance.get(`/warehouse/warehouseItemCount?warehouseName=${location.name}`)
+              .then(response => {
+                setItemCounts(prevState => ({
+                  ...prevState,
+                  [location.name]: response.data
+                }));
+              })
+              .catch(error => console.error('상품 갯수 불러오기 오류:', error));
+          } else {
+            console.warn('창고 이름이 없습니다:', location);
+          }
+        });
+      })
+      .catch((err) => {
+        console.error('창고 목록 불러오기 오류:', err);
+      });
+  }, []);
+
+  // 위치 목록 갱신 함수
+  const handleAddLocation = () => {
+    axiosInstance.get('/warehouse/warehouseList')
+      .then((res) => {
+        setLocationInfo(res.data); // 위치 목록 갱신
+      })
+      .catch((err) => {
+        console.error('위치 목록 불러오기 오류:', err);
+      });
+  };
+
+  const locationClick = (location) => {
+    setSelectedLocation(location);
+    setUpdatedLocation(location);
+    setLocalDetail(true);
+  }
+
+
+
   return (
     <div className=" flex-1 p-6 overflow-y-auto">
-      <div className="bg-white rounded shadow p-4 min-x-[100vh]  min-h-[80vh] " style={{ padding: '0px 40px 80px 40px' }} >
+      <div className="bg-white rounded shadow p-4 min-x-[100vh]  min-h-[80vh] "
+           style={{ padding: '0px 40px 80px 40px' }}>
         <div>
           <Topline
             title="위치"
@@ -130,22 +97,42 @@ function LocationInfo() {
                   </tr>
                   </thead>
                   <tbody>
-                  {locationInfo.map((locationInfo, idx) => (
-                    <tr key={idx}
+                  {locationInfo.map((location) => (
+                    <tr key={location.idx}
                         className="border-b border-gray-200 text-center">
-                      <td className="py-2 px-4 w-[200px]">{locationInfo.localName}</td>
-                      <td className="py-2 px-4 w-[400px]">{locationInfo.localAddress}</td>
-                      <td className="py-2 px-4 w-[200px]">{locationInfo.localTotalCount}</td>
-                      <td className="py-2 px-4 w-[440px]">{locationInfo.localMemo}</td>
+                      <td className="py-2 px-4 w-[200px]">{location.name}</td>
+                      <td className="py-2 px-4 w-[400px]">{location.location}</td>
+                      <td className="py-2 px-4 w-[200px]">{itemCounts[location.name]}</td>
+                      <td className="py-2 px-4 w-[440px]">{location.memo}</td>
                       <td className="py-2 px-4 w-[250px] text-right space-x-2">
                         <button
                           onClick={() => {
-                            setSelectedLocation(locationInfo); // 현재 반복 중인 항목
-                            setLocalDetail(true);
+                            locationClick(location)
                           }}
                           className="px-2 py-1 border rounded text-sm hover:bg-gray-100">수정
                         </button>
-                        <button className="px-2 py-1 border rounded text-sm hover:bg-gray-100">삭제</button>
+                        <button
+                          className="px-2 py-1 border rounded text-sm hover:bg-gray-100"
+                          onClick={() => {
+                            if (window.confirm('정말 삭제하시겠습니까?')) {
+                              // 삭제 요청을 보낼 idx를 사용
+                              axios.delete(`http://localhost:8080/warehouse/${location.idx}`)
+                                .then(() => {
+                                  // 삭제 성공 시, locationInfo 상태에서 해당 항목 제거
+                                  setLocationInfo(prevLocationInfo =>
+                                    prevLocationInfo.filter(item => item.idx !== location.idx)
+                                  );
+                                  alert('위치가 성공적으로 삭제되었습니다.');
+                                })
+                                .catch(error => {
+                                  console.error('위치 삭제 오류:', error);
+                                  alert('위치 삭제 실패');
+                                });
+                            }
+                          }}
+                        >
+                          삭제
+                        </button>
                       </td>
                     </tr>
                   ))}
@@ -154,34 +141,66 @@ function LocationInfo() {
               </div>
             </div>
           </Topline>
-          {/*위치추가*/}
-          <Modal
-            isOpen={localAdd}
-            onClose={() => setLocalAdd(false)}
-            title="위치 추가"
-            footer={
-              <>
-                <button className="bg-blue-600 text-white px-4 py-2 rounded">추가</button>
-                <button
-                  onClick={() => setLocalAdd(false)}
-                  className="bg-gray-200 text-gray-700 px-4 py-2 rounded"
-                >
-                  취소
-                </button>
-              </>
-            }
-          >
-            <LocationAdd />
-          </Modal>
-          {/*위치 상세보기*/}
 
+          {/*위치 추가 모달*/}
+          <Modal isOpen={localAdd}
+                 onClose={() => setLocalAdd(false)}
+                 title="위치 추가"
+          footer={
+            <>
+              <button
+                onClick={() => {
+                  axiosInstance.post(`/warehouse/addLocation`, newLocation)
+                    .then((response) => {
+                      alert(response.data);
+                      setLocalAdd(false);
+                      handleAddLocation();
+                    })
+                    .catch((error) => {
+                      console.error('위치 수정 실패:', error);
+                      alert('위치 수정 실패');
+                    });
+                }}
+                className="bg-blue-600 text-white px-4 py-2 rounded"
+              >
+                추가
+              </button>
+              <button
+                onClick={() => setLocalAdd(false)}
+                className="bg-gray-200 text-gray-700 px-4 py-2 rounded"
+              >
+                취소
+              </button>
+            </>
+          }>
+            <LocationAdd
+              onAddLocation={setNewLocation} />
+          </Modal>
+
+          {/*위치 수정 모달*/}
           <Modal
             isOpen={localDetail}
             onClose={() => setLocalDetail(false)}
             title="위치 수정"
             footer={
               <>
-                <button className="bg-blue-600 text-white px-4 py-2 rounded">수정</button>
+                <button
+                  onClick={() => {
+                    axiosInstance.put(`/warehouse/updateLocation/${updatedLocation.idx}`, updatedLocation)
+                      .then((response) => {
+                        alert(response.data);
+                        setLocalDetail(false);  // 수정 모달 닫기
+                        handleAddLocation();  // 위치 목록 갱신
+                      })
+                      .catch((error) => {
+                        console.error('위치 수정 실패:', error);
+                        alert('위치 수정 실패');
+                      });
+                  }}
+                  className="bg-blue-600 text-white px-4 py-2 rounded"
+                >
+                  수정
+                </button>
                 <button
                   onClick={() => setLocalDetail(false)}
                   className="bg-gray-200 text-gray-700 px-4 py-2 rounded"
@@ -191,10 +210,11 @@ function LocationInfo() {
               </>
             }
           >
-            <LocationDetail locationInfo={selectedLocation} />
+            <LocationDetail
+              locationInfo={selectedLocation}
+              onUpdate={setUpdatedLocation}
+            />
           </Modal>
-
-
         </div>
       </div>
     </div>

@@ -1,3 +1,5 @@
+import { memo } from 'react';
+
 function InventoryTableBody ({ products })
 {
   if (!products || products.length === 0)
@@ -15,8 +17,8 @@ function InventoryTableBody ({ products })
   
   return (
     <tbody>
-    {products.map((product, idx) => (
-      <tr key={idx} className="border-b border-gray-200 text-center">
+    {products.map((product) => (
+      <tr key={product.id || product.name} className="border-b border-gray-200 text-center">
         <td className="py-2 px-2 w-[120px]">
           <img
             src={product.image}
@@ -25,7 +27,7 @@ function InventoryTableBody ({ products })
           />
         </td>
         <td className="cell-style">{product.name}</td>
-        <td className="cell-style">{product.tempWarehouse}</td>
+        <td className="cell-style">{product.warehouseName}</td>
         <td className="cell-style">{product.vendorName}</td>
         <td className="cell-style">{product.inbound}</td>
         <td className="cell-style">{product.outbound}</td>
@@ -37,4 +39,4 @@ function InventoryTableBody ({ products })
   );
 }
 
-export default InventoryTableBody;
+export default memo(InventoryTableBody);
