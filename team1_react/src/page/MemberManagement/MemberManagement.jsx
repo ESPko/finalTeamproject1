@@ -68,7 +68,7 @@ function MemberManagement() {
     console.log('직급 바꿀 직원 : ', member)
     const position = roleToPosition(newRole);
 
-    await axios.put('http://localhost:8080/updateMember', {
+    await axiosInstance.put('/updateMember', {
       idx: member.idx,
       id:member.id,
       department: member.department,  // 여기서 최신 department 사용
@@ -91,7 +91,7 @@ function MemberManagement() {
       return;
     }
 
-    await axios.put('http://localhost:8080/updateMember', {
+    await axiosInstance.put('/updateMember', {
       idx: member.idx,
       id:member.id,
       department: newDepartment,
@@ -102,7 +102,7 @@ function MemberManagement() {
   const DeleteMember = (idx) => {
     console.log('삭제 요청 Idx: ',idx)
     setEmployees(prev => prev.filter(emp => emp.idx !== idx));
-    axios.delete('http://localhost:8080/deleteMember',{
+    axiosInstance.delete('/deleteMember',{
       data:{idx:idx}
     })
       .then(res => {
@@ -121,7 +121,7 @@ function MemberManagement() {
       department:newMember.department,
       position:reserveRoleMap[newMember.role],
     }
-    axios.post('http://localhost:8080/addMember',requestData)
+    axiosInstance.post('/addMember',requestData)
       .then(res =>{
         const {id, nickName, department,position} = res.data;
         const roleMap = ['사원','구매 담당자', '부장'];
