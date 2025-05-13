@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="bitc.fullstack503.team1_server.mapper.kdh.ApproveMapper">
+    <select id="getApproveList" resultType="bitc.fullstack503.team1_server.dto.ItemDTO">
+        select idx, time, image, name, category, warehouse_name, vendor_name, price, quantity, approve
+        from item
+        order by approve asc, time asc
+    </select>
+
+    <update id="updateApprove">
+        update item
+        set approve = #{approve}
+        where idx = #{idx}
+    </update>
+</mapper>

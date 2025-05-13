@@ -9,7 +9,7 @@ function MemberManagement() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const roleOption = ['부장', '구매 담당자', '사원'];
-  const departmentOption = ['경영부', '기획부', '마케팅부', '생산부', '구매부'];
+  const departmentOption = [ '구매부', '경영부', '기획부', '마케팅부', '생산부'];
 
   const roleMap = {
     0:'사원',
@@ -22,39 +22,95 @@ function MemberManagement() {
     '구매담당자':1,
     '부장':2
   }
-
   useEffect(() => {
-    axios.get('http://localhost:8080/member')
+    const token = localStorage.getItem('token');
+
+    axios.get('http://localhost:8080/member', {headers: {Authorization: `Bearer ${token}`}})
       .then(res => {
-        const mappedData = res.data.map((user,index) => ({
-          id:user.idx,
+        console.log("서버에서 받은 데이터: ", res.data)
+        const mappedData = res.data.map((user) => {
+          console.log('매핑된 사용자: ', user);
+          return{
+          idx:user.idx,
+          id:user.id,
           name: user.nickName,
           department: user.department,
           role:roleMap[user.position],
-        }));
+        }
+        });
         setEmployees(mappedData)
       })
       .catch(err => {
         console.error(err)
-      })
+        alert("접근 권한이 없습니다.")
+        window.location.href = "/";
+
+        })
   }, []);
 
 
+  const roleToPosition = (role) => {
+    switch(role){
+      case '부장': return 2;
+      case '구매 담당자': return 1;
+      case '사원': return 0;
+      default: return 0;
+    }
+  }
 
-  const changeRole = (id, newRole) => {
-    setEmployees(prev =>
-      prev.map(emp => emp.id === id ? { ...emp, role: newRole } : emp),
+  const changeRole = async (id, newRole) => {
+    const updatedEmployees = employees.map(emp =>
+      emp.id === id ? { ...emp, role: newRole } : emp
     );
+    setEmployees(updatedEmployees);
+
+    const member = updatedEmployees.find(emp => emp.id === id);
+    console.log('직급 바꿀 직원 : ', member)
+    const position = roleToPosition(newRole);
+
+    await axios.put('http://localhost:8080/updateMember', {
+      idx: member.idx,
+      id:member.id,
+      department: member.department,  // 여기서 최신 department 사용
+      position: position
+    });
   };
 
-  const changeDepartment = (id, newDepartment) => {
-    setEmployees(prev =>
-      prev.map(emp => emp.id === id ? { ...emp, department: newDepartment } : emp),
+  const changeDepartment = async (id, newDepartment) => {
+    const updatedEmployees = employees.map(emp =>
+      emp.id === id ? { ...emp, department: newDepartment } : emp
     );
+    setEmployees(updatedEmployees);
+
+    const member = updatedEmployees.find(emp => emp.id === id);
+    console.log('부서 바꿀 직원 : ', member)
+    const position = roleToPosition(member.role);
+
+    if (!member || member.idx === undefined) {
+      console.error("유효하지 않은 member 정보", member);
+      return;
+    }
+
+    await axios.put('http://localhost:8080/updateMember', {
+      idx: member.idx,
+      id:member.id,
+      department: newDepartment,
+      position: position
+    });
   };
 
-  const DeleteMember = (id) => {
-    setEmployees(prev => prev.filter(emp => emp.id !== id));
+  const DeleteMember = (idx) => {
+    console.log('삭제 요청 Idx: ',idx)
+    setEmployees(prev => prev.filter(emp => emp.idx !== idx));
+    axios.delete('http://localhost:8080/deleteMember',{
+      data:{idx:idx}
+    })
+      .then(res => {
+        console.log('삭제 완료!', res.data)
+      })
+      .catch(err => {
+        console.error(err)
+      })
   };
 
   const AddMember = (newMember) => {
@@ -79,6 +135,7 @@ function MemberManagement() {
             role:roleMap[position]
           }
         ])
+          alert("직원 추가 완료")
           setIsModalOpen(false);
       })
       .catch(err => {
@@ -116,7 +173,7 @@ function MemberManagement() {
 
                 {employees.map(emp => {
                   return (
-                    <div key={emp.id}
+                    <div key={emp.idx}
                          className="grid grid-cols-[250px_250px_250px_1fr]  items-center py-2 border border-gray-300">
                       <div className="ml-3">{emp.name}</div>
 
@@ -143,7 +200,7 @@ function MemberManagement() {
                       </div>
 
                       <div className="flex items-center justify-end">
-                        <button onClick={() => DeleteMember(emp.id)} className=" border border-gray-300 text-red-500 text-sm px-3 py-1 rounded
+                        <button onClick={() => DeleteMember(emp.idx)} className=" border border-gray-300 text-red-500 text-sm px-3 py-1 rounded
             hover:bg-red-500 ml-2 justify-end mr-4">삭제
                         </button>
                       </div>

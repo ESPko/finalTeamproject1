@@ -23,4 +23,38 @@ public class MemberServiceImpl implements MemberService {
     memberMapper.addMember(userDTO);
     return userDTO;
   }
+
+  @Override
+  public UserDTO updateMember(UserDTO userDTO) {
+    System.out.println("업데이트 할 멤버 ID : " + userDTO.getId());
+    int res = memberMapper.updateMember(userDTO);
+    if (res > 0) {
+      // 성공적으로 업데이트된 후, userDTO를 반환 (또는 추가 조회)
+      return userDTO;  // 예시: 수정 후 반환
+    } else {
+      throw new RuntimeException("업데이트 실패");
+    }
+  }
+//  @Override
+//  public UserDTO updateMember(UserDTO userDTO) {
+//    return memberMapper.updateMember(userDTO);
+//  }
+
+
+//  @Override
+//  public UserDTO updateMember(UserDTO userDTO) {
+//    System.out.println("업데이트 하려는 사용자:  " + userDTO);
+//    int res = memberMapper.updateMember(userDTO);
+//    if(res > 0){
+//      return userDTO;
+//    }
+//    else{
+//      throw new RuntimeException("업데이트 실패");
+//    }
+//  }
+
+  @Override
+  public boolean deleteMember(UserDTO userDTO) {
+    return memberMapper.deleteMember(userDTO);
+  }
 }

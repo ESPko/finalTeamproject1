@@ -1,4 +1,4 @@
-import ApprovalPage from '../components/layout/ApprovalPage.jsx';
+import ApprovalPage from './approve/ApprovalPage.jsx';
 
 function TestPage1() {
   return (
