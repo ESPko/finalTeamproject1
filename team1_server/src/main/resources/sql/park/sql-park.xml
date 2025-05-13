@@ -1,15 +1,51 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="bitc.fullstack503.team1_server.mapper.park.FlutterMapper">
-<!-- 전체재고 리스트 쿼리-->
+
+  <!-- 전체재고 리스트 쿼리-->
   <select id="getAllItems" resultType="bitc.fullstack503.team1_server.dto.ItemDTO">
-    SELECT * FROM item
+    SELECT
+    i.idx,
+    i.code,
+    i.name,
+    i.category,
+    i.vendor_name AS vendorName,
+    i.warehouse_name AS warehouseName,
+    i.quantity,
+    i.standard,
+    i.qr,
+    i.approve,
+    i.price,
+    i.image,
+    i.time,
+    w.location AS warehouseLocation <!-- warehouse 테이블과 조인하여 location을 가져옴 -->
+    FROM item i
+    LEFT JOIN warehouse w ON i.warehouse_name = w.name <!-- warehouse 테이블과 warehouse_name을 기준으로 LEFT JOIN -->
   </select>
-<!-- 비품 상세 쿼리-->
+
+  <!-- 비품 상세 쿼리-->
   <select id="getItemByCode" parameterType="int" resultType="bitc.fullstack503.team1_server.dto.ItemDTO">
-    SELECT * FROM item WHERE idx = #{idx}
+    SELECT
+    i.idx,
+    i.code,
+    i.name,
+    i.category,
+    i.vendor_name AS vendorName,
+    i.warehouse_name AS warehouseName,
+    i.quantity,
+    i.standard,
+    i.qr,
+    i.approve,
+    i.price,
+    i.image,
+    i.time,
+    w.location AS warehouseLocation <!-- warehouse 테이블과 조인하여 location을 가져옴 -->
+    FROM item i
+    LEFT JOIN warehouse w ON i.warehouse_name = w.name
+    WHERE i.idx = #{idx}
   </select>
-<!-- 비품 수량조정 쿼리-->
+
+  <!-- 비품 수량조정 쿼리-->
   <update id="updateItem" parameterType="bitc.fullstack503.team1_server.dto.ItemDTO">
     UPDATE item
     SET name = #{name}, category = #{category}, vendor_name = #{vendorName}, warehouse_name = #{warehouseName},
@@ -17,7 +53,8 @@
         image = #{image}, time = #{time}
     WHERE idx = #{idx}
   </update>
-<!-- 비품 츨고 로그 기록 쿼리-->
+
+  <!-- 비품 출고 로그 기록 쿼리-->
   <insert id="insertTransaction" parameterType="bitc.fullstack503.team1_server.dto.TransactionDTO">
     INSERT INTO transaction (
       item_idx,
@@ -43,19 +80,18 @@
     t.user_id AS userId,
     t.item_idx AS itemId,
     t.time AS releaseDate,
-    i.quantity AS quantity,  <!-- ✅ 수정됨 -->
+    i.quantity AS quantity,
     (t.after - t.before) AS releasedQuantity,
     i.name AS itemName,
     i.vendor_name AS vendorName,
     i.warehouse_name AS warehouseName,
-    i.image AS image
-    FROM
-    transaction t
-    JOIN item i ON t.item_idx = i.idx  <!-- ✅ 올바른 JOIN 구문 추가 -->
-    WHERE
-    t.user_id = #{userId}
-    ORDER BY
-    t.time DESC;
+    i.image AS image,
+    w.location AS warehouseLocation  <!-- warehouse 테이블과 조인하여 location을 가져옴 -->
+    FROM transaction t
+    JOIN item i ON t.item_idx = i.idx
+    LEFT JOIN warehouse w ON i.warehouse_name = w.name  <!-- warehouse 테이블과 조인하여 location을 가져옴 -->
+    WHERE t.user_id = #{userId}
+    ORDER BY t.time DESC;
   </select>
 
   <!-- 결과 매핑 -->
@@ -69,6 +105,7 @@
     <result property="itemName" column="itemName"/>
     <result property="vendorName" column="vendorName"/>
     <result property="warehouseName" column="warehouseName"/>
+    <result property="warehouseLocation" column="warehouseLocation"/> <!-- warehouseLocation 추가 -->
   </resultMap>
 
   <!-- 오늘 날짜의 총 입고 수량 -->

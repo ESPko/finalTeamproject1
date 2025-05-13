@@ -21,9 +21,13 @@ public class ShipmentDetailResponse {
   private String vendorName;
   private String image;
 
-  // 생성자 수정: TransactionDTO를 받지 않고, 직접 값을 받는 생성자로 수정
+  // warehouseLocation 필드 추가
+  private String warehouseLocation;
+
+  // 생성자 수정: warehouseLocation을 받는 생성자 추가
   public ShipmentDetailResponse(String userId, String itemName, LocalDateTime releaseDate,
-                                int quantity, int releasedQuantity, String warehouseName, String vendorName, String image) {
+                                int quantity, int releasedQuantity, String warehouseName,
+                                String vendorName, String image, String warehouseLocation) {
     this.userId = userId;
     this.itemName = itemName;
     this.releaseDate = releaseDate; // LocalDateTime으로 변경
@@ -32,5 +36,11 @@ public class ShipmentDetailResponse {
     this.warehouseName = warehouseName;
     this.vendorName = vendorName;
     this.image = image;
+    this.warehouseLocation = warehouseLocation; // warehouseLocation 추가
+  }
+
+  // 기본 생성자 (옵션)
+  public ShipmentDetailResponse() {
+    // 기본값으로 초기화 가능 (필요시)
   }
 }
