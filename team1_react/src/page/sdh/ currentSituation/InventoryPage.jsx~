@@ -51,7 +51,7 @@ function InventoryPage ()
   
   return (
     <div className="flex-1 p-6 overflow-y-auto">
-      <div className="bg-white rounded shadow p-4 min-x-[100vh] min-h-[90vh]" style={{ padding: '0px 40px 0 40px' }}>
+      <div className="bg-white rounded shadow p-4 min-x-[100vh] min-h-[80vh]">
         <Topline title="입출고 조회">
           <InventoryNavigation
             selectedLocations={selectedLocations}

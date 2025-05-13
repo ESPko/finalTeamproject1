@@ -12,7 +12,7 @@ function Topline ({ title, actions, children })
       
       {/* 본문 콘텐츠 영역 */}
       <div className="overflow-x-auto overflow-h-auto min-h-[450px]" style={{ maxHeight: 'calc(80vh - 120px)' }}>
-        <div className="min-w-[1200px] pb-10">{children}</div>
+        <div className="min-w-[700px] pb-10">{children}</div>
       </div>
     </div>
   );

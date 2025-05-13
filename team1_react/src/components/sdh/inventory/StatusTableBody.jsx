@@ -1,3 +1,5 @@
+import { ArrowRight } from 'lucide-react';
+
 function StatusTableBody ({ products })
 {
   if (!products || products.length === 0)
@@ -13,13 +15,29 @@ function StatusTableBody ({ products })
     );
   }
   
+  const getTransactionColorClass = (transaction) => {
+    switch (transaction)
+    {
+      case 0:
+        return 'text-blue-600';
+      case 1:
+        return 'text-red-600';
+      case 2:
+        return 'text-green-600';
+      default:
+        return 'text-gray-800';
+    }
+  };
+  
   return (
     <tbody>
-    {products.map((product) => {
+    {products.map((product, index) => {
+      const key = product.id ?? `${product.name}-${index}`;
       const quantityDifference = product.afterQuantity - product.beforeQuantity;
-      
+      let transactionType = product.transaction;
+      const transactionColor = getTransactionColorClass(transactionType);
       return (
-        <tr key={product.id} className="border-b border-gray-200 text-center">
+        <tr key={key} className="border-b border-gray-200 text-center">
           <td className="py-2 px-2 w-[120px]">
             <img
               src={product.image}
@@ -33,9 +51,13 @@ function StatusTableBody ({ products })
           <td className="cell-style">{product.department}</td>
           <td className="cell-style">{product.outboundPerson}</td>
           <td className="cell-style">
-            {product.beforeQuantity} -> {product.afterQuantity}
+            {product.beforeQuantity}
+            <ArrowRight className="inline-block mx-1 text-gray-400 w-4 h-4" />
+            {product.afterQuantity}
           </td>
-          <td className="cell-style">{quantityDifference}</td>
+          <td className={`cell-style ${transactionColor}`}>
+            {quantityDifference}
+          </td>
           <td className="cell-style">{product.date}</td>
         </tr>
       );
