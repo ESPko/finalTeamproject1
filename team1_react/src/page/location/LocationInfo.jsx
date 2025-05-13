@@ -4,10 +4,17 @@ import Modal from '../../Modal/Modal.jsx';
 import LocationAdd from './LocationAdd.jsx';
 import LocationDetail from './LocationDetail.jsx';
 import axios from 'axios';
+import { SearchIcon } from 'lucide-react';
 
 function LocationInfo() {
   // 서버에서 받아온 위치 목록 상태
   const [locationInfo, setLocationInfo] = useState([]);
+
+  // 필터링된 위치 목록 상태
+  const [filteredLocationInfo, setFilteredLocationInfo] = useState([]);
+
+  // 검색어 상태
+  const [searchQuery, setSearchQuery] = useState('');
 
   // 위치추가 모달 상태
   const [localAdd, setLocalAdd] = useState(false);
@@ -18,15 +25,16 @@ function LocationInfo() {
 
   const [itemCounts, setItemCounts] = useState({});
 
-  const[updatedLocation,setUpdatedLocation] = useState(null);
+  const [updatedLocation, setUpdatedLocation] = useState(null);
 
-  const[newLocation,setNewLocation] = useState(null);
+  const [newLocation, setNewLocation] = useState(null);
 
   // 서버에서 데이터 가져오기
   useEffect(() => {
     axios.get('http://localhost:8080/warehouse/warehouseList')
       .then((res) => {
         setLocationInfo(res.data);
+        setFilteredLocationInfo(res.data); // 초기 상태에서는 필터링하지 않은 전체 목록
         // 각 창고에 대한 상품 갯수도 함께 가져오기
         res.data.forEach(location => {
           if (location.name) {  // localName이 존재하는 경우에만 요청
@@ -48,11 +56,25 @@ function LocationInfo() {
       });
   }, []);
 
+  // 검색어에 따라 위치 목록 필터링하는 함수
+  useEffect(() => {
+    const filtered = locationInfo.filter(location => {
+      const query = searchQuery.toLowerCase();
+      return (
+        location.name.toLowerCase().includes(query) ||
+        location.location.toLowerCase().includes(query) ||
+        location.memo.toLowerCase().includes(query)
+      );
+    });
+    setFilteredLocationInfo(filtered);
+  }, [searchQuery, locationInfo]); // 검색어 또는 위치 목록이 변경되면 필터링
+
   // 위치 목록 갱신 함수
   const handleAddLocation = () => {
     axios.get('http://localhost:8080/warehouse/warehouseList')
       .then((res) => {
         setLocationInfo(res.data); // 위치 목록 갱신
+        setFilteredLocationInfo(res.data); // 갱신 후 필터링된 목록도 다시 업데이트
       })
       .catch((err) => {
         console.error('위치 목록 불러오기 오류:', err);
@@ -63,13 +85,11 @@ function LocationInfo() {
     setSelectedLocation(location);
     setUpdatedLocation(location);
     setLocalDetail(true);
-  }
-
-
+  };
 
   return (
-    <div className=" flex-1 p-6 overflow-y-auto">
-      <div className="bg-white rounded shadow p-4 min-x-[100vh]  min-h-[80vh] "
+    <div className="flex-1 p-6 overflow-y-auto">
+      <div className="bg-white rounded shadow p-4 min-x-[100vh] min-h-[80vh]"
            style={{ padding: '0px 40px 80px 40px' }}>
         <div>
           <Topline
@@ -84,6 +104,22 @@ function LocationInfo() {
             }
           >
             <div>
+              {/* 검색창 */}
+              <div className="flex items-center justify-between m-3">
+                <div className="relative w-full max-w-md min-h-[36px] bg-white border border-[#cbccd3] rounded-md flex items-center transition-all duration-100">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <SearchIcon />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="이름, 주소, 메모 검색"
+                    className="pl-10 pr-4 py-2 w-full focus:outline-none"
+                    value={searchQuery} // 검색어 상태 바인딩
+                    onChange={(e) => setSearchQuery(e.target.value)} // 검색어 입력 시 상태 업데이트
+                  />
+                </div>
+              </div>
+
               {/* 테이블 */}
               <div className="overflow-auto w-max pretty-scrollbar flex-auto m-3 mt-4 text-center">
                 <table className="w-full table-fiex border-collapse">
@@ -97,22 +133,20 @@ function LocationInfo() {
                   </tr>
                   </thead>
                   <tbody>
-                  {locationInfo.map((location) => (
-                    <tr key={location.idx}
-                        className="border-b border-gray-200 text-center">
+                  {filteredLocationInfo.map((location) => (
+                    <tr key={location.idx} className="border-b border-gray-200 text-center">
                       <td className="py-2 px-4 w-[200px]">{location.name}</td>
                       <td className="py-2 px-4 w-[400px]">{location.location}</td>
                       <td className="py-2 px-4 w-[200px]">{itemCounts[location.name]}</td>
                       <td className="py-2 px-4 w-[440px]">{location.memo}</td>
                       <td className="py-2 px-4 w-[250px] text-right space-x-2">
                         <button
-                          onClick={() => {
-                            locationClick(location)
-                          }}
-                          className="px-2 py-1 border rounded text-sm hover:bg-gray-100">수정
+                          onClick={() => locationClick(location)}
+                          className="px-2 py-1 border rounded text-sm hover:bg-gray-100"
+                        >
+                          수정
                         </button>
                         <button
-                          className="px-2 py-1 border rounded text-sm hover:bg-gray-100"
                           onClick={() => {
                             if (window.confirm('정말 삭제하시겠습니까?')) {
                               // 삭제 요청을 보낼 idx를 사용
@@ -122,6 +156,9 @@ function LocationInfo() {
                                   setLocationInfo(prevLocationInfo =>
                                     prevLocationInfo.filter(item => item.idx !== location.idx)
                                   );
+                                  setFilteredLocationInfo(prevFilteredLocationInfo =>
+                                    prevFilteredLocationInfo.filter(item => item.idx !== location.idx)
+                                  );
                                   alert('위치가 성공적으로 삭제되었습니다.');
                                 })
                                 .catch(error => {
@@ -130,6 +167,7 @@ function LocationInfo() {
                                 });
                             }
                           }}
+                          className="px-2 py-1 border rounded text-sm hover:bg-gray-100"
                         >
                           삭제
                         </button>
@@ -146,35 +184,34 @@ function LocationInfo() {
           <Modal isOpen={localAdd}
                  onClose={() => setLocalAdd(false)}
                  title="위치 추가"
-          footer={
-            <>
-              <button
-                onClick={() => {
-                  axios.post(`http://localhost:8080/warehouse/addLocation`, newLocation)
-                    .then((response) => {
-                      alert(response.data);
-                      setLocalAdd(false);
-                      handleAddLocation();
-                    })
-                    .catch((error) => {
-                      console.error('위치 수정 실패:', error);
-                      alert('위치 수정 실패');
-                    });
-                }}
-                className="bg-blue-600 text-white px-4 py-2 rounded"
-              >
-                추가
-              </button>
-              <button
-                onClick={() => setLocalAdd(false)}
-                className="bg-gray-200 text-gray-700 px-4 py-2 rounded"
-              >
-                취소
-              </button>
-            </>
-          }>
-            <LocationAdd
-              onAddLocation={setNewLocation} />
+                 footer={
+                   <>
+                     <button
+                       onClick={() => {
+                         axios.post(`http://localhost:8080/warehouse/addLocation`, newLocation)
+                           .then((response) => {
+                             alert(response.data);
+                             setLocalAdd(false);
+                             handleAddLocation();
+                           })
+                           .catch((error) => {
+                             console.error('위치 수정 실패:', error);
+                             alert('위치 수정 실패');
+                           });
+                       }}
+                       className="bg-blue-600 text-white px-4 py-2 rounded"
+                     >
+                       추가
+                     </button>
+                     <button
+                       onClick={() => setLocalAdd(false)}
+                       className="bg-gray-200 text-gray-700 px-4 py-2 rounded"
+                     >
+                       취소
+                     </button>
+                   </>
+                 }>
+            <LocationAdd onAddLocation={setNewLocation} />
           </Modal>
 
           {/*위치 수정 모달*/}
@@ -210,10 +247,7 @@ function LocationInfo() {
               </>
             }
           >
-            <LocationDetail
-              locationInfo={selectedLocation}
-              onUpdate={setUpdatedLocation}
-            />
+            <LocationDetail locationInfo={selectedLocation} onUpdate={setUpdatedLocation} />
           </Modal>
         </div>
       </div>

@@ -95,8 +95,12 @@ public class ItemController {
             int standardInt = Integer.parseInt(standard);
             int quantityInt = Integer.parseInt(quantity);
 
-            // 이미지 업로드 처리 (수정된 이미지 저장)
-            String imageUrl = itemService.uploadImage(image);
+            // 기존의 imageUrl을 그대로 사용 (이미지 수정이 없는 경우)
+            String imageUrl = itemService.getExistingImageUrl(idx);  // DB에서 기존 이미지 URL을 가져옴
+            if (image != null && !image.isEmpty()) {
+                // 이미지가 수정된 경우에만 처리
+                imageUrl = itemService.uploadImage(image);
+            }
 
             // 수정할 제품 정보 설정
             ItemDTO itemDTO = new ItemDTO();

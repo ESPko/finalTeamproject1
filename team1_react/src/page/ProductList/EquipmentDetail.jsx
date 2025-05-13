@@ -1,16 +1,19 @@
 import { useEffect, useState } from 'react';
 import QRCode from 'react-qr-code';
 
+
 function EquipmentDetail({ product , updateProduct}) {
   const [name, setName] = useState(product?.name || '');
   const [category, setCategory] = useState(product?.category || '');
   const [price, setPrice] = useState(product?.price || '');
   const [standard, setStandard] = useState(product?.standard || '');
-  const [quantity, setQuantity] = useState(product?.quantity || '');
-  const [warehouseName, setWarehouseName] = useState(product?.warehouseName || '');
-  const [vendorName, setVendorName] = useState(product?.vendorName || '');
-  const [image, setImage] = useState(product?.image || null); // 이미지 상태 추가
-  const [time] = useState(product?.time || ''); // time은 수정하지 않음, 읽기 전용
+  const [quantity, setQuantity] = useState(product?.quantity || 0 );
+  const [warehouseName] = useState(product?.warehouseName || '');
+  const [vendorName] = useState(product?.vendorName || '');
+  const [image, setImage] = useState(product?.image || null); // 기존 이미지 URL
+
+  const [imageSrc, setImageSrc] = useState(null);       // 미리보기용
+  const [imageUrl, setImageUrl] = useState(product?.image || ''); // 기존 이미지 URL 상태
 
 
   useEffect(() => {
@@ -20,9 +23,9 @@ function EquipmentDetail({ product , updateProduct}) {
         name: name,
         price: price,
         quantity: quantity,
-        warehouseName: warehouseName,
-        vendorName: vendorName,
-        image: image || '',
+        warehouseName: product.warehouseName,
+        vendorName: product.vendorName,
+        image: imageUrl || image, // 이미지 수정된 경우만 반영
         category: category,
         standard: standard
       })
@@ -33,9 +36,10 @@ function EquipmentDetail({ product , updateProduct}) {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setImage(file); // 미리보기 URL 생성
-      // setImage(URL.createObjectURL(file)); // 미리보기 URL 생성
-      // 필요에 따라 파일 업로드 로직을 추가할 수 있습니다.
+      const imageUrl = URL.createObjectURL(file);
+      setImageSrc(imageUrl);
+      setImage(file);
+      setImageUrl(null);
     }
   };
 
@@ -46,6 +50,9 @@ function EquipmentDetail({ product , updateProduct}) {
   const handleImageClick = () => {
     document.getElementById('file-input').click();
   };
+
+  const categories = ['필기구', '사무용품', '생활용품', '가전', '기타'];
+
 
   return (
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -68,12 +75,15 @@ function EquipmentDetail({ product , updateProduct}) {
             <label className="w-20 text-sm font-medium text-gray-700 whitespace-nowrap">
               카테고리
             </label>
-            <input
-              type="text"
+            <select
               className="flex-1 border rounded px-3 py-2"
               value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            />
+              onChange={(e) => setCategory(e.target.value)}>
+              <option>선택하세요</option>
+              {categories.map((cat, index) => (
+                <option key={index} value={cat}>{cat}</option>
+              ))}
+            </select>
           </div>
           {/* 매입가 */}
           <div className="flex items-center w-full max-w-md">
@@ -96,20 +106,7 @@ function EquipmentDetail({ product , updateProduct}) {
               type="text"
               className="flex-1 border rounded px-3 py-2"
               value={vendorName}
-              onChange={(e) => setVendorName(e.target.value)}
-            />
-          </div>
-          {/* 매입날짜 */}
-          <div className="flex items-center w-full max-w-md">
-            <label className="w-20 text-sm font-medium text-gray-700 whitespace-nowrap">
-              매입날짜
-            </label>
-            <input
-              type="text"
-              className="flex-1 border rounded px-3 py-2"
-              value={time}
-              readOnly
-            />
+              readOnly            />
           </div>
           {/* 수량 */}
           <section>
@@ -133,12 +130,12 @@ function EquipmentDetail({ product , updateProduct}) {
               {/* 총재고 */}
               <div className="flex items-center w-full max-w-md">
                 <label className="w-20 text-sm font-medium text-gray-700 whitespace-nowrap">
-                  총재고
+                  현재 재고
                 </label>
                 <input
                   type="text"
                   className="flex-1 border rounded px-3 py-2"
-                  value={quantity}
+                  value={quantity === 0 ? '0' : quantity} // '0'일 때도 출력되도록 설정
                   onChange={(e) => setQuantity(e.target.value)}
                 />
               </div>
@@ -152,8 +149,7 @@ function EquipmentDetail({ product , updateProduct}) {
                   type="text"
                   className="flex-1 border rounded px-3 py-2"
                   value={warehouseName}
-                  onChange={(e) => setWarehouseName(e.target.value)}
-                />
+                  readOnly                />
               </div>
 
 
@@ -166,16 +162,20 @@ function EquipmentDetail({ product , updateProduct}) {
             className="w-24 h-24 bg-gray-100 border border-dashed rounded-lg flex items-center justify-center text-2xl text-gray-400 cursor-pointer"
             onClick={handleImageClick} // 이미지 클릭 시 input 열기
           >
-            {image ? (
+            {imageSrc ? (
               <img
-                src={image} // 이미지 미리보기
+                src={imageSrc} // 미리보기용 URL을 src에 넣음
                 alt="비품 이미지"
                 className="w-full h-full object-cover border rounded-lg"
               />
             ) : (
-              <div className="w-full h-full bg-gray-100 border border-dashed rounded-lg flex items-center justify-center text-2xl text-gray-400">
-                📷
-              </div>
+              image && (
+                <img
+                  src={image} // 기존 이미지를 src로 사용
+                  alt="비품 이미지"
+                  className="w-full h-full object-cover border rounded-lg"
+                />
+              )
             )}
           </div>
           {/* 이미지 업로드 input */}

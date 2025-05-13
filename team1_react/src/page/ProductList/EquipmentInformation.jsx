@@ -9,6 +9,8 @@ import axios from 'axios';
 
 function EquipmentInformation() {
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]); // 필터링된 제품 목록
+  const [searchTerm, setSearchTerm] = useState(''); // 검색어 상태
   const [showSettings, setShowSettings] = useState(false);
   const [visibleColumns, setVisibleColumns] = useState({
     category: true,
@@ -31,7 +33,6 @@ function EquipmentInformation() {
   const [detailModalOpen, setDetailModalOpen] = useState(false);
   const [updateProduct, setUpdateProduct] = useState(null);
 
-
   const handleRowClick = (product) => {
     setSelectedProduct(product);
     setDetailModalOpen(true);
@@ -43,16 +44,20 @@ function EquipmentInformation() {
         const data = res.data;
         if (Array.isArray(data)) {
           setProducts(data);
+          setFilteredProducts(data); // 초기 로딩 시, 필터링된 목록도 설정
         } else if (Array.isArray(data.data)) {
           setProducts(data.data); // 백엔드 응답이 { data: [...] } 형태일 경우
+          setFilteredProducts(data.data); // 필터링된 목록 설정
         } else {
           console.error('예상하지 못한 응답 형식:', data);
           setProducts([]);
+          setFilteredProducts([]); // 초기화
         }
       })
       .catch((err) => {
         console.error('비품 목록 불러오기 실패:', err);
         setProducts([]);
+        setFilteredProducts([]); // 오류 발생 시 초기화
       });
   };
 
@@ -61,7 +66,28 @@ function EquipmentInformation() {
     fetchItems();
   }, []);
 
-// 비품 수정 요청
+  // 검색어에 맞춰 비품 목록 필터링
+  useEffect(() => {
+    if (searchTerm === '') {
+      setFilteredProducts(products); // 검색어가 비어 있으면 전체 제품 표시
+    } else {
+      const lowercasedSearchTerm = searchTerm.toLowerCase();
+      const filtered = products.filter((product) => {
+        return (
+          product.name.toLowerCase().includes(lowercasedSearchTerm) ||
+          product.category.toLowerCase().includes(lowercasedSearchTerm) ||
+          product.vendorName.toLowerCase().includes(lowercasedSearchTerm) ||
+          product.price.toString().includes(lowercasedSearchTerm) ||
+          product.standard.toString().includes(lowercasedSearchTerm) ||
+          product.quantity.toString().includes(lowercasedSearchTerm) ||
+          product.warehouseName.toLowerCase().includes(lowercasedSearchTerm)
+        );
+      });
+      setFilteredProducts(filtered); // 필터링된 목록 설정
+    }
+  }, [searchTerm, products]);
+
+  // 비품 수정 요청
   const handleUpdateProduct = async () => {
     if (!updateProduct.image) {
       alert('이미지를 먼저 선택하세요.');
@@ -88,6 +114,7 @@ function EquipmentInformation() {
       })
         .then(() => {
           alert('비품이 수정되었습니다.');
+          setDetailModalOpen(false)
           fetchItems(); // 비품 목록 다시 가져오기
         })
         .catch((err) => {
@@ -105,7 +132,6 @@ function EquipmentInformation() {
       alert('수정에 실패했습니다.');
     }
   };
-
 
   return (
     <div className="flex-1 p-6 overflow-y-auto">
@@ -134,6 +160,8 @@ function EquipmentInformation() {
                     type="text"
                     placeholder="비품명, 속성 검색"
                     className="pl-10 pr-4 py-2 w-full focus:outline-none"
+                    value={searchTerm} // 검색어 상태 반영
+                    onChange={(e) => setSearchTerm(e.target.value)} // 검색어 변경
                   />
                 </div>
 
@@ -191,7 +219,7 @@ function EquipmentInformation() {
                 </tr>
                 </thead>
                 <tbody>
-                {products.map((product, idx) => (
+                {filteredProducts.map((product, idx) => (
                   <tr key={idx} onClick={() => handleRowClick(product)}
                       className="border-b border-gray-200 cursor-pointer hover:bg-gray-50">
                     <td className="w-[120px] bg-white flex justify-center items-center py-2">

@@ -71,4 +71,9 @@ public class ItemServiceImpl implements ItemService {
         itemMapper.updateItem(itemDTO);
     }
 
+    @Override
+    public String getExistingImageUrl(int idx) {
+        return itemMapper.getExistingImageUrl(idx);
+    }
+
 }
