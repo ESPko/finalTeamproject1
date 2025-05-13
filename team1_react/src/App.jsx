@@ -3,6 +3,7 @@ import Side from './theme/Side.jsx';
 import Header2 from './theme/Header2.jsx';
 import Side2 from './theme/Side2.jsx';
 import Header from './components/layout/Header.jsx';
+import AxiosTest from './components/AxiosTest.jsx';
 
 function App() {
   // 컴포넌트를 전환할 상태 변수

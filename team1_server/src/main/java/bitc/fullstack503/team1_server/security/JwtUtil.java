@@ -13,7 +13,7 @@ public class JwtUtil {
     // 이 키는 64바이트 이상이어야 합니다. 예: "my-very-long-secret-key-that-is-at-least-64-bytes-long-1234567890-ABCDEFG"
     private final String secret = "my-very-long-secret-key-that-is-at-least-64-bytes-long-1234567890-ABCDEFG";
 
-    private final long expiration = 36000000L; // 1시간
+    private final long expiration = 36000000L; // 10시간
 
     // 토큰 생성
     public String generateToken(String username) {
@@ -38,6 +38,7 @@ public class JwtUtil {
         }
     }
 
+
     //    직원 관리 페이지 부장만 접근 가능하게 하기 위한 부분
     //    승인 목록 페이지 부장만 승인, 거절 버튼 눌러 값 변경 할 수 있게 하기 위한 부분
     public String extractUsername(String token) {
@@ -48,4 +49,5 @@ public class JwtUtil {
                 .getBody()
                 .getSubject();
     }
+
 }
