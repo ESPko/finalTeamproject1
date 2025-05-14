@@ -25,14 +25,14 @@ public class TransactionServiceImpl implements TransactionService
   }
   
   @Override
-  public int selectItemIdxByImage (String image)
+  public int selectItemIdxByImage (ItemDTO itemDTO)
   {
-    return transactionMapper.selectItemIdxByImage (image);
+    return transactionMapper.selectItemIdxByImage (itemDTO);
   }
   
   @Override
-  public void insertItemQrByIdx (ItemDTO itemDTO)
+  public void updateItemQrByIdx (ItemDTO itemDTO)
   {
-    transactionMapper.insertItemQrByIdx (itemDTO);
+    transactionMapper.updateItemQrByIdx (itemDTO);
   }
 }

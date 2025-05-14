@@ -13,14 +13,15 @@
     where idx = #{itemIdx}
   </select>
   
-  <select id=" selectItemIdxByImage" parameterType="String" resultType="int">
+  <select id="selectItemIdxByImage" parameterType="bitc.fullstack503.team1_server.dto.ItemDTO" resultType="int">
     select idx
     from item
     where image = #{image}
   </select>
   
-  <insert id="insertItemQrByIdx" parameterType="bitc.fullstack503.team1_server.dto.ItemDTO">
-    insert into item (qr)
-    values (#{qr}) where idx = #{itemIdx}
-  </insert>
+  <update id="updateItemQrByIdx" parameterType="bitc.fullstack503.team1_server.dto.ItemDTO">
+    update item
+    set qr = #{qr}
+    where idx = #{idx}
+  </update>
 </mapper>

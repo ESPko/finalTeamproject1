@@ -62,6 +62,7 @@ public class ItemController
       ItemDTO itemDTO1 = new ItemDTO ();
       itemDTO1.setIdx (itemIdx);
       itemDTO1.setQr (qr);
+      transactionService.updateItemQrByIdx (itemDTO1);
       return ResponseEntity.ok (Map.of ("message", "비품이 성공적으로 추가되었습니다.", "imageUrl", imageUrl));
     }
     catch (IOException e)

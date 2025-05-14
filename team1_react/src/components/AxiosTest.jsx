@@ -73,15 +73,14 @@ function AxiosTest ()
 
     <div style={{ padding: '20px' }}>
       <h1>토큰 : {token}</h1>
-      <button type={'button'} className={'bg-red-400 btn btn-secondary me-2'} onClick={sendDataTest}>Spring RestAPI 서버
-                                                                                                     접속 테스트
+      <button type={'button'} className={'bg-red-400 btn btn-secondary me-2'} onClick={sendDataTest}>
+        Spring RestAPI 서버 접속 테스트
       </button>
-      <button type={'button'} className={'bg-blue-400 btn btn-secondary me-2'} onClick={sendDataTokenTest}>토큰을 담은 Spring
-                                                                                                           RestAPI 서버 접속
-                                                                                                           테스트
+      <button type={'button'} className={'bg-blue-400 btn btn-secondary me-2'} onClick={sendDataTokenTest}>
+        토큰을 담은 Spring RestAPI 서버 접속 테스트
       </button>
       <hr />
-      br
+      <br />
       {token ? (
         <div>
           <h2>환영합니다!</h2>

@@ -9,7 +9,7 @@ public interface TransactionMapper
   
   int selectItemQuantity (int itemIdx);
   
-  int selectItemIdxByImage (String image);
+  int selectItemIdxByImage (ItemDTO itemDTO);
   
-  void insertItemQrByIdx (ItemDTO itemDTO);
+  void updateItemQrByIdx (ItemDTO itemDTO);
 }

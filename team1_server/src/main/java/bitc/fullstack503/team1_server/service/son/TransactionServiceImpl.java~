@@ -1,4 +1,5 @@
 package bitc.fullstack503.team1_server.service.son;
+import bitc.fullstack503.team1_server.dto.ItemDTO;
 import bitc.fullstack503.team1_server.dto.TransactionDTO;
 import bitc.fullstack503.team1_server.mapper.son.TransactionMapper;
 import lombok.RequiredArgsConstructor;
@@ -21,5 +22,17 @@ public class TransactionServiceImpl implements TransactionService
   public int selectItemQuantity (int itemIdx)
   {
     return transactionMapper.selectItemQuantity (itemIdx);
+  }
+  
+  @Override
+  public int selectItemIdxByImage (String image)
+  {
+    return transactionMapper.selectItemIdxByImage (image);
+  }
+  
+  @Override
+  public void updateItemQrByIdx (ItemDTO itemDTO)
+  {
+    transactionMapper.updateItemQrByIdx (itemDTO);
   }
 }
