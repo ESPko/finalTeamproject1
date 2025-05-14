@@ -18,8 +18,15 @@
         where idx = #{idx}
     </update>
 
+    <delete id="deleteTransactionsByUserId" parameterType="bitc.fullstack503.team1_server.dto.TransactionDTO">
+        delete from transaction
+        where user_id = #{id}
+    </delete>
+
     <delete id="deleteMember" parameterType="bitc.fullstack503.team1_server.dto.UserDTO">
         delete from user
         where idx = #{idx};
     </delete>
+
+
 </mapper>

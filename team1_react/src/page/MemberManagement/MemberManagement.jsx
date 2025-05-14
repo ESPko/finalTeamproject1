@@ -2,6 +2,7 @@ import AddMemberModal from './AddMemberModal.jsx';
 import { useEffect, useState } from 'react';
 import Topline from '../../components/layout/Topline.jsx';
 import axiosInstance  from '../../api/axiosInstance.jsx';
+import { useNavigate } from 'react-router-dom';
 
 function MemberManagement() {
   const [employees, setEmployees] = useState([]);
@@ -99,11 +100,12 @@ function MemberManagement() {
     });
   };
 
-  const DeleteMember = (idx) => {
+  const DeleteMember = (idx,id) => {
     console.log('삭제 요청 Idx: ',idx)
+    console.log('삭제 요청 Id: ',id)
     setEmployees(prev => prev.filter(emp => emp.idx !== idx));
     axiosInstance.delete('/deleteMember',{
-      data:{idx:idx}
+      data:{idx:idx, id:id}
     })
       .then(res => {
         console.log('삭제 완료!', res.data)
@@ -140,8 +142,12 @@ function MemberManagement() {
       })
       .catch(err => {
         console.error(err)
+        alert("직원 추가 실패")
       })
   };
+
+  const navigate = useNavigate();
+
   return (
     <div className=" flex-1 p-6 overflow-y-auto">
       <div className="bg-white rounded shadow p-4 min-x-[100vh]  min-h-[80vh] "
@@ -200,7 +206,7 @@ function MemberManagement() {
                       </div>
 
                       <div className="flex items-center justify-end">
-                        <button onClick={() => DeleteMember(emp.idx)} className=" border border-gray-300 text-red-500 text-sm px-3 py-1 rounded
+                        <button onClick={() => DeleteMember(emp.idx, emp.id)} className=" border border-gray-300 text-red-500 text-sm px-3 py-1 rounded
             hover:bg-red-500 ml-2 justify-end mr-4">삭제
                         </button>
                       </div>
@@ -215,6 +221,9 @@ function MemberManagement() {
               </div>
             </div>
           </Topline>
+          <button
+            onClick={() => navigate('/')}
+            className={"bg-gray-500 text-white rounded p-2 hover:cursor-pointer"}>메인 화면 가기</button>
         </div>
       </div>
     </div>

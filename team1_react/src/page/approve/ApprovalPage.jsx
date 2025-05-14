@@ -2,6 +2,7 @@ import Topline from '../../components/layout/Topline.jsx';
 import { useEffect, useState } from 'react';
 import ApproveItemList from './ApproveItemList.jsx';
 import axiosInstance from '../../api/axiosInstance.jsx';
+import { useNavigate } from 'react-router-dom';
 
 
 function ApprovalPage() {
@@ -90,6 +91,8 @@ function ApprovalPage() {
       });
   };
 
+  const navigate = useNavigate();
+
   return (
     <main className=" flex-1 p-6 overflow-y-auto">
       <div className="bg-white rounded shadow p-4 min-x-[100vh]  min-h-[80vh] "
@@ -135,6 +138,10 @@ function ApprovalPage() {
               changeApprove={changeApprove}
             />
           </Topline>
+          <button
+            onClick={() => navigate('/')}
+            className={"bg-gray-500 text-white rounded p-2 hover:cursor-pointer"}>메인 화면 가기</button>
+
         </div>
       </div>
     </main>

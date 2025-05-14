@@ -1,5 +1,6 @@
 package bitc.fullstack503.team1_server.service.kdh;
 
+import bitc.fullstack503.team1_server.dto.ItemDTO;
 import bitc.fullstack503.team1_server.dto.TransactionDTO;
 import bitc.fullstack503.team1_server.mapper.kdh.MainPageMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,11 @@ public class MainPageServiceImpl implements MainPageService {
     result.put("totalInput", totalInput); //입고 수량
     result.put("totalOutput", totalOutput); //출고 수량
     return result;
-
   }
+
+  @Override
+  public List<ItemDTO> inputRequestList() {
+    return mainPageMapper.inputRequestList();
+  }
+
 }
