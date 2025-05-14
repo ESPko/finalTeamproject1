@@ -1,5 +1,8 @@
 import { useEffect, useState, useMemo } from 'react';
 import Topline from '../../components/layout/Topline.jsx';
+import { useEffect, useState } from 'react';
+import LowStockSearch from './LowStockSearch';
+import axios from 'axios'; // 컴포넌트 추가
 import LowStockSearch from './LowStockSearch';
 import axiosInstance from '../../api/axiosInstance'; // axiosInstance 사용
 
@@ -7,6 +10,11 @@ function LowStockPage() {
   const [lowStockItems, setLowStockItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [orderedItems, setOrderedItems] = useState(() => {
+    // 로컬스토리지에서 기존 데이터 불러오기
+    const stored = localStorage.getItem('orderedItems');
+    return stored ? JSON.parse(stored) : {};
+  });
 
   useEffect(() => {
     const fetchLowStock = async () => {

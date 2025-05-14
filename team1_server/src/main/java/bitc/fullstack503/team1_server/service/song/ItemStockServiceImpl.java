@@ -23,20 +23,38 @@ public class ItemStockServiceImpl implements ItemStockService {
   @Override
   public void receiveItemWithInfo(Long idx, Map<String, Object> data) {
     Integer quantityToAdd = (Integer) data.get("quantity");
-    String receivedDate = (String) data.get("receivedDate");
     String memo = (String) data.get("memo");
 
+    // 필요한 파라미터만 전달
     Map<String, Object> paramMap = new HashMap<>();
     paramMap.put("idx", idx);
     paramMap.put("quantity", quantityToAdd);
-    paramMap.put("receivedDate", receivedDate);
-    paramMap.put("memo", memo);
 
     itemStockMapper.updateItemInfo(paramMap);
   }
 
   @Override
   public List<ItemDTO> getLowStockItems() {
-    return itemStockMapper.selectLowStockItems(); // 이 부분
+    return itemStockMapper.selectLowStockItems();
+  }
+
+  @Override
+  public void updateItemApprovalToReceive(Long idx) {
+    // 입고 처리 시 approve 값을 1로 업데이트
+    Map<String, Object> paramMap = new HashMap<>();
+    paramMap.put("idx", idx);
+    paramMap.put("approve", 1);
+
+    itemStockMapper.updateItemApproval(paramMap);
+  }
+
+  @Override
+  public void updateItemApprovalToLowStock(Long idx) {
+    // 부족 재고 처리 시 approve 값을 3으로 업데이트
+    Map<String, Object> paramMap = new HashMap<>();
+    paramMap.put("idx", idx);
+    paramMap.put("approve", 3);
+
+    itemStockMapper.updateItemApproval(paramMap);
   }
 }

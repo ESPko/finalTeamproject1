@@ -8,26 +8,27 @@ function TestPage1() {
   const [selectedItem, setSelectedItem] = useState(null); // 선택된 제품
   const [inputQuantity, setInputQuantity] = useState(0); // 입력 수량
   const totalQuantity = selectedItem ? selectedItem.quantity + Number(inputQuantity) : 0;
-  const [selectedDate, setSelectedDate] = useState(''); // 날짜 선택자 상태
-  const [memo, setMemo] = useState(''); // 메모 상태
 
   // 수량 변경 처리
   const handleQuantityChange = (e) => {
     const value = parseInt(e.target.value);
-    if (!isNaN(value)) {
+    if (!isNaN(value) && value >= 0) { // 0 이상일 경우만 수량을 업데이트
       setInputQuantity(value);
     }
   };
 
   // 입고 완료 처리
   const handleComplete = async () => {
-    if (!selectedItem || inputQuantity <= 0 || !selectedDate) {
-      alert("수량을 1 이상 입력하고, 날짜를 선택해주세요.");
-      return;
+
+    // 취소 확인 팝업
+    const isConfirmed = window.confirm("입고를 완료하시겠습니까?");
+
+    if (!isConfirmed) {
+      return; // 사용자가 취소를 클릭하면 함수 종료
     }
 
     try {
-      const updatedQuantity = Number(inputQuantity);
+      const updatedQuantity = selectedItem.quantity + Number(inputQuantity);
 
       // PUT 요청을 보냄
       const response = await axiosInstance.put(
@@ -35,8 +36,7 @@ function TestPage1() {
         {
           ...selectedItem,
           quantity: updatedQuantity,
-          memo: memo || null, // 메모가 비어 있으면 null 전송
-          receivedDate: selectedDate // 날짜 정보 전송
+          approve: 1,
         }
       );
 
@@ -50,11 +50,14 @@ function TestPage1() {
 
         alert(`제품이 ${Number(inputQuantity)}개 입고 완료되었습니다.`);
 
+        // 입고 완료 후 서버에서 최신 데이터 다시 불러오기
+        const refreshedItem = await axios.get(`http://localhost:8080/api/items/${selectedItem.idx}`);
+        setSelectedItem(refreshedItem.data);
+
         // 상태 초기화
         setSelectedItem(null);
         setInputQuantity(0);
-        setSelectedDate('');
-        setMemo('');
+        // setMemo(''); // 메모를 비워도 되므로 주석 처리
       }
     } catch (error) {
       alert("입고 처리 중 오류가 발생했습니다. 다시 시도해주세요.");
@@ -62,8 +65,8 @@ function TestPage1() {
     }
   };
 
-  const isButtonDisabled = !selectedItem || inputQuantity <= 0 || !selectedDate;
-
+  // 버튼 활성화 조건 변경 (날짜 부분을 제외하고 수량과 제품이 있을 때만 활성화)
+  const isButtonDisabled = !selectedItem || inputQuantity <= 0;
 
   return (
     <div className="flex-1 p-6 overflow-y-auto">
@@ -86,9 +89,9 @@ function TestPage1() {
                       <StorageProductSearch
                         selectedItem={selectedItem}
                         onSelect={(item) => {
-                        setSelectedItem(item);
-                        setInputQuantity(0); // 선택 시 수량 초기화
-                      }} />
+                          setSelectedItem(item);
+                          setInputQuantity(0); // 선택 시 수량 초기화
+                        }} />
                     </div>
                     <div className="w-[180px] text-gray-400 justify-center flex mr-[80px]">
                       {selectedItem ? selectedItem.quantity : '-'}
@@ -127,22 +130,6 @@ function TestPage1() {
                       <div>{selectedItem ? selectedItem.vendorName : '입고처'}</div>
                     </div>
                   </div>
-
-                  {/* 날짜 */}
-                  <div className={'w-[305px] h-[36px] flex justify-between mt-[12px]'}>
-                    <StorageDateSelector selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
-                  </div>
-
-                  {/*/!* 메모 (선택 사항) *!/*/}
-                  {/*<div className={'mt-[30px]'}>*/}
-                  {/*  <textarea*/}
-                  {/*    rows={4}*/}
-                  {/*    value={memo}*/}
-                  {/*    onChange={(e) => setMemo(e.target.value)}*/}
-                  {/*    className="w-full border rounded text-sm border-gray-300 p-[8px]"*/}
-                  {/*    placeholder="메모 입력 (선택)"*/}
-                  {/*  />*/}
-                  {/*</div>*/}
 
                   {/* 완료 버튼 */}
                   <div className="pt-[80px]">
