@@ -137,7 +137,7 @@ function EquipmentInformation ()
           {
             console.error('서버 응답 오류:', err.response.data); // 서버에서 반환하는 오류 메시지
           }
-          alert('수정에 실패했습니다.');
+          alert('비품 수정에 실패했습니다.');
         });
     }
     catch (err)
@@ -147,7 +147,29 @@ function EquipmentInformation ()
       {
         console.error('서버 응답 오류:', err.response.data); // 서버에서 반환하는 오류 메시지
       }
-      alert('수정에 실패했습니다.');
+      alert('비품 수정에 실패했습니다.');
+    }
+  };
+
+  const handleDeleteItem = (product) => {
+    // 삭제 확인 메시지
+    const confirmDelete = window.confirm('이 비품을 삭제하시겠습니까?');
+
+    if (confirmDelete) {
+      // 사용자가 "OK"를 클릭하면 삭제 진행
+      axiosInstance.put(`/item/${product.idx}`)
+        .then(() => {
+          alert('비품이 삭제되었습니다.');
+          setDetailModalOpen(false);
+          fetchItems(); // 비품 목록 다시 가져오기
+        })
+        .catch((err) => {
+          alert('삭제 중 오류가 발생했습니다.');
+          console.log(err);
+        });
+    } else {
+      // 사용자가 "취소"를 클릭하면 아무 작업도 하지 않음
+      console.log('비품삭제가 취소되었습니다.');
     }
   };
   
@@ -294,10 +316,9 @@ function EquipmentInformation ()
                 </button>
                 
                 <button
-                  onClick={() => setDetailModalOpen(false)}
+                  onClick={() => handleDeleteItem(selectedProduct)}
                   className="bg-gray-200 text-gray-700 px-4 py-2 rounded"
-                >
-                  닫기
+                >삭제
                 </button>
               </>
             }

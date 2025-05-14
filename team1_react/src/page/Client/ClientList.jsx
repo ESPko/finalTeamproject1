@@ -19,12 +19,12 @@ function ClientList() {
   const fetchClients = () => {
     axiosInstance.get('/vendor/vendorList')
       .then(response => {
-        console.log('클라이언트 목록:', response.data); // 응답 데이터 확인
+        console.log('매입처 목록:', response.data); // 응답 데이터 확인
         setClients(response.data);
         setFilteredClients(response.data); // 초기 데이터 로드 후 필터된 클라이언트 설정
       })
       .catch(error => {
-        console.error('클라이언트 목록 불러오기 오류:', error); // 오류 확인
+        console.error('매입처 목록 불러오기 오류:', error); // 오류 확인
       });
   };
 
@@ -57,6 +57,45 @@ function ClientList() {
     setUpdatedClient(client); // 수정할 값을 초기화
     setClientDetailModal(true);
   };
+
+  // ClientList.js (삭제 로직)
+
+  const handleDeletVendor = (client) => {
+    console.log('매입회사 이름:',client.name);
+    axiosInstance.get(`/item/getVendorItemCount?vendorName=${client.name}`)
+      .then(response => {
+        const itemCount = response.data; // 비품 수
+        console.log(itemCount);
+        if (itemCount > 0) {
+          // 비품이 존재하면 숨기겠다는 확인 메시지
+          if (window.confirm('해당 매입처에 비품이 존재합니다. 삭제하시겠습니까?')) {
+            // 창고 삭제
+            deleteVendor(client);
+          }
+        } else {
+          // 비품이 없다면 바로 창고 삭제
+          if (window.confirm('해당 매입처를 삭제하시겠습니까?')) {
+            deleteVendor(client);
+          }
+        }
+      })
+      .catch(error => console.error('비품 수 조회 오류:', error));
+  };
+
+// 창고 삭제 함수
+  const deleteVendor = (client) => {
+    axiosInstance.delete(`/vendor/${client.idx}`)
+      .then(() => {
+        alert('매입처 삭제 완료되었습니다.');
+        setClientDetailModal(false); // 모달 닫기
+        fetchClients(); // 클라이언트 목록 갱신
+      })
+      .catch(error => {
+        alert('매입처 삭제 중 오류가 발생했습니다.');
+        console.error(error);
+      });
+  };
+
 
   return (
     <div className="flex-1 p-6 overflow-y-auto">
@@ -148,7 +187,7 @@ function ClientList() {
                   onClick={() => {
                     axiosInstance.put(`/vendor/${updatedClient.idx}`, updatedClient)
                       .then(() => {
-                        alert('수정 완료');
+                        alert('매입처 정보가 수정되었습니다.');
                         setClientDetailModal(false);
                         fetchClients();
                       });
@@ -158,20 +197,7 @@ function ClientList() {
                 </button>
                 <button
                   className="bg-red-600 text-white px-4 py-2 rounded"
-                  onClick={() => {
-                    if (window.confirm('정말 삭제하시겠습니까?')) {
-                      axiosInstance.delete(`/vendor/${selectedClient.idx}`)
-                        .then(() => {
-                          alert('삭제 완료');
-                          setClientDetailModal(false);
-                          fetchClients(); // 삭제 후 목록 갱신
-                        })
-                        .catch(error => {
-                          alert('삭제 중 오류가 발생했습니다.');
-                          console.error(error);
-                        });
-                    }
-                  }}
+                  onClick={() => handleDeletVendor(selectedClient)}
                 >
                   삭제
                 </button>

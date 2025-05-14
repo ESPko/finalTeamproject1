@@ -5,6 +5,7 @@
   <select id="getItemList" resultType="bitc.fullstack503.team1_server.dto.ItemDTO">
     select *
     from item
+    WHERE approve IN (1, 3)
     ORDER BY idx DESC
   </select>
   
@@ -32,6 +33,24 @@
     FROM item
     WHERE idx = #{idx}
   </select>
-
-
+<!--    삭제할 창고 이름을 가진 비품 갯수 확인 -->
+    <select id="checkItemsInWarehouse" resultType="int">
+        select COALESCE(COUNT(*), 0)  from item where  warehouse_name = #{warehouseName}
+    </select>
+<!--    삭제할 창고 이름을 가진 비품들 상태(4)로 숨기기 -->
+    <update id="updateHideItemWarehouse">
+        update item
+        set approve = 4
+        where warehouse_name = #{warehouseName}
+    </update>
+<!--    삭제할 매입 회사 이름을 가진 비품 갯수 확인-->
+    <select id="checkItemsInVendor" resultType="int">
+        select COALESCE(COUNT(*), 0)  from item where  vendor_name    = #{vendorName}
+    </select>
+<!--    아이템 삭제(실제로는 숨김)-->
+    <update id="deleteItem">
+        update item
+        set approve = 4
+        where idx = #{idx}
+    </update>
 </mapper>

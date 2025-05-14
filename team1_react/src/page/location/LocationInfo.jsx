@@ -6,27 +6,21 @@ import LocationDetail from './LocationDetail.jsx';
 import axiosInstance  from '../../api/axiosInstance.jsx';
 import { SearchIcon } from 'lucide-react';
 
+
 function LocationInfo() {
   // 서버에서 받아온 위치 목록 상태
   const [locationInfo, setLocationInfo] = useState([]);
-
   // 필터링된 위치 목록 상태
   const [filteredLocationInfo, setFilteredLocationInfo] = useState([]);
-
   // 검색어 상태
   const [searchQuery, setSearchQuery] = useState('');
-
   // 위치추가 모달 상태
   const [localAdd, setLocalAdd] = useState(false);
-
   // 위치상세보기 모달 상태
   const [localDetail, setLocalDetail] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState(null);
-
   const [itemCounts, setItemCounts] = useState({});
-
   const [updatedLocation, setUpdatedLocation] = useState(null);
-
   const [newLocation, setNewLocation] = useState(null);
 
   // 서버에서 데이터 가져오기
@@ -77,7 +71,7 @@ function LocationInfo() {
         setFilteredLocationInfo(res.data); // 갱신 후 필터링된 목록도 다시 업데이트
       })
       .catch((err) => {
-        console.error('위치 목록 불러오기 오류:', err);
+        console.error('창고 위치 목록 불러오기 오류:', err);
       });
   };
 
@@ -86,6 +80,50 @@ function LocationInfo() {
     setUpdatedLocation(location);
     setLocalDetail(true);
   };
+
+  // 비품 수를 확인한 후 삭제 처리 함수
+  const handleDeleteWarehouse = (location) => {
+    axiosInstance.get(`/item/getWarehouseItemCount?warehouseName=${location.name}`)
+      .then(response => {
+        const itemCount = response.data;
+        if (itemCount > 0) {
+          // 비품이 존재하는 경우
+          if (window.confirm('해당 창고에 비품이 존재합니다. 창고를 삭제하시면 관련 비품도 함께 삭제됩니다. 계속하시겠습니까?')) {
+            axiosInstance.put(`/item/hideItemsByWarehouse?warehouseName=${location.name}`)
+              .then(() => {
+                console.log('비품 상태 숨기기 성공');
+                deleteWarehouse(location);  // 비품 숨기기 후 창고 삭제
+              })
+              .catch(error => {
+                console.error('비품 숨기기 오류:', error);
+                alert('비품 상태 숨기기 실패');
+              });
+          } else {
+            console.log('비품 숨기기 취소');
+          }
+        } else {
+          if (window.confirm('해당 창고를 삭제하시겠습니까?')) {
+            deleteWarehouse(location);
+          }
+        }
+      })
+      .catch(error => console.error('비품 수 조회 오류:', error));
+  };
+
+  // 창고 삭제 함수
+  const deleteWarehouse = (location) => {
+    axiosInstance.delete(`/warehouse/${location.idx}`)
+      .then(() => {
+        alert('창고 정보가 성공적으로 삭제되었습니다.');
+        setLocationInfo(prevLocationInfo => prevLocationInfo.filter(item => item.idx !== location.idx));
+        setFilteredLocationInfo(prevFilteredLocationInfo => prevFilteredLocationInfo.filter(item => item.idx !== location.idx));
+      })
+      .catch(error => {
+        console.error('위치 삭제 오류:', error);
+        alert('창고 정보 삭제 실패');
+      });
+  };
+
 
   return (
     <div className="flex-1 p-6 overflow-y-auto">
@@ -99,7 +137,7 @@ function LocationInfo() {
                 onClick={() => setLocalAdd(true)}
                 className="bg-blue-600 text-white px-4 py-2 rounded"
               >
-                위치 추가
+                창고 추가
               </button>
             }
           >
@@ -149,22 +187,7 @@ function LocationInfo() {
                         <button
                           onClick={() => {
                             if (window.confirm('정말 삭제하시겠습니까?')) {
-                              // 삭제 요청을 보낼 idx를 사용
-                              axiosInstance.delete(`/warehouse/${location.idx}`)
-                                .then(() => {
-                                  // 삭제 성공 시, locationInfo 상태에서 해당 항목 제거
-                                  setLocationInfo(prevLocationInfo =>
-                                    prevLocationInfo.filter(item => item.idx !== location.idx)
-                                  );
-                                  setFilteredLocationInfo(prevFilteredLocationInfo =>
-                                    prevFilteredLocationInfo.filter(item => item.idx !== location.idx)
-                                  );
-                                  alert('위치가 성공적으로 삭제되었습니다.');
-                                })
-                                .catch(error => {
-                                  console.error('위치 삭제 오류:', error);
-                                  alert('위치 삭제 실패');
-                                });
+                              handleDeleteWarehouse(location); // 삭제 처리 함수 호출
                             }
                           }}
                           className="px-2 py-1 border rounded text-sm hover:bg-gray-100"
@@ -195,8 +218,8 @@ function LocationInfo() {
                              handleAddLocation();
                            })
                            .catch((error) => {
-                             console.error('위치 수정 실패:', error);
-                             alert('위치 수정 실패');
+                             console.error('창고 추가 실패:', error);
+                             alert('창고 추가 실패');
                            });
                        }}
                        className="bg-blue-600 text-white px-4 py-2 rounded"
@@ -230,8 +253,8 @@ function LocationInfo() {
                         handleAddLocation();  // 위치 목록 갱신
                       })
                       .catch((error) => {
-                        console.error('위치 수정 실패:', error);
-                        alert('위치 수정 실패');
+                        console.error('창고 수정 실패:', error);
+                        alert('창고 정보 수정 실패');
                       });
                   }}
                   className="bg-blue-600 text-white px-4 py-2 rounded"

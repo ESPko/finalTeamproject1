@@ -18,4 +18,6 @@ public interface WarehouseMapper {
     void deleteWarehouse(int idx);
 
     List<WarehouseDTO> getWarehouse();
+
+    String getWarehouseNameByIdx(int idx);
 }
