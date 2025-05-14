@@ -23,11 +23,19 @@ void main() async {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   // 알림 권한 요청 (웹에서는 별도로 권한 허용이 필요 없음)
-  await messaging.requestPermission();
+  if (!kIsWeb) {
+    await messaging.requestPermission();
+  }
 
   // FCM 토큰 가져오기
   final token = await messaging.getToken();
   print("FCM Token: $token");
+
+  // 토큰 갱신 감지
+  messaging.onTokenRefresh.listen((newToken) {
+    print("New FCM Token: $newToken");
+    // 서버로 새로운 토큰 전송
+  });
 
   // 백그라운드 메시지 처리
   FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundHandler);
