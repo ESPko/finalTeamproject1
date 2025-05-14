@@ -47,6 +47,9 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
             } else {
               final item = snapshot.data!;
 
+              // 아이템의 warehouseLocation 값 출력
+              print('아이템 위치: ${item.warehouseLocation}');
+
               return SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
                 child: Column(
@@ -60,11 +63,12 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                           child: Image.network(item.image, height: 250, fit: BoxFit.cover),
                         ),
                       ),
+
                     const SizedBox(height: 30),
 
                     _buildInfoBox(context, '위치 정보', [
-                      _buildInfoRow('',item.warehouseName),
-                      _buildInfoRow('',item.warehouseLocation),
+                      _buildInfoRow('', item.warehouseName),
+                      _buildInfoRow('', item.warehouseLocation),
                     ]),
 
                     _buildInfoBox(context, '아이템 정보', [
@@ -131,5 +135,4 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
       ),
     );
   }
-
 }
