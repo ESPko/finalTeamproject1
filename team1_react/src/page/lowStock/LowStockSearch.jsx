@@ -53,7 +53,7 @@ function LowStockSearch({ items, onSelect }) {
       <button
         type="button"
         onClick={handleSearchClick}
-        className="ml-[10px] h-[36px] w-[50px] border font-semibold border-gray-300 rounded-sm hover:bg-gray-100 shadow-sm text-gray-600"
+        className="ml-[10px] h-[36px] w-[50px] border font-semibold border-gray-300 rounded-sm hover:bg-gray-100 shadow-sm text-gray-500"
       >
         검색
       </button>

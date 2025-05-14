@@ -160,7 +160,7 @@ function EquipmentInformation ()
             actions={
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="bg-blue-600 text-white px-4 py-2 rounded"
+                className="bg-blue-500 font-semibold text-white px-4 py-2 rounded"
               >
                 비품 추가
               </button>
@@ -223,11 +223,11 @@ function EquipmentInformation ()
               </div>
               
               {/* 테이블 */}
-              <table className="w-full table-flex border-collapse">
+              <table className="w-full table-flex border-collapse mt-5">
                 <thead className="bg-white">
-                <tr className="bg-white sticky top-0 z-30 border-b">
+                <tr className="bg-white sticky top-0 z-30 border-b border-gray-200 h-[52px]">
                   <th className="bg-white w-[120px]">사진</th>
-                  <th className="bg-white border-r w-[200px] border-gray-300">비품명</th>
+                  <th className="bg-white border-r w-[200px] border-gray-200">비품명</th>
                   {visibleColumns.category && <th className="w-[180px]">카테고리</th>}
                   {visibleColumns.vendorName && <th className="w-[190px]">매입회사</th>}
                   {visibleColumns.price && <th className="w-[150px]">매입가</th>}
@@ -239,13 +239,13 @@ function EquipmentInformation ()
                 <tbody>
                 {filteredProducts.map((product, idx) => (
                   <tr key={idx} onClick={() => handleRowClick(product)}
-                      className="border-b border-gray-200 cursor-pointer hover:bg-gray-50">
+                      className="border-b border-gray-100 cursor-pointer text-gray-600">
                     <td className="w-[120px] bg-white flex justify-center items-center py-2">
                       {product.image ? (
                         <img
                           src={product.image}
                           alt="비품 이미지"
-                          className="w-[60px] h-[60px] object-cover border rounded-lg"
+                          className="w-[60px] h-[60px] object-cover rounded-sm"
                         />
                       ) : (
                         <div

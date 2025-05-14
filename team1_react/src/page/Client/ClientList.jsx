@@ -67,7 +67,7 @@ function ClientList() {
             actions={
               <button
                 onClick={() => setClientAdd(true)}
-                className="bg-blue-600 text-white px-4 py-2 rounded"
+                className="bg-blue-500 text-white font-semibold px-4 py-2 rounded"
               >
                 매입처 추가
               </button>
@@ -94,9 +94,9 @@ function ClientList() {
               <div className="overflow-auto w-max pretty-scrollbar flex-auto m-3 mt-4 text-center">
                 <table className="min-w-full table-fixed border-collapse">
                   <thead className="bg-white">
-                  <tr className="bg-white sticky top-0 z-30 border-b text-center">
+                  <tr className="bg-white sticky top-0 z-30 border-b border-gray-200 text-center">
                     <th className="py-2 px-4 w-[200px]">이름</th>
-                    <th className="py-2 px-4 w-[200px]">전화번호</th>
+                    <th className="py-2 px-4 w-[200px]">전화 번호</th>
                     <th className="py-2 px-4 w-[240px]">이메일</th>
                     <th className="py-2 px-4 w-[450px]">주소</th>
                     <th className="py-2 px-4 w-[350px]">메모</th>
@@ -105,7 +105,7 @@ function ClientList() {
                   <tbody>
                   {filteredClients.length > 0 ? (
                     filteredClients.map((client) => (
-                      <tr key={client.idx} onClick={() => clientClick(client)} className="border-b border-gray-200 text-center">
+                      <tr key={client.idx} onClick={() => clientClick(client)} className="border-b border-gray-100 text-center text-gray-500">
                         <td className="py-2 px-4 w-[200px]">{client.name}</td>
                         <td className="py-2 px-4 w-[200px]">{client.phone}</td>
                         <td className="py-2 px-4 w-[240px]">{client.email}</td>

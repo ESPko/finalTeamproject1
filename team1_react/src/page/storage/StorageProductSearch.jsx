@@ -39,7 +39,7 @@ function StorageProductSearch({selectedItem, onSelect}) {
   const handleSelect = async (item) => {
     try {
       // 서버에서 최신 정보 다시 가져오기
-      const response = await axios.get(`http://localhost:8080/api/items/${item.idx}`);
+      const response = await axiosInstance.get(`http://localhost:8080/api/items/${item.idx}`);
       const updatedItem = response.data;
 
       setQuery(updatedItem.name); // input에 최신 이름 표시

@@ -108,9 +108,9 @@ function ApprovalPage() {
                     setSelectedApproval(e.target.value)
                     approvalSelect(e.target.value)
                   }}
-                  className= "w-[150px] border border-gray-300 rounded px-3 py-2"
+                  className= "w-[200px] h-[36px] border border-gray-300 rounded px-3 text-sm mr-5"
                 >
-                  {['전체보기','대기','승인','거절'].map((name) => (
+                  {['전체 보기','대기','승인','거절'].map((name) => (
                     <option key={name} value={name}>{name}</option>
                   ))}
                 </select>
@@ -120,11 +120,11 @@ function ApprovalPage() {
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="제품 이름 검색"
-                  className="w-[700px] h-[40px] border border-gray-300 rounded p-[10px] text-sm"
+                  className="w-[440px] h-[36px] border border-gray-300 rounded p-[10px] text-sm"
                 />
                 <button onClick={searchProduct}
                         type={'button'}
-                        className={'ml-[10px] h-[40px] w-[50px] border font-semibold border-gray-300 rounded-sm hover:bg-gray-100 shadow-sm text-gray-600'}>검색
+                        className={'ml-[10px] h-[36px] w-[50px] border font-semibold border-gray-300 rounded-sm hover:bg-gray-100 shadow-sm text-gray-500'}>검색
                 </button>
               </div>
             </div>

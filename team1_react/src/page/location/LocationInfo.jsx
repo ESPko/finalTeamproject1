@@ -97,7 +97,7 @@ function LocationInfo() {
             actions={
               <button
                 onClick={() => setLocalAdd(true)}
-                className="bg-blue-600 text-white px-4 py-2 rounded"
+                className="bg-blue-500 shadow font-semibold text-white w-[86px] h-[36px] rounded"
               >
                 위치 추가
               </button>
@@ -124,7 +124,7 @@ function LocationInfo() {
               <div className="overflow-auto w-max pretty-scrollbar flex-auto m-3 mt-4 text-center">
                 <table className="w-full table-fiex border-collapse">
                   <thead className="bg-white">
-                  <tr className="bg-white sticky top-0 z-30 border-b text-center">
+                  <tr className="bg-white sticky top-0 z-30 border-b border-gray-200 text-center">
                     <th className="py-2 px-4 w-[200px]">이름</th>
                     <th className="py-2 px-4 w-[400px]">주소</th>
                     <th className="py-2 px-4 w-[200px]">재고 수량</th>
@@ -134,15 +134,15 @@ function LocationInfo() {
                   </thead>
                   <tbody>
                   {filteredLocationInfo.map((location) => (
-                    <tr key={location.idx} className="border-b border-gray-200 text-center">
+                    <tr key={location.idx} className="border-b border-gray-100 text-center text-gray-500">
                       <td className="py-2 px-4 w-[200px]">{location.name}</td>
                       <td className="py-2 px-4 w-[400px]">{location.location}</td>
-                      <td className="py-2 px-4 w-[200px]">{itemCounts[location.name]}</td>
+                      <td className="py-2 px-4 w-[200px] text-black">{itemCounts[location.name]}</td>
                       <td className="py-2 px-4 w-[440px]">{location.memo}</td>
                       <td className="py-2 px-4 w-[250px] text-right space-x-2">
                         <button
                           onClick={() => locationClick(location)}
-                          className="px-2 py-1 border rounded text-sm hover:bg-gray-100"
+                          className="px-2 py-1 border border-gray-200 shadow text-gray-400 font-semibold rounded text-sm hover:bg-gray-200"
                         >
                           수정
                         </button>
@@ -167,7 +167,7 @@ function LocationInfo() {
                                 });
                             }
                           }}
-                          className="px-2 py-1 border rounded text-sm hover:bg-gray-100"
+                          className="px-2 py-1 border border-gray-200 shadow font-semibold text-gray-400 rounded text-sm hover:bg-gray-200"
                         >
                           삭제
                         </button>
