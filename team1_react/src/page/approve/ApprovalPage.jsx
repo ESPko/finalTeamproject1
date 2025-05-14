@@ -1,21 +1,28 @@
 import Topline from '../../components/layout/Topline.jsx';
 import { useEffect, useState } from 'react';
-import axiosInstance  from '../../api/axiosInstance.jsx';
 import ApproveItemList from './ApproveItemList.jsx';
+import axiosInstance from '../../api/axiosInstance.jsx';
 
 
 function ApprovalPage() {
   const [approveProduct, setApproveProduct] = useState([]);
   const [search, setSearch] = useState(``)
   const [filteredProducts,setFilteredProducts] = useState(approveProduct)
+  const [selectedApproval, setSelectedApproval] = useState('전체보기')
 
+  const approvalMap ={
+    '전체보기': null,
+    '대기': 0,
+    '승인': 1,
+    '거절': 2,
+  };
 
   // 저장된 승인 목록들 불러오기
   useEffect(() => {
     axiosInstance.get('/approve')
 
       .then(res => {
-        const mappedData = res.data.map((ap) => ({
+        const mappedData = res.data.map((ap, index) => ({
           idx: ap.idx,
           time: ap.time,
           image: ap.image,
@@ -28,20 +35,30 @@ function ApprovalPage() {
           approve: ap.approve,
         }));
         setApproveProduct(mappedData);
+        setFilteredProducts(mappedData)
       })
       .catch(err => {
         console.error(err);
       });
   }, []);
 
-  // 검색
-  useEffect(() => {
-    setFilteredProducts(approveProduct);
-  }, [approveProduct]);
-
-  const changSearch = (e) =>{
-    setSearch(e.target.value);
+  // 드롭 다운 메뉴 변경
+  const approvalSelect = (value) => {
+    setSelectedApproval(value);
   };
+
+  // 검색 필터링
+  useEffect(() => {
+    const approvalValue = approvalMap[selectedApproval];
+
+    const filtered = approveProduct.filter(product => {
+      const matchApproval = approvalValue === null || product.approve === approvalValue ;
+      const matchSearch = product.name.toLowerCase().includes(search.toLowerCase())
+      return matchApproval && matchSearch
+    })
+    setFilteredProducts(filtered);
+  }, [approveProduct, selectedApproval,search]);
+
 
   // 이름 끝까지 다 안치고 일부분만 쳐도 결과가 나오게 함
   const searchProduct = () =>{
@@ -54,9 +71,9 @@ function ApprovalPage() {
     const token = localStorage.getItem('token');
 
     axiosInstance.put('/updateApprove', {
-      idx: idx,
-      approve: approveStatus,
-    },
+        idx: idx,
+        approve: approveStatus,
+      },
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -81,27 +98,42 @@ function ApprovalPage() {
           <Topline
             title="승인목록"
           >
-            <div className=" mt-[40px]">
-              <div>
+            <div className=" mt-[40px] ">
+              <div className="flex w-full h-[40px]">
+
+                {/*승인 여부 검색용 드롭다운 메뉴*/}
+                <select
+                  value={selectedApproval}
+                  onChange={(e) => {
+                    setSelectedApproval(e.target.value)
+                    approvalSelect(e.target.value)
+                  }}
+                  className= "w-[150px] border border-gray-300 rounded px-3 py-2"
+                >
+                  {['전체보기','대기','승인','거절'].map((name) => (
+                    <option key={name} value={name}>{name}</option>
+                  ))}
+                </select>
+
                 <input
                   type="text"
                   value={search}
-                  onChange={changSearch}
+                  onChange={(e) => setSearch(e.target.value)}
                   placeholder="제품 이름 검색"
-                  className="w-[300px] h-[36px] border border-gray-300 rounded p-[10px] text-sm"
+                  className="w-[700px] h-[40px] border border-gray-300 rounded p-[10px] text-sm"
                 />
                 <button onClick={searchProduct}
                         type={'button'}
-                        className={'ml-[10px] h-[36px] w-[50px] border font-semibold border-gray-300 rounded-sm hover:bg-gray-100 shadow-sm text-gray-600'}>검색
+                        className={'ml-[10px] h-[40px] w-[50px] border font-semibold border-gray-300 rounded-sm hover:bg-gray-100 shadow-sm text-gray-600'}>검색
                 </button>
               </div>
             </div>
 
-           {/* 승인 목록 리스트 컴포넌트*/}
-           <ApproveItemList
-             approveProduct={filteredProducts}
-             changeApprove={changeApprove}
-           />
+            {/* 승인 목록 리스트 컴포넌트*/}
+            <ApproveItemList
+              approveProduct={filteredProducts}
+              changeApprove={changeApprove}
+            />
           </Topline>
         </div>
       </div>
