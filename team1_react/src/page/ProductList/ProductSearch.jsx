@@ -6,6 +6,7 @@ import ProductListDetail from './ProductSearchDetail.jsx';
 import Topline from '../../components/layout/Topline.jsx';
 import { SearchIcon } from 'lucide-react';
 import axiosInstance  from '../../api/axiosInstance.jsx';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -62,6 +63,8 @@ function ProductSearch() {
     setFilteredProducts(filtered)
     setSelectedProduct(null)
   }
+
+  const navigate = useNavigate();
 
   return (
     <div className=" flex-1 p-6 overflow-y-auto">
@@ -131,6 +134,9 @@ function ProductSearch() {
             </div>
 
           </Topline>
+          <button
+            onClick={() => navigate('/')}
+            className={"bg-gray-500 text-white rounded p-2 hover:cursor-pointer"}>메인 화면 가기</button>
 
         </div>
       </div>

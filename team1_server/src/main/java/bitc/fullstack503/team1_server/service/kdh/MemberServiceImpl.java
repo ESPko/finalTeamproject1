@@ -2,8 +2,10 @@ package bitc.fullstack503.team1_server.service.kdh;
 
 import bitc.fullstack503.team1_server.dto.UserDTO;
 import bitc.fullstack503.team1_server.mapper.kdh.MemberMapper;
+import bitc.fullstack503.team1_server.mapper.son.TransactionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -53,8 +55,12 @@ public class MemberServiceImpl implements MemberService {
 //    }
 //  }
 
+  @Transactional
   @Override
   public boolean deleteMember(UserDTO userDTO) {
+    System.out.println("삭제 요청한 유저 ID: " + userDTO.getId());
+    System.out.println("삭제 요청한 유저 IDX: " + userDTO.getIdx());
+    memberMapper.deleteTransactionsByUserId(userDTO.getId());
     return memberMapper.deleteMember(userDTO);
   }
 }
