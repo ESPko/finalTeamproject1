@@ -61,25 +61,6 @@ public class MemberController {
     }
   }
 
-//  @PutMapping("/updateMember")
-//  public UserDTO updateMember(@RequestBody UserDTO userDTO){
-//
-//    return memberService.updateMember(userDTO);
-//  }
-
-//  @PutMapping("/updateMember")
-//  public ResponseEntity<?> updateMember(@RequestBody UserDTO userDTO){
-//    try{
-//      System.out.println("업댓할 정보"+userDTO);
-//      UserDTO updated = memberService.updateMember(userDTO);
-//      return ResponseEntity.ok(updated);
-//    }
-//    catch (Exception e){
-//      e.printStackTrace();
-//      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("업데이트 실패함:  "+ e.getMessage());
-//    }
-//  }
-
   @DeleteMapping("/deleteMember")
   public UserDTO deleteMember(@RequestBody UserDTO userDTO){
     boolean result = memberService.deleteMember(userDTO);

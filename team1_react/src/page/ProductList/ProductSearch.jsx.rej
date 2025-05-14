@@ -1,0 +1,11 @@
+diff a/team1_react/src/page/ProductList/ProductSearch.jsx b/team1_react/src/page/ProductList/ProductSearch.jsx	(rejected hunks)
+@@ -134,9 +134,6 @@
+             </div>
+ 
+           </Topline>
+-          <button
+-            onClick={() => navigate('/')}
+-            className={"bg-gray-500 text-white rounded p-2 hover:cursor-pointer"}>메인 화면 가기</button>
+ 
+         </div>
+       </div>
