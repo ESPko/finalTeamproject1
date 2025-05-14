@@ -115,7 +115,7 @@ public class ItemController
         imageUrl = itemService.uploadImage (image);
       }
       // transaction 용 before quantity 값 받아오기
-      int before = transactionService.selectItemQuantity (idx);
+      int before = transactionService.selectItemQuantityByIdx (idx);
       // 수정할 제품 정보 설정
       ItemDTO itemDTO = new ItemDTO ();
       itemDTO.setIdx (idx);
@@ -128,7 +128,7 @@ public class ItemController
       itemDTO.setImage (imageUrl);
       itemDTO.setQuantity (quantityInt);
       itemService.updateItem (idx, itemDTO, imageUrl);  // DB에 업데이트
-      int after = transactionService.selectItemQuantity (idx);
+      int after = transactionService.selectItemQuantityByIdx (idx);
       if (before != after)
       {
         TransactionDTO transactionDTO = new TransactionDTO ();

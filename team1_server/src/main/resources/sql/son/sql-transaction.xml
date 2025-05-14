@@ -7,10 +7,10 @@
     values (#{itemIdx}, #{userId}, #{transaction}, #{before}, #{after})
   </insert>
   
-  <select id="selectItemQuantity" parameterType="int" resultType="int">
+  <select id="selectItemQuantityByIdx" parameterType="int" resultType="int">
     select quantity
     from item
-    where idx = #{itemIdx}
+    where idx = #{idx}
   </select>
   
   <select id="selectItemIdxByImage" parameterType="bitc.fullstack503.team1_server.dto.ItemDTO" resultType="int">

@@ -1,25 +1,24 @@
-import { useEffect, useState, useCallback, useMemo } from 'react';
-import InventoryNavigation from '../../../components/sdh/navi/InventoryNavigation.jsx';
+import { useEffect, useState, useMemo } from 'react';
 import Topline from '../../../components/layout/Topline.jsx';
+import InventoryNavigation from '../../../components/sdh/navi/InventoryNavigation.jsx'; // 원본 컴포넌트
 import InventoryTableBody from '../../../components/sdh/inventory/InventoryTableBody.jsx';
-import axiosInstance from '../../../api/axiosInstance'; // ✅ 확장자 .jsx 제거 권장
+import axiosInstance from '../../../api/axiosInstance'; // ✅ axiosInstance 사용
 
 function InventoryPage ()
 {
-  const [products, setProducts] = useState([]);
-  const [selectedLocations, setSelectedLocations] = useState([]);
-  const [selectedCorrespondents, setSelectedCorrespondents] = useState([]);
-  const [tags, setTags] = useState([]);
-  
+  const [selectedLocations, setSelectedLocations] = useState([]); // 위치 선택
+  const [selectedCorrespondents, setSelectedCorrespondents] = useState([]); // 거래처 선택
   const [startDate, setStartDate] = useState(() => {
-    const d = new Date();
-    d.setDate(d.getDate() - 6);
-    return d;
+    const date = new Date();
+    date.setDate(date.getDate() - 6); // 기본 시작일: 6일 전
+    return date;
   });
+  const [endDate, setEndDate] = useState(new Date()); // 기본 종료일: 현재 날짜
+  const [tags, setTags] = useState([]); // 태그 선택
+  const [products, setProducts] = useState([]); // 제품 데이터
   
-  const [endDate, setEndDate] = useState(() => new Date());
-  
-  const formatDate = useCallback((date, isStart = true) => {
+  // 날짜 포맷을 맞추기 위한 함수
+  const formatDate = useMemo(() => (date, isStart = true) => {
     const yyyy = date.getFullYear();
     const mm = String(date.getMonth() + 1).padStart(2, '0');
     const dd = String(date.getDate()).padStart(2, '0');
@@ -27,27 +26,43 @@ function InventoryPage ()
     return `${yyyy}-${mm}-${dd} ${hhmmss}`;
   }, []);
   
-  const requestBody = useMemo(() => ({
-    tags,
-    selectedLocations,
-    selectedCorrespondents,
-    startDate: formatDate(startDate, true),
-    endDate: formatDate(endDate, false),
-  }), [tags, selectedLocations, selectedCorrespondents, startDate, endDate, formatDate]);
-  
-  const fetchInventoryData = useCallback(() => {
-    axiosInstance.post('/api/inventory/search', requestBody)
-      .then(res => {
-        setProducts(res.data);
-      })
-      .catch(err => {
-        console.error('Axios 요청 실패:', err);
-      });
-  }, [requestBody]);
-  
+  // 데이터 요청을 위한 바디 객체 생성
   useEffect(() => {
-    fetchInventoryData();
-  }, [fetchInventoryData]);
+    const fetchInventoryData = async () => {
+      const formattedStart = formatDate(startDate, true);
+      const formattedEnd = formatDate(endDate, false);
+      
+      const requestBody = {
+        tags,
+        selectedLocations,
+        selectedCorrespondents,
+        startDate: formattedStart,
+        endDate: formattedEnd,
+      };
+      
+      try
+      {
+        const response = await axiosInstance.post('/api/inventory/search', requestBody); // axios 요청
+        setProducts(response.data);
+      }
+      catch (error)
+      {
+        console.error('Axios 요청 실패:', error);
+      }
+    };
+    
+    // 필터 조건이 있을 경우에만 요청
+    if (
+      tags.length ||
+      selectedLocations.length ||
+      selectedCorrespondents.length ||
+      startDate ||
+      endDate
+    )
+    {
+      fetchInventoryData();
+    }
+  }, [tags, selectedLocations, selectedCorrespondents, startDate, endDate, formatDate]);
   
   return (
     <div className="flex-1 p-6 overflow-y-auto">

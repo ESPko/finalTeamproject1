@@ -19,9 +19,9 @@ public class TransactionServiceImpl implements TransactionService
   }
   
   @Override
-  public int selectItemQuantity (int itemIdx)
+  public int selectItemQuantityByIdx (int itemIdx)
   {
-    return transactionMapper.selectItemQuantity (itemIdx);
+    return transactionMapper.selectItemQuantityByIdx (itemIdx);
   }
   
   @Override

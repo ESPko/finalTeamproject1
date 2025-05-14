@@ -57,7 +57,9 @@ public class ItemController
       itemDTO.setCode (code);
       itemService.addItem (itemDTO, imageUrl);
       // qr 넣기
-      int itemIdx = transactionService.selectItemIdxByImage (imageUrl);
+      ItemDTO itemDTO2 = new ItemDTO ();
+      itemDTO2.setImage (imageUrl);
+      int itemIdx = transactionService.selectItemIdxByImage (itemDTO2);
       String qr = itemIdx + "/" + code;
       ItemDTO itemDTO1 = new ItemDTO ();
       itemDTO1.setIdx (itemIdx);
