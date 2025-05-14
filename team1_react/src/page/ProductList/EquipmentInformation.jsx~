@@ -116,7 +116,7 @@ function EquipmentInformation ()
     formData.append('price', updateProduct.price);
     formData.append('standard', updateProduct.standard);
     formData.append('image', updateProduct.image);
-    formData.append('userId', user.id);
+    formData.append('nickName', user.id);
     
     try
     {

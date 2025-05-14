@@ -1,0 +1,13 @@
+package bitc.fullstack503.team1_server.service.son;
+import bitc.fullstack503.team1_server.dto.ItemDTO;
+import bitc.fullstack503.team1_server.dto.TransactionDTO;
+public interface TransactionService
+{
+  void insertTransaction (TransactionDTO transactionDTO);
+  
+  int selectItemQuantity (int itemIdx);
+  
+  int selectItemIdxByImage (String image);
+  
+  void insertItemQrByIdx (ItemDTO itemDTO);
+}
