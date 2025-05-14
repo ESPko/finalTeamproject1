@@ -14,11 +14,26 @@ function LowStockPage() {
   });
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/lowstock')
-      .then((response) => response.json())
-      .then((data) => {
+    axios.get('http://localhost:8080/api/lowstock')
+      .then((response) => {
+        const data = response.data;
+
         setLowStockItems(data);
-        setFilteredItems(data); // 기본적으로 전체 항목 표시
+        setFilteredItems(data); // 전체 목록 초기 표시
+
+        // 로컬스토리지에서 기존 발주 정보 가져오기
+        const stored = JSON.parse(localStorage.getItem('orderedItems') || '{}');
+        const updatedOrdered = {};
+
+        // 서버에서 approve 상태가 3인 것만 유지
+        data.forEach(item => {
+          if (item.approve === 3 && stored[item.idx]) {
+            updatedOrdered[item.idx] = true;
+          }
+        });
+
+        setOrderedItems(updatedOrdered);
+        localStorage.setItem('orderedItems', JSON.stringify(updatedOrdered));
       })
       .catch((error) => {
         console.error('Error fetching low stock items:', error);
@@ -124,10 +139,10 @@ function LowStockPage() {
                     <button
                       type="button"
                       className={`border shadow border-gray-200 rounded-sm h-[36px] px-1
-      ${orderedItems[item.idx]
+                        ${orderedItems[item.idx] && item.approve === 3
                         ? 'text-gray-300'
                         : 'text-gray-400 font-semibold hover:bg-gray-200'}`}
-                      disabled={orderedItems[item.idx]}
+                      disabled={orderedItems[item.idx] && item.approve === 3}
                       onClick={() => handleApply(item.idx)}
                     >
                       발주 완료
@@ -135,7 +150,7 @@ function LowStockPage() {
                   </div>
 
                   <div className="col-span-1 flex items-center justify-center">
-                    {orderedItems[item.idx] && (
+                    {orderedItems[item.idx] && item.approve ===3 && (
                       <div className="text-gray-400 font-semibold cursor-pointer"
                       onClick={() => window.location.href = '/test2'}
                       >
