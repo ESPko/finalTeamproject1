@@ -19,7 +19,7 @@
     where image = #{image}
   </select>
   
-  <insert id="insertItemQrByIdx" parameterType="bitc.fullstack503.team1_server.dto.Item">
+  <insert id="insertItemQrByIdx" parameterType="bitc.fullstack503.team1_server.dto.ItemDTO">
     insert into item (qr)
     values (#{qr}) where idx = #{itemIdx}
   </insert>

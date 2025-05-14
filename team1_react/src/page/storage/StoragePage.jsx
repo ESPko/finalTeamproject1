@@ -1,7 +1,6 @@
 import Topline from '../../components/layout/Topline.jsx';
 import StorageProductSearch from './StorageProductSearch.jsx';
 import { useState } from 'react';
-import StorageDateSelector from './StorageDateSelector.jsx';
 import axiosInstance from '../../api/axiosInstance.jsx';
 
 function TestPage1() {

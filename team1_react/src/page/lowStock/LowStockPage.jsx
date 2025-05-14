@@ -1,8 +1,5 @@
 import { useEffect, useState, useMemo } from 'react';
 import Topline from '../../components/layout/Topline.jsx';
-import { useEffect, useState } from 'react';
-import LowStockSearch from './LowStockSearch';
-import axios from 'axios'; // 컴포넌트 추가
 import LowStockSearch from './LowStockSearch';
 import axiosInstance from '../../api/axiosInstance'; // axiosInstance 사용
 
