@@ -17,7 +17,7 @@ public class LoginController {
 
     @GetMapping({"", "/"})
     public Object index() {
-        return "Board API Server 접속";
+        return "Test API Server 접속";
     }
 
     @PostMapping("/login")

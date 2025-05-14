@@ -9,7 +9,7 @@ function AxiosTest ()
   const [token, setToken] = useState(localStorage.getItem('token') || '');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  
+
   // 로그인 요청
   const handleLogin = async () => {
     try
@@ -18,7 +18,7 @@ function AxiosTest ()
         id: username,
         pass: password,
       });
-      
+
       const receivedToken = response.data.token;
       setToken(receivedToken);
       localStorage.setItem('token', receivedToken);
@@ -29,13 +29,13 @@ function AxiosTest ()
       console.error('Login failed:', error);
     }
   };
-  
+
   // 로그아웃 처리
   const handleLogout = () => {
     setToken('');
     localStorage.removeItem('token');
   };
-  
+
   // 스프링 서버와 통신 테스트(토큰없음)
   const sendDataTest = () => {
     axios.get('http://localhost:8080/api')
@@ -48,12 +48,12 @@ function AxiosTest ()
         console.log(err);
       });
   };
-  
+
   // 스프링 서버와 통신 테스트(토큰있음)
   const sendDataTokenTest = () => {
     const token = localStorage.getItem('token'); // 토큰 가져오기
     console.log('보낼 토큰:', token); // 디버깅용 로그
-    
+
     axios.get('http://localhost:8080/api', {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -68,9 +68,9 @@ function AxiosTest ()
         console.log(err);
       });
   };
-  
+
   return (
-    
+
     <div style={{ padding: '20px' }}>
       <h1>토큰 : {token}</h1>
       <button type={'button'} className={'bg-red-400 btn btn-secondary me-2'} onClick={sendDataTest}>Spring RestAPI 서버
@@ -104,10 +104,10 @@ function AxiosTest ()
             onChange={(e) => setPassword(e.target.value)}
           /><br />
           <button onClick={handleLogin}>로그인</button>
-          
+
           <button type={'button'} className={'btn btn-secondary me-2'} onClick={sendDataTest}>Spring RestAPI 서버 접속 테스트
           </button>
-        
+
         </div>
       )}
     </div>

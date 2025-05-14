@@ -13,7 +13,7 @@ public class JwtUtil {
     // 이 키는 64바이트 이상이어야 합니다. 예: "my-very-long-secret-key-that-is-at-least-64-bytes-long-1234567890-ABCDEFG"
     private final String secret = "my-very-long-secret-key-that-is-at-least-64-bytes-long-1234567890-ABCDEFG";
 
-    private final long expiration = 36000000L; // 10시간
+    private final long expiration = 3600000L; // 10시간
 
     // 토큰 생성
     public String generateToken(String username) {
