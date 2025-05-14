@@ -57,12 +57,14 @@ public class ItemController
       itemDTO.setCode (code);
       itemService.addItem (itemDTO, imageUrl);
       // qr 넣기
-      int itemIdx = transactionService.selectItemIdxByImage (imageUrl);
+      ItemDTO itemDTO2 = new ItemDTO ();
+      itemDTO2.setImage (imageUrl);
+      int itemIdx = transactionService.selectItemIdxByImage (itemDTO2);
       String qr = itemIdx + "/" + code;
       ItemDTO itemDTO1 = new ItemDTO ();
       itemDTO1.setIdx (itemIdx);
       itemDTO1.setQr (qr);
-      transactionService.insertItemQrByIdx (itemDTO1);
+      transactionService.updateItemQrByIdx (itemDTO1);
       return ResponseEntity.ok (Map.of ("message", "비품이 성공적으로 추가되었습니다.", "imageUrl", imageUrl));
     }
     catch (IOException e)
