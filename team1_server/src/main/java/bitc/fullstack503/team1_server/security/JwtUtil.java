@@ -13,16 +13,30 @@ public class JwtUtil {
     // 이 키는 64바이트 이상이어야 합니다. 예: "my-very-long-secret-key-that-is-at-least-64-bytes-long-1234567890-ABCDEFG"
     private final String secret = "my-very-long-secret-key-that-is-at-least-64-bytes-long-1234567890-ABCDEFG";
 
-    private final long expiration = 3600000L; // 10시간
+    private final long accessTokenExpiration = 3600000L;       // 1시간
+    private final long refreshTokenExpiration = 604800000L;    // 7일
 
-    // 토큰 생성
-    public String generateToken(String username) {
+
+    public String generateAccessToken(String username) {
         return Jwts.builder()
-          .setSubject(username)
-          .setIssuedAt(new Date())
-          .setExpiration(new Date(System.currentTimeMillis() + expiration))
-          .signWith(Keys.hmacShaKeyFor(secret.getBytes()), SignatureAlgorithm.HS512) // Secret key 64바이트 사용
-          .compact();
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + accessTokenExpiration))
+                .signWith(Keys.hmacShaKeyFor(secret.getBytes()), SignatureAlgorithm.HS512)
+                .compact();
+    }
+
+    public String generateRefreshToken(String username) {
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + refreshTokenExpiration))
+                .signWith(Keys.hmacShaKeyFor(secret.getBytes()), SignatureAlgorithm.HS512)
+                .compact();
+    }
+
+    public Date getRefreshTokenExpiryDate() {
+        return new Date(System.currentTimeMillis() + refreshTokenExpiration);
     }
 
     // 토큰 검증

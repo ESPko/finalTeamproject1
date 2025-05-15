@@ -1,14 +1,12 @@
-import React from "react";
-import { Navigate } from "react-router-dom";
+import { useAuth } from '../contexts/AuthContext';
+import { Navigate } from 'react-router-dom';
 
-const ProtectedRoute = ({ children }) => {
-  const token = localStorage.getItem("token");
+export default function ProtectedRoute({ children }) {
+  const { token, loading } = useAuth();
 
-  if (!token) {
-    return <Navigate to="/login" replace />;
+  if (loading) {
+    return <div>로딩 중...</div>; // ✅ 로딩 중일 때 기다림
   }
 
-  return children;
-};
-
-export default ProtectedRoute;
+  return token ? children : <Navigate to="/login" />;
+}
