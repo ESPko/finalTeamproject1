@@ -50,7 +50,8 @@ public class SecurityConfig {
           "http://localhost:*",              // Flutter/React 개발용 (모든 포트)
           "http://127.0.0.1:*",              // 추가적으로 로컬 호스트 IP 대응
           "http://10.0.2.2:*",               // Android Emulator
-          "http://10.100.203.16:*"           // 실기기 접속용 서버 IP
+          "http://10.100.203.16:*",           // 실기기 접속용 서버 IP
+          "http://3.39.53.78:*"
         ));
 
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));

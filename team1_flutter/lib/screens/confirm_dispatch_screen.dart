@@ -42,7 +42,18 @@ class _ConfirmDispatchDialogState extends State<ConfirmDispatchDialog> {
       }
 
       final itemUrl = '${uri.origin}/api/items/$id';
-      final response = await http.get(Uri.parse(itemUrl));
+
+      // 🔐 토큰 추가
+      final token = await ApiService().getTokenFromSharedPreferences();
+      if (token == null) throw Exception('토큰이 없습니다. 다시 로그인해주세요.');
+
+      final response = await http.get(
+        Uri.parse(itemUrl),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
 
       if (response.statusCode == 200) {
         final decoded = utf8.decode(response.bodyBytes);
@@ -55,6 +66,7 @@ class _ConfirmDispatchDialogState extends State<ConfirmDispatchDialog> {
       throw Exception('QR URL 처리 중 오류 발생: $e');
     }
   }
+
 
   Future<void> dispatchQuantity(int quantityToSubtract) async {
     final apiService = ApiService();
