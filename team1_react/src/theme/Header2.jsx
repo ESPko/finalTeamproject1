@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext.jsx';
 import { FiUser } from '@react-icons/all-files/fi/FiUser.js';
 import { useState } from 'react';
 
-function Header2({toggleLayout }) {
+function Header2({ toggleLayout }) {
   const { user } = useAuth();
   const [token, setToken] = useState(localStorage.getItem('token') || '');
 
@@ -15,14 +15,19 @@ function Header2({toggleLayout }) {
   };
 
   return (
-    <header className="flex items-center justify-between border-b border-gray-100 bg-[#ffffff] h-16 px-6">
+    <header
+      className="flex items-center justify-between border-b border-gray-100 bg-white h-16 px-6"
+      style={{ height: '64px', minHeight: '64px', maxHeight: '64px', overflow: 'hidden' }}>
       <Link to="/" className="!text-[#9379db] text-2xl font-bold tracking-wide">
         JAEGOHAE
       </Link>
+
+
       <div className="flex items-center space-x-4">
         <HeaderIcons2 onToggleTheme={toggleLayout} />
 
-        <div className="flex items-center space-x-2 backdrop-blur bg-white/5 px-3 py-1.5 rounded-full text-white text-sm font-medium shadow hover:bg-black/3 transition-colors duration-300">
+        <div
+          className="flex items-center space-x-2 backdrop-blur bg-white/5 px-3 py-1.5 rounded-full text-white text-sm font-medium shadow hover:bg-black/3 transition-colors duration-300">
           <FiUser
             className={`${
               user?.position === 0

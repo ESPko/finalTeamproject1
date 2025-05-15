@@ -126,20 +126,32 @@ function TestPage1 ()
                 
                 <div className={'mt-[20px]'}>
                   {/* 위치 */}
-                  <div className={'w-[305px] h-[36px] flex justify-between'}>
+                  {/* 위치 */}
+                  <div className="w-[305px] h-[36px] flex justify-between">
                     <label className="block font-semibold">위치</label>
-                    <div className="w-[220px] border border-gray-300 rounded text-gray-400 items-center justify-center flex font-semibold text-sm">
-                      <div>{selectedItem ? selectedItem.warehouseName : '위치'}</div>
+                    <div className="w-[220px] border border-gray-300 rounded text-gray-400 flex items-center px-2 font-semibold text-sm">
+                      <div
+                        className="overflow-hidden text-ellipsis whitespace-nowrap w-full"
+                        title={selectedItem ? selectedItem.warehouseName : '위치'}
+                      >
+                        {selectedItem ? selectedItem.warehouseName : '위치'}
+                      </div>
                     </div>
                   </div>
                   
                   {/* 입고처 */}
-                  <div className={'w-[305px] h-[36px] flex justify-between mt-[12px]'}>
+                  <div className="w-[305px] h-[36px] flex justify-between mt-[12px]">
                     <label className="block font-semibold">입고처</label>
-                    <div className="w-[220px] border border-gray-300 rounded text-gray-400 items-center justify-center flex font-semibold text-sm">
-                      <div>{selectedItem ? selectedItem.vendorName : '입고처'}</div>
+                    <div className="w-[220px] border border-gray-300 rounded text-gray-400 flex items-center px-2 font-semibold text-sm">
+                      <div
+                        className="overflow-hidden text-ellipsis whitespace-nowrap w-full"
+                        title={selectedItem ? selectedItem.vendorName : '입고처'}
+                      >
+                        {selectedItem ? selectedItem.vendorName : '입고처'}
+                      </div>
                     </div>
                   </div>
+<<<<<<< HEAD
                   
                   {/* 카테 고리 */}
                   <div className={'w-[305px] h-[36px] flex justify-between mt-[12px]'}>
@@ -147,6 +159,19 @@ function TestPage1 ()
                     <div className="w-[220px] border border-gray-300 rounded text-gray-400 items-center justify-center flex font-semibold text-sm">
                       <div>{selectedItem ? selectedItem.category : '카테 고리'}</div>
                     </div>
+=======
+
+
+                  {/* 완료 버튼 */}
+                  <div className="pt-[80px]">
+                    <button
+                      onClick={handleComplete}
+                      disabled={isButtonDisabled}
+                      className={`w-[86px] h-[36px] rounded-sm text-sm font-semibold ${isButtonDisabled ? 'bg-gray-100 text-gray-400 shadow cursor-default' : 'bg-gray-100 shadow text-gray-500 font-semibold text-sm hover:bg-gray-200'}`}
+                    >
+                      입고 완료
+                    </button>
+>>>>>>> origin/y3
                   </div>
                 </div>
                 
