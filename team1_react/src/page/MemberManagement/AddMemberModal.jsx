@@ -71,7 +71,8 @@ function AddMemberModal({isOpen, onClose, onAdd}) {
             type="text"
             value={userId}
             onChange={(e) => setUserId(e.target.value)}
-            placeholder={'ID를 입력하세요'}
+            placeholder={'ID를 입력하세요 (최대 10글자)'}
+            maxLength={10}
             className="w-full border rounded px-3 py-2"/>
         </div>
 

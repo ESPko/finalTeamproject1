@@ -1,0 +1,15 @@
+diff a/team1_server/src/main/java/bitc/fullstack503/team1_server/service/kdh/MainPageServiceImpl.java b/team1_server/src/main/java/bitc/fullstack503/team1_server/service/kdh/MainPageServiceImpl.java	(rejected hunks)
+@@ -45,11 +45,6 @@
+     result.put("totalInput", totalInput); //입고 수량
+     result.put("totalOutput", totalOutput); //출고 수량
+     return result;
+-  }
+ 
+-  @Override
+-  public List<ItemDTO> inputRequestList() {
+-    return mainPageMapper.inputRequestList();
+   }
+-
+-}
+\ No newline at end of file
++}

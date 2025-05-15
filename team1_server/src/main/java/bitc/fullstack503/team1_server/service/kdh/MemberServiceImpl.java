@@ -37,23 +37,6 @@ public class MemberServiceImpl implements MemberService {
       throw new RuntimeException("업데이트 실패");
     }
   }
-//  @Override
-//  public UserDTO updateMember(UserDTO userDTO) {
-//    return memberMapper.updateMember(userDTO);
-//  }
-
-
-//  @Override
-//  public UserDTO updateMember(UserDTO userDTO) {
-//    System.out.println("업데이트 하려는 사용자:  " + userDTO);
-//    int res = memberMapper.updateMember(userDTO);
-//    if(res > 0){
-//      return userDTO;
-//    }
-//    else{
-//      throw new RuntimeException("업데이트 실패");
-//    }
-//  }
 
   @Transactional
   @Override

@@ -27,7 +27,7 @@ function MainPageInputRequestList() {
 
   return (
     <div>
-      <div className="bg-white rounded-2xl shadow p-4 flex flex-col">
+      <div className="bg-white rounded-2xl shadow p-4 flex flex-col h-full">
         <div className="flex justify-between items-center mb-4">
           {/*입고 신청 내역 글자 클릭 시 승인 목록 페이지로 이동*/}
           <a href="/test3">

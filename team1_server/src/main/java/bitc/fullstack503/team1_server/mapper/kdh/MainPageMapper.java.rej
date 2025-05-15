@@ -1,0 +1,8 @@
+diff a/team1_server/src/main/java/bitc/fullstack503/team1_server/mapper/kdh/MainPageMapper.java b/team1_server/src/main/java/bitc/fullstack503/team1_server/mapper/kdh/MainPageMapper.java	(rejected hunks)
+@@ -9,6 +9,4 @@
+ @Mapper
+ public interface MainPageMapper {
+   List<TransactionDTO> getTodayStock();
+-
+-  List<ItemDTO> inputRequestList();
+ }
