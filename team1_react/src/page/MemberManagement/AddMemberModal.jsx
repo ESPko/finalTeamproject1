@@ -60,7 +60,8 @@ function AddMemberModal({isOpen, onClose, onAdd}) {
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder={'이름을 입력하세요'}
+          placeholder={'이름을 입력하세요 (최대 10 글자)'}
+          maxLength={10}
           className="w-full border rounded px-3 py-2"/>
         </div>
 
@@ -80,7 +81,8 @@ function AddMemberModal({isOpen, onClose, onAdd}) {
             type="text"
             value={userPw}
             onChange={(e) => setUserPw(e.target.value)}
-            placeholder={'비밀번호 입력하세요'}
+            placeholder={'비밀번호 입력하세요(최소 4자리)'}
+            minLength={4}
             className="w-full border rounded px-3 py-2"/>
         </div>
 

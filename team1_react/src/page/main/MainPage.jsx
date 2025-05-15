@@ -2,6 +2,7 @@ import { ResponsiveLine } from "@nivo/line";
 import { ResponsiveBar } from "@nivo/bar";
 import { ResponsivePie } from "@nivo/pie";
 import DashboardChart from './DashboardChart.jsx';
+import MainPageInputRequestList from './MainPageInputRequestList.jsx';
 
 const stockData = [
   { x: "01-01", y: 9 },
@@ -17,12 +18,6 @@ const ioData = [
   { date: "04-01", 입고: 3, 출고: 5 },
 ];
 
-  const recentRequests = [
-    { id: 1, item: "A제품", date: "2025-04-23", status: "완료" },
-    { id: 2, item: "B제품", date: "2025-04-22", status: "대기" },
-    { id: 3, item: "C제품", date: "2025-04-21", status: "거절" },
-  ];
-
   const Dashboard = () =>{
 
     return (
@@ -31,63 +26,7 @@ const ioData = [
         <DashboardChart/>
 
         {/* 입고 신청 내역 */}
-        <div className="bg-white rounded-2xl shadow p-4 flex flex-col">
-          <div className="flex justify-between items-center mb-4">
-            <div className="text-lg font-bold text-gray-800">입고 신청 내역</div>
-            <div className="text-sm text-gray-400">2025-04-01 ~ 2025-04-30</div>
-          </div>
-          <div className="space-y-2 mb-4 text-sm">
-            <div className="flex justify-between">
-              <span>신청 완료</span>
-              <span className="text-green-500 font-bold">5</span>
-            </div>
-            <div className="flex justify-between">
-              <span>신청 대기</span>
-              <span className="text-yellow-500 font-bold">5</span>
-            </div>
-            <div className="flex justify-between">
-              <span>신청 거절</span>
-              <span className="text-red-500 font-bold">5</span>
-            </div>
-          </div>
-          <div className="mt-2">
-            <div className="text-sm font-semibold text-gray-700 mb-2">최근 신청 내역</div>
-            <div className="overflow-auto text-sm">
-              <table className="w-full text-left text-gray-600">
-                <thead>
-                <tr className="border-b">
-                  <th className="py-1">번호</th>
-                  <th className="py-1">품목명</th>
-                  <th className="py-1">신청일자</th>
-                  <th className="py-1">상태</th>
-                </tr>
-                </thead>
-                <tbody>
-                {recentRequests.map((req) => (
-                  <tr key={req.id} className="border-b hover:bg-gray-50">
-                    <td className="py-1">{req.id}</td>
-                    <td className="py-1">{req.item}</td>
-                    <td className="py-1">{req.date}</td>
-                    <td className="py-1">
-              <span
-                className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                  req.status === "완료"
-                    ? "bg-green-100 text-green-600"
-                    : req.status === "대기"
-                      ? "bg-yellow-100 text-yellow-600"
-                      : "bg-red-100 text-red-600"
-                }`}
-              >
-                {req.status}
-              </span>
-                    </td>
-                  </tr>
-                ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+        <MainPageInputRequestList/>
 
         {/* 재고 변동 */}
         <div className="bg-white rounded-2xl shadow p-4">

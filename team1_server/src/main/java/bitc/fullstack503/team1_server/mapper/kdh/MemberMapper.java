@@ -15,4 +15,5 @@ public interface MemberMapper {
   int updateMember(UserDTO userDTO);
 
   boolean deleteMember(UserDTO userDTO);
+  void deleteTransactionsByUserId(String id);
 }
