@@ -101,7 +101,7 @@ function TestPage1() {
             <div className="mt-[20px]">
               <div className="w-[305px] h-[36px] flex justify-between">
                 <label className="block font-semibold">위치</label>
-                <div className="w-[220px] border border-gray-300 rounded text-gray-400 flex items-center px-2 font-semibold text-sm">
+                <div className="w-[220px] border border-gray-300 rounded text-gray-400 flex items-center px-2 text-center font-semibold text-sm">
                   <div className="overflow-hidden text-ellipsis whitespace-nowrap w-full" title={selectedItem ? selectedItem.warehouseName : '위치'}>
                     {selectedItem ? selectedItem.warehouseName : '위치'}
                   </div>
@@ -110,7 +110,7 @@ function TestPage1() {
 
               <div className="w-[305px] h-[36px] flex justify-between mt-[12px]">
                 <label className="block font-semibold">입고처</label>
-                <div className="w-[220px] border border-gray-300 rounded text-gray-400 flex items-center px-2 font-semibold text-sm">
+                <div className="w-[220px] border border-gray-300 rounded text-gray-400 flex items-center px-2 text-center font-semibold text-sm">
                   <div className="overflow-hidden text-ellipsis whitespace-nowrap w-full" title={selectedItem ? selectedItem.vendorName : '입고처'}>
                     {selectedItem ? selectedItem.vendorName : '입고처'}
                   </div>
@@ -119,7 +119,7 @@ function TestPage1() {
 
               <div className="w-[305px] h-[36px] flex justify-between mt-[12px]">
                 <label className="block font-semibold">카테고리</label>
-                <div className="w-[220px] border border-gray-300 rounded text-gray-400 items-center justify-center flex font-semibold text-sm">
+                <div className="w-[220px] border border-gray-300 rounded text-gray-400 flex items-center px-2 text-center font-semibold text-sm">
                   <div className="overflow-hidden text-ellipsis whitespace-nowrap w-full" title={selectedItem ? selectedItem.category : '카테고리'}>
                     {selectedItem ? selectedItem.category : '카테고리'}</div>
                 </div>
