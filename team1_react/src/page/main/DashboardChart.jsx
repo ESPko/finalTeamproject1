@@ -51,11 +51,8 @@ function DashboardChart() {
           })
       }
       fetchStockData();
-      const stockInterval = setInterval(fetchStockData, 1000);
-
       return () => {
         clearInterval(timeInterval);
-        clearInterval(stockInterval);
       };
     }, []);
 
