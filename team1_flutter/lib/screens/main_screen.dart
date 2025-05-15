@@ -53,11 +53,11 @@ class _MainScreenState extends State<MainScreen> {
       });
 
       // WidgetsBinding 사용하여 안전한 스낵바 출력
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('로그인 정보 로딩 오류: $_error')),
-        );
-      });
+      // WidgetsBinding.instance.addPostFrameCallback((_) {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     SnackBar(content: Text('로그인 정보 로딩 오류: $_error')),
+      //   );
+      // });
     }
   }
 
