@@ -141,17 +141,26 @@ function TestPage1 ()
                     </div>
                   </div>
 
-                  {/* 완료 버튼 */}
-                  <div className="pt-[80px]">
-                    <button
-                      onClick={handleComplete}
-                      disabled={isButtonDisabled}
-                      className={`w-[86px] h-[36px] rounded-sm text-sm font-semibold ${isButtonDisabled ? 'bg-gray-100 text-gray-400 shadow cursor-default' : 'bg-gray-100 shadow text-gray-500 font-semibold text-sm hover:bg-gray-200'}`}
-                    >
-                      입고 완료
-                    </button>
+                  {/* 카테 고리 */}
+                  <div className={'w-[305px] h-[36px] flex justify-between mt-[12px]'}>
+                    <label className="block font-semibold">카테고리</label>
+                    <div className="w-[220px] border border-gray-300 rounded text-gray-400 items-center justify-center flex font-semibold text-sm">
+                      <div>{selectedItem ? selectedItem.category : '카테 고리'}</div>
+                    </div>
                   </div>
                 </div>
+
+                {/* 완료 버튼 */}
+                <div className="pt-[80px]">
+                  <button
+                    onClick={handleComplete}
+                    disabled={isButtonDisabled}
+                    className={`w-[86px] h-[36px] rounded-sm text-sm font-semibold ${isButtonDisabled ? 'bg-gray-100 text-gray-400 shadow cursor-default' : 'bg-blue-400 shadow text-white font-semibold text-sm hover:bg-blue-500'}`}
+                  >
+                    입고 완료
+                  </button>
+                </div>
+
               </div>
             </div>
           </Topline>
