@@ -28,7 +28,7 @@ public class VendorController
     String beforeName = transactionService.selectVendorNameByIdx (idx);
     vendorService.updateVendor (vendorDTO);
     String afterName = vendorDTO.getName ();
-    if (!beforeName.equals (afterName))
+    if (beforeName.equals (afterName))
     {
       transactionService.updateItemVendorAfterNameByBeforeName (beforeName, afterName);
     }
