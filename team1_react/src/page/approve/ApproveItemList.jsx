@@ -30,11 +30,11 @@ function ApproveItemList({ approveProduct, changeApprove }) {
             <div className={'col-span-1 flex items-center'}>{ap.price}</div>
             <div className={'col-span-1 flex items-center'}>{ap.quantity}</div>
             <p className={`col-span-1 font-semibold pl-[20px] ${ap.approve === 0 ? 'text-gray-400'
-              : ap.approve === 1 ? 'text-blue-400' : ap.approve === 2 ? 'text-red-400' : 'text-yellow-500'}`}
+              : ap.approve === 1 ? 'text-blue-400' : ap.approve === 2 ? 'text-red-400' : 'text-blue-400'}`}
             >{ap.approve === 0 ? '승인 대기'
               : ap.approve === 1 ? '승인'
                 : ap.approve === 2 ? '거절'
-                : '입고 대기'}</p>
+                  : '승인'}</p>
 
             <div className={'col-span-1 flex items-center'}>
               <button type={'button'}

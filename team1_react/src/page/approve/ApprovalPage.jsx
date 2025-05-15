@@ -13,9 +13,8 @@ function ApprovalPage() {
   const approvalMap ={
     '전체 보기': null,
     '승인 대기': 0,
-    '승인': 1,
+    '승인': [1,3],
     '거절': 2,
-    '입고 대기':3,
   };
 
   // 저장된 승인 목록들 불러오기
@@ -53,7 +52,13 @@ function ApprovalPage() {
     const approvalValue = approvalMap[selectedApproval];
 
     const filtered = approveProduct.filter(product => {
-      const matchApproval = approvalValue === null || product.approve === approvalValue ;
+      const matchApproval =
+        approvalValue === null
+          ? true
+          : Array.isArray(approvalValue)
+            ? approvalValue.includes(product.approve)
+            :product.approve === approvalValue;
+
       const matchSearch = product.name.toLowerCase().includes(search.toLowerCase())
       return matchApproval && matchSearch
     })
@@ -111,7 +116,7 @@ function ApprovalPage() {
                   }}
                   className= "w-[200px] h-[36px] border border-gray-300 rounded px-3 text-sm mr-5"
                 ><option value="전체 보기">전체 보기</option>
-                  {['승인 대기','승인','거절', '입고 대기'].map((name) => (
+                  {['승인 대기','승인','거절'].map((name) => (
                     <option key={name} value={name}>{name}</option>
                   ))}
                 </select>
