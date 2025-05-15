@@ -180,20 +180,17 @@ function MemberManagement() {
             actions={
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="bg-blue-600 text-white px-4 py-2 rounded"
+                className="bg-blue-500 text-white w-[86px] h-[36px] rounded-sm text-sm font-semibold"
               >
                 직원 추가
               </button>
             }
           >
             <div>
-              <div className="overflow-auto max-w-full pretty-scrollbar flex-auto m-3 mt-4 text-center">
-                <div className="flex justify-end items-center mb-4">
+              <div className="overflow-auto max-w-full pretty-scrollbar flex-auto">
+                <div className="mt-10"></div>
 
-
-                </div>
-
-                <div className="grid grid-cols-[250px_250px_250px_1fr] text-black font-semibold border-b pb-2 mb-2">
+                <div className="grid grid-cols-[250px_250px_250px_1fr] text-gray-600 font-semibold border-b border-gray-200 p-3">
                   <div>이름</div>
                   <div>부서</div>
                   <div>직급</div>
@@ -202,14 +199,14 @@ function MemberManagement() {
                 {employees.map(emp => {
                   return (
                     <div key={emp.idx}
-                         className="grid grid-cols-[250px_250px_250px_1fr]  items-center py-2 border border-gray-300">
-                      <div className="ml-3">{emp.name}</div>
+                         className="grid grid-cols-[250px_250px_250px_1fr] items-center py-2 border-b border-gray-100">
+                      <div className="ml-3 text-gray-700">{emp.name}</div>
 
                       <div>
                         <select
                           value={emp.department}
                           onChange={e => changeDepartment(emp.id, e.target.value)}
-                          className="border border-gray-300 rounded px-2 py-1">
+                          className="border border-gray-300 rounded-sm w-[150px] h-[36px] shadow text-sm text-gray-600">
                           {departmentOption.map(department => (
                             <option key={department} value={department}>{department}</option>
                           ))}
@@ -220,7 +217,7 @@ function MemberManagement() {
                         <select
                           value={emp.role}
                           onChange={e => changeRole(emp.id, e.target.value)}
-                          className="border border-gray-300 rounded px-2 py-1">
+                          className="border border-gray-300 rounded-sm w-[150px] h-[36px] shadow text-sm text-gray-600">
                           {roleOption.map(role => (
                             <option key={role} value={role}>{role}</option>
                           ))}
@@ -228,8 +225,7 @@ function MemberManagement() {
                       </div>
 
                       <div className="flex items-center justify-end">
-                        <button onClick={() => DeleteMember(emp.idx, emp.id)} className=" border border-gray-300 text-red-500 text-sm px-3 py-1 rounded
-            hover:bg-red-500 ml-2 justify-end mr-4">삭제
+                        <button onClick={() => DeleteMember(emp.idx, emp.id)} className=" border border-gray-200 text-red-400 text-sm px-3 py-1 rounded-sm hover:bg-gray-200 justify-end mr-4">삭제
                         </button>
                       </div>
                     </div>
