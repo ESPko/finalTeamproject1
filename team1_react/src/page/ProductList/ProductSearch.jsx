@@ -23,7 +23,10 @@ function ProductSearch() {
 
   const [warehouse, setWarehouse] = useState([])
 
+  const [isLoading, setIsLoading] = useState(true)
+
   useEffect(() => {
+    setIsLoading(true)
     axiosInstance.get('/productSearch')
       .then(res => {
         const mappedData = res.data.map((ps) => ({
@@ -44,6 +47,9 @@ function ProductSearch() {
       })
       .catch(err => {
         console.error(err)
+      })
+      .finally(() => {
+        setIsLoading(false)
       })
   }, []);
 
@@ -89,12 +95,13 @@ function ProductSearch() {
 
                   {/* 창고 위치 선택 드롭다운 메뉴 */}
                   <div className="mb-4">
+
                     <label className="font-semibold mb-2 block">창고 선택</label>
                     <select
                       value={selectedWarehouse}
                       onChange={(e) => {
                         setSelectedWarehouse(e.target.value)
-                        warehouseSelect(e.target.value)
+                        // warehouseSelect(e.target.value)
                       }}
                       className="w-[200px] h-[35px] border border-gray-300 rounded px-3 text-sm">
                       <option value="모든 창고">모든 창고</option>
@@ -126,13 +133,12 @@ function ProductSearch() {
                 <div className="flex">
                   <div className="w-1/2">
                     {/* 비품 리스트 */}
-                    {filteredProducts.length > 0 ? (
-                      <ProductSearchItem
-                        products={filteredProducts}
-                        onSelectedProduct={setSelectedProduct}
-                      />
+                    {isLoading ? (
+                      <div className="text-center py-10 font-semibold text-gray-500">로딩중...</div>
                     ) : (
-                      <NoResultProduct />
+                      filteredProducts.length > 0 ?(<ProductSearchItem
+                        products={filteredProducts}
+                        onSelectedProduct={setSelectedProduct}/> ): <NoResultProduct/>
                     )}
                   </div>
 

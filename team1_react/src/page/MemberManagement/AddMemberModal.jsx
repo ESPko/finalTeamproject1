@@ -29,7 +29,7 @@ function AddMemberModal({isOpen, onClose, onAdd}) {
             value={department}
             onChange={(e) => setDepartment(e.target.value)}
             className="w-[250px] border border-gray-300 rounded px-3 py-2">
-            <option value="부선 선택">부서 선택</option>
+            <option value="부서 선택">부서 선택</option>
             <option value="경영부">경영부</option>
             <option value="기획부">기획부</option>
             <option value="구매부">구매부</option>

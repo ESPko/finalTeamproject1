@@ -123,7 +123,7 @@ function MemberManagement() {
   const AddMember = (newMember) => {
 
     console.log('전발 받은 newMember', newMember)
-    const {userId, name, userPw} = newMember
+    const {userId, name, userPw, role, department} = newMember
     console.log('name:', name, 'type:', typeof name, 'length:', name ? name.length : 'no value');
     // ID 공백 방지
     if(!userId || !userId.trim()){
@@ -151,6 +151,16 @@ function MemberManagement() {
 
     if(userPw.length < 4 ){
       alert('비밀번호 최소 4자리 이상 입력해주세요.')
+      return;
+    }
+
+    if(department === "부서 선택"){
+      alert('부서를 선택해주세요.')
+      return;
+    }
+
+    if(role === '직급 선택'){
+      alert('직급을 선택해 주세요.')
       return;
     }
     const requestData = {
