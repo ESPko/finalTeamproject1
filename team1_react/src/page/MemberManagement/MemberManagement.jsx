@@ -100,8 +100,13 @@ function MemberManagement() {
   };
 
   const DeleteMember = (idx,id) => {
+    const isConfirmed = window.confirm('해당 직원 정보를 삭제시키겠습니까?');
+    if(!isConfirmed){
+      return
+    }
     console.log('삭제 요청 Idx: ',idx)
     console.log('삭제 요청 Id: ',id)
+
     setEmployees(prev => prev.filter(emp => emp.idx !== idx));
     axiosInstance.delete('/deleteMember',{
       data:{idx:idx, id:id}
@@ -125,9 +130,17 @@ function MemberManagement() {
       alert('ID 를 입력해주세요.')
       return;
     }
+    if(userId.length < 4 ){
+      alert('ID를 최소 4자리 이상 입력해주세요.')
+      return;
+    }
     // 이름 공백 방지
     if(!name || !name.trim()){
-      alert('이름 를 입력해주세요.')
+      alert('이름을 입력해주세요.')
+      return;
+    }
+    if(name.length < 1 ){
+      alert('이름을 최소 1자리 이상 입력해주세요.')
       return;
     }
     // 비밀번호 4자리 이하 계정 생성 방지
@@ -137,7 +150,7 @@ function MemberManagement() {
     }
 
     if(userPw.length < 4 ){
-      alert('비밀번호 최소 4자리 입력해주세요.')
+      alert('비밀번호 최소 4자리 이상 입력해주세요.')
       return;
     }
     const requestData = {
