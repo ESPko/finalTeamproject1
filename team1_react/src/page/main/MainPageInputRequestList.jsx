@@ -4,10 +4,9 @@ import axiosInstance from '../../api/axiosInstance.jsx';
 function MainPageInputRequestList() {
   const [recentRequests, setRecentRequests] = useState([])
 
-  const approvedCount = recentRequests.filter(r => r.approve === 1).length;
+  const approvedCount = recentRequests.filter(r => r.approve === 1 || r.approve === 3).length;
   const waitingCount = recentRequests.filter(r => r.approve === 0).length;
   const rejectedCount = recentRequests.filter(r => r.approve === 2).length;
-  const inputWaitingCount = recentRequests.filter(r => r.approve !== 0 && r.approve !== 1 && r.approve !== 2).length;
 
   // 목록 불러오기
   useEffect(() => {
@@ -46,10 +45,6 @@ function MainPageInputRequestList() {
           <div className="flex justify-between">
             <span>승인 대기</span>
             <span className="text-gray-500 font-bold">{waitingCount}</span>
-          </div>
-          <div className="flex justify-between">
-            <span>입고 대기</span>
-            <span className="text-yellow-500 font-bold">{inputWaitingCount}</span>
           </div>
           <div className="flex justify-between">
             <span>신청 거절</span>
