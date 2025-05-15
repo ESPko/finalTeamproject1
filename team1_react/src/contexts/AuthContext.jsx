@@ -1,23 +1,40 @@
-// src/context/AuthContext.js
-import { createContext, useContext, useState } from 'react';
-
-// AuthProvider.tsx 또는 useAuth.js
+import { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem("user");
-    return savedUser ? JSON.parse(savedUser) : null;
-  });
+  const getStoredUser = () => {
+    const saved = localStorage.getItem("user") || sessionStorage.getItem("user");
+    return saved ? JSON.parse(saved) : null;
+  };
 
-  const [token, setToken] = useState(() => localStorage.getItem("token") || "");
+  const getStoredToken = () => {
+    return localStorage.getItem("token") || sessionStorage.getItem("token") || "";
+  };
 
-  const login = (user, token) => {
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState("");
+  const [loading, setLoading] = useState(true); // ✅ 추가
+
+  useEffect(() => {
+    const userFromStorage = getStoredUser();
+    const tokenFromStorage = getStoredToken();
+
+    if (userFromStorage && tokenFromStorage) {
+      setUser(userFromStorage);
+      setToken(tokenFromStorage);
+    }
+
+    setLoading(false); // ✅ 로딩 완료 표시
+  }, []);
+
+  const login = (user, token, rememberMe = false) => {
     setUser(user);
     setToken(token);
-    localStorage.setItem("user", JSON.stringify(user));
-    localStorage.setItem("token", token);
+
+    const storage = rememberMe ? localStorage : sessionStorage;
+    storage.setItem("user", JSON.stringify(user));
+    storage.setItem("token", token);
   };
 
   const logout = () => {
@@ -25,10 +42,12 @@ export function AuthProvider({ children }) {
     setToken("");
     localStorage.removeItem("user");
     localStorage.removeItem("token");
+    sessionStorage.removeItem("user");
+    sessionStorage.removeItem("token");
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
+    <AuthContext.Provider value={{ user, token, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );
@@ -37,4 +56,3 @@ export function AuthProvider({ children }) {
 export function useAuth() {
   return useContext(AuthContext);
 }
-
