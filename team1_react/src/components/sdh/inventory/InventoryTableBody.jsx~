@@ -27,9 +27,7 @@ function InventoryTableBody ({ products })
           />
         </td>
         <td className="cell-style">{product.name}</td>
-        <td className="cell-style truncate max-w-[180px]" title={product.warehouseName}>
-          {product.warehouseName}
-        </td>
+        <td className="cell-style">{product.warehouseName}</td>
         <td className="cell-style">{product.vendorName}</td>
         <td className="cell-style text-blue-600">{product.inbound}</td>
         <td className="cell-style text-red-600">{product.outbound}</td>

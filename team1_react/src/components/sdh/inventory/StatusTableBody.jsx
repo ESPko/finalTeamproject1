@@ -46,7 +46,9 @@ function StatusTableBody ({ products })
             />
           </td>
           <td className="cell-style">{product.name}</td>
-          <td className="cell-style">{product.warehouseName}</td>
+          <td className="cell-style truncate max-w-[180px]" title={product.warehouseName}>
+            {product.warehouseName}
+          </td>
           <td className="cell-style">{product.vendorName}</td>
           <td className="cell-style">{product.department}</td>
           <td className="cell-style">{product.outboundPerson}</td>

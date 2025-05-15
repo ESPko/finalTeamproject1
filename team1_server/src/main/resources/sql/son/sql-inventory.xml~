@@ -6,15 +6,14 @@
     SELECT
     i.image AS image,
     i.name AS name,
-    w.name AS warehouseName,
-    v.name AS vendorName,
+    i.warehouse_name AS warehouseName,
+    i.vendor_name AS vendorName,
     SUM(CASE WHEN t.transaction = 0 THEN (t.after - t.before) ELSE 0 END) AS inbound,
     SUM(CASE WHEN t.transaction = 1 THEN (t.before - t.after) ELSE 0 END) AS outbound,
     SUM(CASE WHEN t.transaction = 2 THEN ABS(t.after - t.before) ELSE 0 END) AS adjusted,
-    i.quantity AS totalQuantity
+    i.quantity AS totalQuantity,
+    i.idx as idx
     FROM item i
-    JOIN warehouse w ON i.warehouse_name = w.name
-    JOIN vendor v ON i.vendor_name = v.name
     LEFT JOIN transaction t ON i.idx = t.item_idx
     WHERE t.time BETWEEN #{request.startDate} AND #{request.endDate}
     
@@ -61,8 +60,8 @@
       </foreach>
     </if>
     
-    GROUP BY i.idx, i.name, w.name, v.name, i.quantity, i.image
-    ORDER BY i.name
+    GROUP BY i.idx, i.name, i.warehouse_name, i.vendor_name, i.quantity, i.image
+    ORDER BY i.idx desc
   </select>
   
   
@@ -80,16 +79,15 @@
     SELECT
     i.image AS image,
     i.name AS name,
-    w.name AS warehouseName,
-    v.name AS vendorName,
+    i.warehouse_name AS warehouseName,
+    i.vendor_name AS vendorName,
     u.department AS department,
     u.nick_name AS outboundPerson,
     t.before AS beforeQuantity,
     t.after AS afterQuantity,
-    t.time AS date
+    t.time AS date,
+    t.transaction as transaction
     FROM item i
-    JOIN warehouse w ON i.warehouse_name = w.name
-    JOIN vendor v ON i.vendor_name = v.name
     JOIN transaction t ON i.idx = t.item_idx
     JOIN user u ON t.user_id = u.id
     WHERE t.time BETWEEN #{request.startDate} AND #{request.endDate}
@@ -142,12 +140,12 @@
   
   
   <select id="selectAllDepartment" resultType="bitc.fullstack503.team1_server.dto.UserDTO">
-    SELECT department
+    SELECT DISTINCT department
     FROM user
   </select>
   
   <select id="selectAllNickName" resultType="bitc.fullstack503.team1_server.dto.UserDTO">
-    SELECT nick_name
+    SELECT DISTINCT nick_name
     FROM user
   </select>
 

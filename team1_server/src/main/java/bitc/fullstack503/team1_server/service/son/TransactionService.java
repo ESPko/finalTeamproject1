@@ -5,7 +5,7 @@ public interface TransactionService
 {
   void insertTransaction (TransactionDTO transactionDTO);
   
-  int selectItemQuantity (int itemIdx);
+  int selectItemQuantityByIdx (int itemIdx);
   
   int selectItemIdxByImage (ItemDTO itemDTO);
   
