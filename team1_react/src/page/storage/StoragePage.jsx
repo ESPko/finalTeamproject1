@@ -83,8 +83,7 @@ function TestPage1 ()
           <Topline title="입고">
             <div>
               <div className="bg-danger mt-[25px]">
-                <div className={'text-gray-700 h-[51px] text-[14px] font-semibold border-b-1 border-b-gray-300 flex items-center'}>제품
-                                                                                                                                   목록
+                <div className={'text-gray-700 h-[51px] text-[14px] font-semibold border-b-1 border-b-gray-300 flex items-center'}>제품 목록
                 </div>
                 <div className="text-[14px] text-gray-700">
                   <div className="p-4 flex border-b-gray-300 pb-2 font-semibold h-[52px]">
