@@ -76,6 +76,19 @@ function LowStockPage() {
 
           // 로컬스토리지에 저장
           localStorage.setItem('orderedItems', JSON.stringify(updated));
+
+
+          // approve 상태를 3으로 반영
+          const updatedFiltered = filteredItems.map((item) =>
+            item.idx === idx ? { ...item, approve: 3 } : item
+          );
+          setFilteredItems(updatedFiltered);
+
+          const updatedLowStock = lowStockItems.map((item) =>
+            item.idx === idx ? { ...item, approve: 3 } : item
+          );
+          setLowStockItems(updatedLowStock);
+
         } else {
           alert("입고 대기 상태로 변경하는데 실패했습니다.");
         }
@@ -86,11 +99,9 @@ function LowStockPage() {
     }
   };
 
-
-
   return (
-    <main className="flex-1 p-6 overflow-y-auto">
-      <div className="bg-white rounded shadow p-4 h-full" style={{ width: '1530px', padding: '0px 40px 80px 40px' }}>
+    <div className="flex-1 p-6 overflow-y-auto">
+      <div className="bg-white rounded shadow p-4 min-x-[100vh] min-h-[80vh]" style={{ padding: '0px 40px 80px 40px' }}>
         <div>
           <Topline title="재고 부족 알림">
             <div className="mt-[40px] relative">
@@ -115,9 +126,9 @@ function LowStockPage() {
               </div>
 
               {filteredItems.map((item) => (
-                <div key={item.idx} className="h-[52px] items-center grid grid-cols-12 border-b border-b-gray-100">
+                <div key={item.idx} className="break-all whitespace-normal items-center grid grid-cols-12 border-b border-b-gray-100">
                   <div className="col-span-3 flex items-center">
-                    <div className="w-[36px] h-[36px] mr-[20px] rounded bg-gray-300 flex items-center justify-center">
+                    <div className="w-[60px] h-[60px] m-3 mr-[20px] rounded bg-gray-300 flex items-center justify-center">
                       <img
                         src={item.image}
                         alt={item.name}
@@ -130,8 +141,8 @@ function LowStockPage() {
                     </div>
                     <div>{item.name}</div>
                   </div>
-                  <div className="col-span-2">{item.warehouseName}</div>
-                  <div className="col-span-2 text-blue-300 font-semibold">{item.standard}</div>
+                  <div className="col-span-2 mr-5">{item.warehouseName}</div>
+                  <div className="col-span-2 font-semibold">{item.standard}</div>
                   <div className="col-span-2 font-semibold">{item.quantity}</div>
                   <div className="col-span-1 text-red-400 font-semibold">{item.quantity - item.standard}</div>
 
@@ -165,7 +176,7 @@ function LowStockPage() {
           </Topline>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
 

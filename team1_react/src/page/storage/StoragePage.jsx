@@ -50,13 +50,12 @@ function TestPage1() {
         alert(`제품이 ${Number(inputQuantity)}개 입고 완료되었습니다.`);
 
         // 입고 완료 후 서버에서 최신 데이터 다시 불러오기
-        const refreshedItem = await axios.get(`http://localhost:8080/api/items/${selectedItem.idx}`);
+        const refreshedItem = await axiosInstance.get(`http://localhost:8080/api/items/${selectedItem.idx}`);
         setSelectedItem(refreshedItem.data);
 
         // 상태 초기화
         setSelectedItem(null);
         setInputQuantity(0);
-        // setMemo(''); // 메모를 비워도 되므로 주석 처리
       }
     } catch (error) {
       alert("입고 처리 중 오류가 발생했습니다. 다시 시도해주세요.");
@@ -64,7 +63,7 @@ function TestPage1() {
     }
   };
 
-  // 버튼 활성화 조건 변경 (날짜 부분을 제외하고 수량과 제품이 있을 때만 활성화)
+  // 버튼 활성화 조건 변경 (날짜 부분을 제외 하고 수량과 제품이 있을 때만 활성화)
   const isButtonDisabled = !selectedItem || inputQuantity <= 0;
 
   return (
@@ -73,7 +72,7 @@ function TestPage1() {
         <div>
           <Topline title="입고">
             <div>
-              <div className="bg-danger mt-[25px]">
+              <div className="mt-[25px]">
                 <div className={'text-gray-700 h-[51px] text-[14px] font-semibold border-b-1 border-b-gray-300 flex items-center'}>제품 목록</div>
                 <div className="text-[14px] text-gray-700">
                   <div className="p-4 flex border-b-gray-300 pb-2 font-semibold h-[52px]">
@@ -130,12 +129,20 @@ function TestPage1() {
                     </div>
                   </div>
 
+                  {/* 카테 고리 */}
+                  <div className={'w-[305px] h-[36px] flex justify-between mt-[12px]'}>
+                    <label className="block font-semibold">카테고리</label>
+                    <div className="w-[220px] border border-gray-300 rounded text-gray-400 items-center justify-center flex font-semibold text-sm">
+                      <div>{selectedItem ? selectedItem.category : '카테 고리'}</div>
+                    </div>
+                  </div>
+
                   {/* 완료 버튼 */}
                   <div className="pt-[80px]">
                     <button
                       onClick={handleComplete}
                       disabled={isButtonDisabled}
-                      className={`w-[86px] h-[36px] rounded-sm text-sm font-semibold ${isButtonDisabled ? 'bg-gray-100 text-gray-400 shadow cursor-default' : 'bg-gray-100 shadow text-gray-500 font-semibold text-sm hover:bg-gray-200'}`}
+                      className={`w-[86px] h-[36px] rounded-sm text-sm font-semibold ${isButtonDisabled ? 'bg-gray-100 text-gray-400 shadow cursor-default' : 'bg-blue-400 shadow text-white font-semibold text-sm hover:bg-blue-500'}`}
                     >
                       입고 완료
                     </button>

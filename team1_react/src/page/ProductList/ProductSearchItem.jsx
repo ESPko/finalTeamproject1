@@ -8,19 +8,19 @@ function ProductSearchItem({products, onSelectedProduct}) {
   const [selected, setSelected] = useState(null)
 
   return (
-    <div className="border border-gray-300 runded">
-      <div className="flex justify-between items-center bg-gray-200 px-4 pt-1">
+    <div className="border-t border-gray-200">
+      <div className="flex justify-between items-center bg-gray-50 h-[36px] px-4">
         {/*전체 비품 목록 개수*/}
-        <p className="font-bold">{products.length} 개 품목</p>
+        <p className="font-bold text-gray-500 text-sm">{products.length}개 품목</p>
         {/*전체 비품 재고 수량*/}
-        <p className="font-bold">총 {totalAmount} 개</p>
+        <p className="font-semibold text-gray-500">총 {totalAmount} 개</p>
       </div>
-      <ul className="w-full ">
+      <ul className="w-full">
         {products.map((product) =>(
 
-          <li key={product.idx} className="border border-gray-300  cursor-pointer" onClick={() => onSelectedProduct(product)}>
-            <div className="flex items-center hover:bg-gray-100 active:bg-gray-200">
-              <img src={product.image} alt={product.name} className="w-16 h-16 object-cover mr-4"
+          <li key={product.idx} className="border-t border-gray-200 p-1 cursor-pointer hover:bg-gray-100 active:bg-gray-200" onClick={() => onSelectedProduct(product)}>
+            <div className="flex items-center ">
+              <img src={product.image} alt={product.name} className="w-15 h-15 object-cover mr-4 rounded-sm"
               />
 
               <div className="flex flex-col">
@@ -29,10 +29,10 @@ function ProductSearchItem({products, onSelectedProduct}) {
                   onClick={() => onSelectedProduct(product)}>
                   {product.name}
                 </p>
-                <p className="text-sm text-gray-500">적정 재고: {product.standard}</p>
+                <p className="text-sm text-gray-500">적정 재고 : {product.standard}</p>
               </div>
               <div className="ml-auto p-2">
-                <p className={`${product.quantity <product.standard ? 'text-red-500': 'text-indigo-500'} font-bold` }>{product.quantity ??0}개</p>
+                <p className={`${product.quantity <product.standard ? 'text-red-400': 'text-blue-400'} font-semibold` }>{product.quantity ??0}개</p>
               </div>
             </div>
           </li>

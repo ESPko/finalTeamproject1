@@ -85,7 +85,7 @@ function ProductSearch() {
                         setSelectedWarehouse(e.target.value)
                         warehouseSelect(e.target.value)
                       }}
-                      className="w-full border border-gray-300 rounded px-3 py-2">
+                      className="w-[200px] h-[35px] border border-gray-300 rounded px-3 text-sm">
                       {['모든 창고', '창고1','창고2','창고3','창고4',].map((name) => (
                         <option key={name} value={name}>{name}</option>
                       ))}
@@ -93,17 +93,17 @@ function ProductSearch() {
                   </div>
 
                   {/* 검색창 */}
-                  <div className="flex items-center flex-grow max-w-[800px] mt-3">
+                  <div className="flex items-center flex-grow max-w-[500px] mt-3">
                     <input
                       type="text"
                       value={search}
                       onChange={changSearch}
                       placeholder="찾으시는 비품의 이름을 입력하세요"
-                      className="flex-grow border border-gray-300 px-4 py-2 rounded-l outline-none"
+                      className="flex-grow border w-[440px] h-[36px] border-gray-300 px-4 py-2 rounded outline-none mr-3"
                     />
                     <button
                       onClick={searchProduct}
-                      className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-r"
+                      className="h-[36px] hover:bg-gray-100 shadow-sm border  border-gray-300 text-gray-500 px-4 rounded"
                     >
                       {/*<img src="src/productImg/search.png" width={'27px'}/>*/}
                       <SearchIcon />
@@ -111,8 +111,8 @@ function ProductSearch() {
                   </div>
                 </div>
 
-                <div className="flex gap-6">
-                  <div className="w-1/2 mt-12 p-3">
+                <div className="flex">
+                  <div className="w-1/2">
                     {/* 비품 리스트 */}
                     {filteredProducts.length > 0 ? (
                       <ProductSearchItem
@@ -123,9 +123,10 @@ function ProductSearch() {
                       <NoResultProduct />
                     )}
                   </div>
-                  <div className="w-px bg-gray-500 "/>
 
-                  <div className="w-1/2 mt-12 p-3">
+                  <div className="w-px bg-gray-200 "/>
+
+                  <div className="w-1/2">
                     {/* 상세 보기 */}
                     <ProductListDetail product={selectedProduct} />
                   </div>

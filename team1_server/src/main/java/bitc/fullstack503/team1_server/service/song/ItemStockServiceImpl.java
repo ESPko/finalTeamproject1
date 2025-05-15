@@ -23,7 +23,6 @@ public class ItemStockServiceImpl implements ItemStockService {
   @Override
   public void receiveItemWithInfo(Long idx, Map<String, Object> data) {
     Integer quantityToAdd = (Integer) data.get("quantity");
-    String memo = (String) data.get("memo");
 
     // 필요한 파라미터만 전달
     Map<String, Object> paramMap = new HashMap<>();
