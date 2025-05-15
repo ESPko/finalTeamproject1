@@ -158,4 +158,25 @@ public class ItemController
       return ResponseEntity.status (500).body (Map.of ("error", "아이템 수정 실패", "message", e.getMessage ()));
     }
   }
+    // 창고에 속한 비품 수를 반환하는 API
+    @GetMapping("/getWarehouseItemCount")
+    public int getWarehouseItemCount(@RequestParam String warehouseName) {
+        return itemService.getWarehouseItemCount(warehouseName);
+    }
+    // 창고에 속한 비품 상태를 숨기는 API
+    @PutMapping("/hideItemsByWarehouse")
+    public void hideItemsByWarehouse(@RequestParam String warehouseName) {
+        itemService.hideItemsByWarehouse(warehouseName);
+    }
+
+    // 매입회사에 속한 비품 수를 반환하는 API
+    @GetMapping("/getVendorItemCount")
+    public int getVendorItemCount(@RequestParam String vendorName) {
+        return itemService.getVendorItemCount(vendorName);
+    }
+    @PutMapping("/{idx}")
+    public void deleteItem(@PathVariable int idx) {
+      itemService.deleteItem(idx);
+    }
+
 }

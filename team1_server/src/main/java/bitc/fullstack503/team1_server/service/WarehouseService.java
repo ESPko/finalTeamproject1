@@ -13,7 +13,11 @@ public interface WarehouseService {
 
     void updateLocation( WarehouseDTO warehouseDTO);
 
+    // 창고 위치 삭제
     void deleteWarehouse(int idx);
 
     List<WarehouseDTO> getWarehouse();
+
+
+    
 }

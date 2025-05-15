@@ -48,11 +48,12 @@ public class WarehouseController {
 
     @DeleteMapping("/{idx}")
     public void deleteLocation(@PathVariable int idx) {
+        // 창고 삭제
         warehouseService.deleteWarehouse(idx);
     }
 
     @GetMapping("/name")
-    public List<WarehouseDTO> getWarehouse(){
+    public List<WarehouseDTO> getWarehouse() {
         return warehouseService.getWarehouse();
     }
 }

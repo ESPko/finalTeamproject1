@@ -2,26 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="bitc.fullstack503.team1_server.mapper.WarehouseMapper">
+<!--    창고 위치 리스트 가지고 오기 -->
     <select id="getWarehouseList" resultType="bitc.fullstack503.team1_server.dto.WarehouseDTO">
         SELECT idx, name, location, memo FROM warehouse ORDER BY idx DESC
     </select>
-
+<!--    해당 창고를 가지고 있는 비품 수-->
     <select id="getWarehouseItemCount" resultType="int">
         select coalesce(sum(quantity), 0) from item where warehouse_name = #{warehouseName}
     </select>
-
+<!--    창고 위치 추가 하기 -->
     <insert id="insertLocation" parameterType="bitc.fullstack503.team1_server.dto.WarehouseDTO">
         insert into warehouse (name, location, memo) values (#{name}, #{location}, #{memo});
     </insert>
-
+<!--    창고 위치 수정하기 -->
     <update id="updateLocation">
         update warehouse set name = #{name}, location = #{location}, memo = #{memo} where idx = #{idx}
     </update>
-
+<!--    창고 위치 삭제하기 -->
     <delete id="deleteWarehouse">
         delete from warehouse where idx = #{idx}
     </delete>
-
+<!--    창고 이름 목록 가지고 오기 -->
     <select id="getWarehouse" resultType="bitc.fullstack503.team1_server.dto.WarehouseDTO">
         SELECT idx, name FROM warehouse ORDER BY idx DESC
     </select>

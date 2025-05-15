@@ -14,4 +14,12 @@ public interface ItemMapper {
     void updateItem(ItemDTO itemDTO);
 
     String getExistingImageUrl(int idx);
+    // 해당 창고 이름을 가진 비품이 있는지 확인
+    int checkItemsInWarehouse(String warehouseName);
+    // 삭제할 창고이름을 가진 비품들 상태(4)로 숨기기
+    void updateHideItemWarehouse(String warehouseName);
+
+    int checkItemsInVendor(String vendorName);
+
+    void deleteItem(int idx);
 }

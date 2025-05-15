@@ -15,4 +15,15 @@ public interface ItemService {
     void updateItem(int idx, ItemDTO itemDTO, String imageUrl);
 
     String getExistingImageUrl(int idx);
+
+    // 창고에 있는 비품 수를 가져오는 메서드
+    int getWarehouseItemCount(String warehouseName);
+
+    // 비품 상태 숨기기 메서드
+    void hideItemsByWarehouse(String warehouseName);
+
+    int getVendorItemCount(String vendorName);
+
+
+    void deleteItem(int idx);
 }

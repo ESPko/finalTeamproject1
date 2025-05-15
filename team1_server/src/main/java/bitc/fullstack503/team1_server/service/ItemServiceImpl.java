@@ -76,4 +76,27 @@ public class ItemServiceImpl implements ItemService {
         return itemMapper.getExistingImageUrl(idx);
     }
 
+    // 창고에 있는 비품 수를 가져오는 메서드
+    @Override
+    public int getWarehouseItemCount(String warehouseName) {
+        return itemMapper.checkItemsInWarehouse(warehouseName);
+    }
+
+    // 비품 상태 숨기기 메서드
+    @Override
+    public void hideItemsByWarehouse(String warehouseName) {
+        itemMapper.updateHideItemWarehouse(warehouseName);
+    }
+
+    // 매입회사에 있는 비품 수를 가져오는 메서드
+    @Override
+    public int getVendorItemCount(String vendorName) {
+        return itemMapper.checkItemsInVendor(vendorName);
+    }
+
+    @Override
+    public void deleteItem(int idx) {
+        itemMapper.deleteItem(idx);
+    }
+
 }
