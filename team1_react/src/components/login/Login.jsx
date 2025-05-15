@@ -77,10 +77,11 @@ export default function Login() {
             <input
               type={showPassword ? "text" : "password"}
               placeholder="********"
-              className="bg-transparent w-full outline-none text-sm pr-8"
+              className="bg-transparent w-full outline-none text-sm pr-8 leading-none"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+
             <button
               type="button"
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"

@@ -7,7 +7,7 @@ function Location({ selected, setSelected }) {
   const [locations, setLocations] = useState([]);
   const dropdownRef = useRef(null);
 
-  // ✅ 창고 목록 불러오기 (axios 사용)
+  // 창고 목록 불러오기 (axios 사용)
   useEffect(() => {
     const fetchLocations = async () => {
       try {
@@ -21,7 +21,7 @@ function Location({ selected, setSelected }) {
     fetchLocations();
   }, []);
 
-  // ✅ 외부 클릭 시 드롭다운 닫기
+  // 외부 클릭 시 드롭다운 닫기
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -32,14 +32,14 @@ function Location({ selected, setSelected }) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // ✅ 검색 필터링
+  // 검색 필터링
   const filteredLocations = useMemo(() => {
     return locations.filter(location =>
       location.toLowerCase().includes(search.toLowerCase())
     );
   }, [search, locations]);
 
-  // ✅ 선택/해제 토글
+  // 선택/해제 토글
   const toggleLocation = (location) => {
     setSelected(prev =>
       prev.includes(location)

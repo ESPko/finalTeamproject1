@@ -14,7 +14,7 @@ export function AuthProvider({ children }) {
 
   const [user, setUser] = useState(null);
   const [token, setToken] = useState("");
-  const [loading, setLoading] = useState(true); // ✅ 추가
+  const [loading, setLoading] = useState(true); // 추가
 
   useEffect(() => {
     const userFromStorage = getStoredUser();
@@ -25,7 +25,7 @@ export function AuthProvider({ children }) {
       setToken(tokenFromStorage);
     }
 
-    setLoading(false); // ✅ 로딩 완료 표시
+    setLoading(false); // 로딩 완료 표시
   }, []);
 
   const login = (user, token, rememberMe = false) => {
@@ -53,6 +53,7 @@ export function AuthProvider({ children }) {
   );
 }
 
+// 전역 데이터로 설정한 유저정보, 토큰, 로그인, 로그아웃, 로딩 로직을 가져다 쓸수있는 Context
 export function useAuth() {
   return useContext(AuthContext);
 }

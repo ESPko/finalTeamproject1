@@ -4,11 +4,10 @@ import { useAuth } from '../../contexts/AuthContext.jsx';
 import { FiUser } from '@react-icons/all-files/fi/FiUser.js';
 
 function Header({ toggleLayout }) {
-  const { user, token, logout, loading } = useAuth(); // ✅ AuthContext에서 token, logout 받아옴
+  const { user, token, logout, loading } = useAuth(); // AuthContext에서 token, logout 받아옴
 
   if (loading) {
-    // ✅ 로딩 중일 때는 아무것도 표시하지 않거나 로딩 스피너 등을 넣을 수 있음
-    return null;
+    return "로딩중...";
   }
 
   return (
