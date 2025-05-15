@@ -52,7 +52,6 @@ createRoot(document.getElementById("root")).render(
             <Route path="test8" element={<InventoryPage />} />
             <Route path="test9" element={<StatusPage />} />
             <Route path="test10" element={<MemberManagement />} />
-            <Route path="axios" element={<AxiosTest />} />
           </Route>
 
           {/* Not Found */}
