@@ -19,15 +19,14 @@ class ItemCardLarge extends StatelessWidget {
     final bool isStockLow = item.quantity < item.standard;
 
     return GestureDetector(
-      onTap: onTap ??
-              () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => ItemDetailScreen(itemId: item.idx),
-              ),
-            );
-          },
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => ItemDetailScreen(itemId: item.idx),
+          ),
+        );
+      },
       child: Container(
         width: double.infinity,
         margin: const EdgeInsets.only(bottom: 16),
@@ -61,9 +60,19 @@ class ItemCardLarge extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(item.name, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  Text(
+                    item.name,
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    overflow: TextOverflow.ellipsis, // 말줄임표로 처리
+                    maxLines: 1, // 한 줄만 표시
+                  ),
                   const SizedBox(height: 4),
-                  Text(item.vendorName, style: const TextStyle(fontSize: 16, color: Colors.black54)),
+                  Text(
+                    item.vendorName,
+                    style: const TextStyle(fontSize: 16, color: Colors.black54),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
                 ],
               ),
             ),
@@ -71,7 +80,16 @@ class ItemCardLarge extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 const SizedBox(height: 8),
-                Text(item.warehouseName, style: const TextStyle(fontSize: 16, color: Colors.deepPurpleAccent)),
+                SizedBox(
+                  width: 80,
+                  child: Text(
+                    item.warehouseName,
+                    style: const TextStyle(fontSize: 16, color: Colors.deepPurpleAccent),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    textAlign: TextAlign.right,
+                  ),
+                ),
                 Text('현재재고 ${item.quantity}', style: const TextStyle(fontSize: 14)),
                 Text(
                   '적정재고 ${item.standard}',

@@ -4,7 +4,6 @@ import '../models/item.dart';
 import '../services/api_service.dart';
 import '../widgets/item_card_large.dart';
 import 'item_detail_screen.dart';
-import 'product_detail_page.dart';
 
 class StockCheck extends StatefulWidget {
   const StockCheck({Key? key}) : super(key: key);
@@ -90,8 +89,8 @@ class _StockCheckState extends State<StockCheck> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          RichText(
-            text: TextSpan(
+          Text.rich(
+            TextSpan(
               children: [
                 const TextSpan(
                   text: '오늘  ',
@@ -103,6 +102,9 @@ class _StockCheckState extends State<StockCheck> {
                 ),
               ],
             ),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            softWrap: false,
           ),
           const SizedBox(height: 20),
           Row(
@@ -125,22 +127,28 @@ class _StockCheckState extends State<StockCheck> {
   }
 
   Widget _buildSummaryText(String text) {
-    return Flexible(
+    return Expanded(
       child: Center(
         child: Text(
           text,
           style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white),
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+          softWrap: false,
         ),
       ),
     );
   }
 
   Widget _buildSummaryLabel(String text) {
-    return Flexible(
+    return Expanded(
       child: Center(
         child: Text(
           text,
           style: TextStyle(fontSize: 16, color: Colors.grey[300]),
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+          softWrap: false,
         ),
       ),
     );
