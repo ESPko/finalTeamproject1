@@ -126,7 +126,6 @@ function TestPage1 ()
 
                 <div className={'mt-[20px]'}>
                   {/* 위치 */}
-                  {/* 위치 */}
                   <div className="w-[305px] h-[36px] flex justify-between">
                     <label className="block font-semibold">위치</label>
                     <div className="w-[220px] border border-gray-300 rounded text-gray-400 flex items-center px-2 font-semibold text-sm">

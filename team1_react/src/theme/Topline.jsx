@@ -1,4 +1,3 @@
-
 function Topline({ title, actions, children }) {
   return (
     <div className="px-10 pb-20">
@@ -17,4 +16,3 @@ function Topline({ title, actions, children }) {
 }
 
 export default Topline;
-
