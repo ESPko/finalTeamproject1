@@ -101,7 +101,7 @@ function LowStockPage() {
 
   return (
     <div className="flex-1 p-6 overflow-y-auto">
-      <div className="bg-white rounded shadow p-4 min-x-[100vh] min-h-[80vh]" style={{ padding: '0px 40px 80px 40px' }}>
+      <div className="bg-white rounded shadow p-4 min-w-full min-h-[80vh]" style={{ padding: '0px 40px 80px 40px' }}>
         <div>
           <Topline title="재고 부족 알림">
             <div className="mt-[40px] relative">
@@ -121,8 +121,8 @@ function LowStockPage() {
                 <div className="col-span-2">기본 안전 재고</div>
                 <div className="col-span-2">현재 재고</div>
                 <div className="col-span-1">부족 재고</div>
-                <div className="col-span-1"></div>
                 <div className="col-span-1 flex justify-center">입고 현황</div>
+                <div className="col-span-1"></div>
               </div>
 
               {filteredItems.map((item) => (
@@ -146,6 +146,18 @@ function LowStockPage() {
                   <div className="col-span-2 font-semibold">{item.quantity}</div>
                   <div className="col-span-1 text-red-400 font-semibold">{item.quantity - item.standard}</div>
 
+
+
+                  <div className="col-span-1 flex items-center justify-center">
+                    {orderedItems[item.idx] && item.approve ===3 && (
+                      <div className="text-gray-400 font-semibold cursor-pointer"
+                      onClick={() => window.location.href = '/test2'}
+                      >
+                        입고 대기 중
+                      </div>
+                    )}
+                  </div>
+
                   <div className="col-span-1 flex justify-center">
                     <button
                       type="button"
@@ -158,16 +170,6 @@ function LowStockPage() {
                     >
                       발주 완료
                     </button>
-                  </div>
-
-                  <div className="col-span-1 flex items-center justify-center">
-                    {orderedItems[item.idx] && item.approve ===3 && (
-                      <div className="text-gray-400 font-semibold cursor-pointer"
-                      onClick={() => window.location.href = '/test2'}
-                      >
-                        입고 대기 중
-                      </div>
-                    )}
                   </div>
 
                 </div>
