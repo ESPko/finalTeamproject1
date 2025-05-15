@@ -121,8 +121,8 @@ function LowStockPage() {
                 <div className="col-span-2">기본 안전 재고</div>
                 <div className="col-span-2">현재 재고</div>
                 <div className="col-span-1">부족 재고</div>
-                <div className="col-span-1 flex justify-center">입고 현황</div>
-                <div className="col-span-1"></div>
+                <div className="col-span-1 flex justify-center">상태</div>
+                <div className="col-span-1 flex justify-center">입고 대기</div>
               </div>
 
               {filteredItems.map((item) => (
@@ -146,7 +146,19 @@ function LowStockPage() {
                   <div className="col-span-2 font-semibold">{item.quantity}</div>
                   <div className="col-span-1 text-red-400 font-semibold">{item.quantity - item.standard}</div>
 
-
+                  <div className="col-span-1 flex justify-center">
+                    <button
+                      type="button"
+                      className={`border shadow border-gray-200 rounded-sm h-[36px] px-1
+                        ${orderedItems[item.idx] && item.approve === 3
+                        ? 'text-gray-300'
+                        : 'text-gray-400 font-semibold hover:bg-gray-200'}`}
+                      disabled={orderedItems[item.idx] && item.approve === 3}
+                      onClick={() => handleApply(item.idx)}
+                    >
+                      발주 대기
+                    </button>
+                  </div>
 
                   <div className="col-span-1 flex items-center justify-center">
                     {orderedItems[item.idx] && item.approve ===3 && (
@@ -158,19 +170,7 @@ function LowStockPage() {
                     )}
                   </div>
 
-                  <div className="col-span-1 flex justify-center">
-                    <button
-                      type="button"
-                      className={`border shadow border-gray-200 rounded-sm h-[36px] px-1
-                        ${orderedItems[item.idx] && item.approve === 3
-                        ? 'text-gray-300'
-                        : 'text-gray-400 font-semibold hover:bg-gray-200'}`}
-                      disabled={orderedItems[item.idx] && item.approve === 3}
-                      onClick={() => handleApply(item.idx)}
-                    >
-                      발주 완료
-                    </button>
-                  </div>
+
 
                 </div>
               ))}
