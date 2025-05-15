@@ -8,7 +8,7 @@ const HeaderIcons2 = ({ onToggleTheme }) => {
       {/* Sun - 라이트모드 토글 버튼 */}
       <button
         onClick={onToggleTheme}
-        className="group relative w-10 h-10 border border-black/30 rounded-md flex items-center justify-center cursor-pointer
+        className="group relative w-10 h-10 rounded-md flex items-center justify-center cursor-pointer
              hover:bg-black/[0.05] transition-colors duration-300"
       >
         <IconSun
