@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import QRCode from 'react-qr-code';
 
-function EquipmentDetail ({ product, updateProduct })
-{
+function EquipmentDetail({ product , updateProduct}) {
   const [name, setName] = useState(product?.name || '');
   const [category, setCategory] = useState(product?.category || '');
   const [price, setPrice] = useState(product?.price || '');
@@ -16,8 +15,7 @@ function EquipmentDetail ({ product, updateProduct })
   const [imageUrl, setImageUrl] = useState(product?.image || ''); // 기존 이미지 URL 상태
   
   useEffect(() => {
-    if (updateProduct && product)
-    {
+    if (updateProduct && product) {
       updateProduct({
         ...product,
         name: name,
@@ -35,8 +33,7 @@ function EquipmentDetail ({ product, updateProduct })
   // 이미지 파일 업로드 처리 함수
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    if (file)
-    {
+    if (file) {
       const imageUrl = URL.createObjectURL(file);
       setImageSrc(imageUrl);
       setImage(file);
@@ -58,28 +55,24 @@ function EquipmentDetail ({ product, updateProduct })
   const handleStandardChange = (e) => {
     const val = e.target.value;
     // 빈 문자열 허용 (입력 중일 때)
-    if (val === '')
-    {
+    if (val === '') {
       setStandard('');
       return;
     }
     const numVal = Number(val);
-    if (!isNaN(numVal) && numVal >= 0)
-    {
+    if (!isNaN(numVal) && numVal >= 0) {
       setStandard(val);
     }
   };
   
   const handleQuantityChange = (e) => {
     const val = e.target.value;
-    if (val === '')
-    {
+    if (val === '') {
       setQuantity('');
       return;
     }
     const numVal = Number(val);
-    if (!isNaN(numVal) && numVal >= 0)
-    {
+    if (!isNaN(numVal) && numVal >= 0) {
       setQuantity(val);
     }
   };

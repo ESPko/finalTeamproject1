@@ -10,7 +10,6 @@ function AddMemberModal({isOpen, onClose, onAdd}) {
   const [userPw, setUserPw] = useState('');
 
   const ModalSubmit = () => {
-    if (!name.trim()) return
     const newMember = {role, name, department, userId,userPw}
     onAdd(newMember)
     onClose()
@@ -23,46 +22,44 @@ function AddMemberModal({isOpen, onClose, onAdd}) {
         <div className="flex justify-between items-center px-2 py-3 border-b"></div>
 
 
+        <div className="flex items-center justify-between">
         <div className="mb-4 mt-5">
           <div className="font-semibold mb-2">부서</div>
           <select
-          value={department}
-          onChange={(e) => setDepartment(e.target.value)}
-          className="w-full border border-gray-300 rounded px-3 py-2">
-            <option value="부선 선택">부서 선택</option>
+            value={department}
+            onChange={(e) => setDepartment(e.target.value)}
+            className="w-[250px] border border-gray-300 rounded px-3 py-2">
+            <option value="부서 선택">부서 선택</option>
             <option value="경영부">경영부</option>
             <option value="기획부">기획부</option>
             <option value="구매부">구매부</option>
             <option value="마케팅부">마케팅부</option>
             <option value="생산부">생산부</option>
-
           </select>
-
         </div>
-
         <div className="mb-4 mt-5">
           <div className="font-semibold mb-2">직급</div>
           <select
             value={role}
             onChange={(e) => setRole(e.target.value)}
-            className="w-full border border-gray-300 rounded px-3 py-2">
+            className="w-[250px] border border-gray-300 rounded px-3 py-2">
             <option value="직급 선택">직급 선택</option>
             <option value="부장">부장</option>
             <option value="구매팀장">구매팀장</option>
             <option value="사원">사원</option>
-
           </select>
+        </div>
         </div>
 
         <div className="mb-4">
           <label className="block font-semibold mb-1">이름</label>
           <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder={'이름을 입력하세요 (최대 10 글자)'}
-          maxLength={10}
-          className="w-full border rounded px-3 py-2"/>
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder={'이름을 입력하세요 (최대 10 글자)'}
+            minLength={1}
+            className="w-full border rounded px-3 py-2"/>
         </div>
 
         <div className="mb-4">
@@ -72,7 +69,7 @@ function AddMemberModal({isOpen, onClose, onAdd}) {
             value={userId}
             onChange={(e) => setUserId(e.target.value)}
             placeholder={'ID를 입력하세요 (최대 10글자)'}
-            maxLength={10}
+            minLength={4}
             className="w-full border rounded px-3 py-2"/>
         </div>
 

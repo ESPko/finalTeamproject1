@@ -6,7 +6,6 @@ import ProductListDetail from './ProductSearchDetail.jsx';
 import Topline from '../../components/layout/Topline.jsx';
 import { SearchIcon } from 'lucide-react';
 import axiosInstance  from '../../api/axiosInstance.jsx';
-import { useNavigate } from 'react-router-dom';
 
 
 
@@ -22,7 +21,12 @@ function ProductSearch() {
 
   const [selectedWarehouse, setSelectedWarehouse] =useState('모든 창고')
 
+  const [warehouse, setWarehouse] = useState([])
+
+  const [isLoading, setIsLoading] = useState(true)
+
   useEffect(() => {
+    setIsLoading(true)
     axiosInstance.get('/productSearch')
       .then(res => {
         const mappedData = res.data.map((ps) => ({
@@ -35,9 +39,17 @@ function ProductSearch() {
         }));
         setProduct(mappedData)
         setFilteredProducts(mappedData)
+
+        const warehouseSet = new Set(mappedData.map(item => item.warehouseName))
+        const warehouseList = Array.from(warehouseSet)
+
+        setWarehouse(warehouseList)
       })
       .catch(err => {
         console.error(err)
+      })
+      .finally(() => {
+        setIsLoading(false)
       })
   }, []);
 
@@ -55,16 +67,21 @@ function ProductSearch() {
   }
 
   // 창고선택시 변경
-  const warehouseSelect = (warehouse) => {
-    setSelectedWarehouse(warehouse);
+  // const warehouseSelect = (warehouse) => {
+  //   setSelectedWarehouse(warehouse);
+  //
+  //   const filtered = products.filter(product => (warehouse === '모든 창고' || product.warehouseName === warehouse) && product.name.toLowerCase().includes(search.toLowerCase())
+  //   )
+  //   setFilteredProducts(filtered)
+  //   setSelectedProduct(null)
+  // }
 
-    const filtered = products.filter(product => (warehouse === '모든 창고' || product.warehouseName === warehouse) && product.name.toLowerCase().includes(search.toLowerCase())
-    )
+  useEffect(() => {
+    const filtered = products.filter(product =>
+      (selectedWarehouse === '모든 창고' || product.warehouseName === selectedWarehouse) && product.name.toLowerCase().includes(search.toLowerCase()))
     setFilteredProducts(filtered)
     setSelectedProduct(null)
-  }
-
-  const navigate = useNavigate();
+  }, [products,search,selectedWarehouse]);
 
   return (
     <div className=" flex-1 p-6 overflow-y-auto">
@@ -78,16 +95,18 @@ function ProductSearch() {
 
                   {/* 창고 위치 선택 드롭다운 메뉴 */}
                   <div className="mb-4">
+
                     <label className="font-semibold mb-2 block">창고 선택</label>
                     <select
                       value={selectedWarehouse}
                       onChange={(e) => {
                         setSelectedWarehouse(e.target.value)
-                        warehouseSelect(e.target.value)
+                        // warehouseSelect(e.target.value)
                       }}
                       className="w-[200px] h-[35px] border border-gray-300 rounded px-3 text-sm">
-                      {['모든 창고', '창고1','창고2','창고3','창고4',].map((name) => (
-                        <option key={name} value={name}>{name}</option>
+                      <option value="모든 창고">모든 창고</option>
+                      {warehouse.map((warehouseName) => (
+                        <option key={warehouseName} value={warehouseName}>{warehouseName}</option>
                       ))}
                     </select>
                   </div>
@@ -114,13 +133,12 @@ function ProductSearch() {
                 <div className="flex">
                   <div className="w-1/2">
                     {/* 비품 리스트 */}
-                    {filteredProducts.length > 0 ? (
-                      <ProductSearchItem
-                        products={filteredProducts}
-                        onSelectedProduct={setSelectedProduct}
-                      />
+                    {isLoading ? (
+                      <div className="text-center py-10 font-semibold text-gray-500">로딩중...</div>
                     ) : (
-                      <NoResultProduct />
+                      filteredProducts.length > 0 ?(<ProductSearchItem
+                        products={filteredProducts}
+                        onSelectedProduct={setSelectedProduct}/> ): <NoResultProduct/>
                     )}
                   </div>
 
@@ -135,9 +153,6 @@ function ProductSearch() {
             </div>
 
           </Topline>
-          <button
-            onClick={() => navigate('/')}
-            className={"bg-gray-500 text-white rounded p-2 hover:cursor-pointer"}>메인 화면 가기</button>
 
         </div>
       </div>

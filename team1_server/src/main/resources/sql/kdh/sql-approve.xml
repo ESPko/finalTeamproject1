@@ -5,7 +5,8 @@
     <select id="getApproveList" resultType="bitc.fullstack503.team1_server.dto.ItemDTO">
         select idx, time, image, name, category, warehouse_name, vendor_name, price, quantity, approve
         from item
-        order by approve asc, time asc
+        where approve != 4
+        order by time desc
     </select>
 
     <update id="updateApprove">

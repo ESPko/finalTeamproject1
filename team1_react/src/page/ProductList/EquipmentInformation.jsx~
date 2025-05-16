@@ -264,7 +264,7 @@ function EquipmentInformation ()
                 <tbody>
                 {filteredProducts.map((product, idx) => (
                   <tr key={idx} onClick={() => handleRowClick(product)} className="border-b border-gray-100 cursor-pointer text-gray-600">
-                    <td className="w-[120px] bg-white flex justify-center items-center">
+                    <td className="w-[120px] bg-white flex justify-center items-center py-2">
                       {product.image ? (
                         <img
                           src={product.image}

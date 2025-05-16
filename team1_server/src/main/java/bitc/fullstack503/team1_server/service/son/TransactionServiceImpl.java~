@@ -19,9 +19,9 @@ public class TransactionServiceImpl implements TransactionService
   }
   
   @Override
-  public int selectItemQuantity (int itemIdx)
+  public int selectItemQuantityByIdx (int itemIdx)
   {
-    return transactionMapper.selectItemQuantity (itemIdx);
+    return transactionMapper.selectItemQuantityByIdx (itemIdx);
   }
   
   @Override
@@ -34,5 +34,23 @@ public class TransactionServiceImpl implements TransactionService
   public void updateItemQrByIdx (ItemDTO itemDTO)
   {
     transactionMapper.updateItemQrByIdx (itemDTO);
+  }
+  
+  @Override
+  public String selectWarehouseNameByIdx (int idx)
+  {
+    return transactionMapper.selectWarehouseNameByIdx (idx);
+  }
+  
+  @Override
+  public void updateItemWarehouseAfterNameByBeforeName (String beforeName, String afterName)
+  {
+    transactionMapper.updateItemWarehouseAfterNameByBeforeName (beforeName, afterName);
+  }
+  
+  @Override
+  public void updateItemVendorAfterNameByBeforeName (String beforeName, String afterName)
+  {
+    transactionMapper.updateItemVendorAfterNameByBeforeName (beforeName, afterName);
   }
 }

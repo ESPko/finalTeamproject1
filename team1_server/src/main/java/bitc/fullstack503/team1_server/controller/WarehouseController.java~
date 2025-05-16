@@ -49,7 +49,7 @@ public class WarehouseController
       String beforeName = transactionService.selectWarehouseNameByIdx (idx);
       warehouseService.updateLocation (warehouseDTO);
       String afterName = warehouseDTO.getName ();
-      if (!beforeName.equals (afterName))
+      if (beforeName.equals (afterName))
       {
         transactionService.updateItemWarehouseAfterNameByBeforeName (beforeName, afterName);
       }

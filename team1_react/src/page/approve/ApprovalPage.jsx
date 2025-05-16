@@ -2,19 +2,18 @@ import Topline from '../../components/layout/Topline.jsx';
 import { useEffect, useState } from 'react';
 import ApproveItemList from './ApproveItemList.jsx';
 import axiosInstance from '../../api/axiosInstance.jsx';
-import { useNavigate } from 'react-router-dom';
 
 
 function ApprovalPage() {
   const [approveProduct, setApproveProduct] = useState([]);
   const [search, setSearch] = useState(``)
   const [filteredProducts,setFilteredProducts] = useState(approveProduct)
-  const [selectedApproval, setSelectedApproval] = useState('전체보기')
+  const [selectedApproval, setSelectedApproval] = useState('전체 보기')
 
   const approvalMap ={
-    '전체보기': null,
-    '대기': 0,
-    '승인': 1,
+    '전체 보기': null,
+    '승인 대기': 0,
+    '승인': [1,3],
     '거절': 2,
   };
 
@@ -23,7 +22,7 @@ function ApprovalPage() {
     axiosInstance.get('/approve')
 
       .then(res => {
-        const mappedData = res.data.map((ap, index) => ({
+        const mappedData = res.data.map((ap) => ({
           idx: ap.idx,
           time: ap.time,
           image: ap.image,
@@ -53,7 +52,13 @@ function ApprovalPage() {
     const approvalValue = approvalMap[selectedApproval];
 
     const filtered = approveProduct.filter(product => {
-      const matchApproval = approvalValue === null || product.approve === approvalValue ;
+      const matchApproval =
+        approvalValue === null
+          ? true
+          : Array.isArray(approvalValue)
+            ? approvalValue.includes(product.approve)
+            :product.approve === approvalValue;
+
       const matchSearch = product.name.toLowerCase().includes(search.toLowerCase())
       return matchApproval && matchSearch
     })
@@ -91,8 +96,6 @@ function ApprovalPage() {
       });
   };
 
-  const navigate = useNavigate();
-
   return (
     <main className=" flex-1 p-6 overflow-y-auto">
       <div className="bg-white rounded shadow p-4 min-x-[100vh]  min-h-[80vh] "
@@ -112,8 +115,8 @@ function ApprovalPage() {
                     approvalSelect(e.target.value)
                   }}
                   className= "w-[200px] h-[36px] border border-gray-300 rounded px-3 text-sm mr-5"
-                >
-                  {['전체 보기','대기','승인','거절'].map((name) => (
+                ><option value="전체 보기">전체 보기</option>
+                  {['승인 대기','승인','거절'].map((name) => (
                     <option key={name} value={name}>{name}</option>
                   ))}
                 </select>
@@ -138,9 +141,6 @@ function ApprovalPage() {
               changeApprove={changeApprove}
             />
           </Topline>
-          <button
-            onClick={() => navigate('/')}
-            className={"bg-gray-500 text-white rounded p-2 hover:cursor-pointer"}>메인 화면 가기</button>
 
         </div>
       </div>

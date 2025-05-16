@@ -63,7 +63,7 @@ function StatusPage ()
   
   return (
     <div className="flex-1 p-6 overflow-y-auto">
-      <div className="bg-white rounded shadow p-4 min-x-[100vh] min-h-[90vh]" style={{ padding: '0px 40px 0 40px' }}>
+      <div className="bg-white rounded shadow p-4 min-x-[100vh] min-h-[80vh]" style={{ padding: '0px 40px 80px' }}>
         <Topline title="비품 사용 현황">
           <StatusNavigation
             selectedDepartments={selectedDepartments}
@@ -77,18 +77,18 @@ function StatusPage ()
             tags={tags}
             setTags={setTags}
           />
-          <table className="table-fixed border-collapse">
+          <table className="table-fixed border-collapse w-full">
             <thead className="bg-white top-0 z-30">
             <tr className="border-b border-gray-300">
-              <th className="cell-style w-[120px]">사진</th>
-              <th className="cell-style w-[200px]">제품명</th>
-              <th className="cell-style w-[180px]">보관위치</th>
-              <th className="cell-style w-[190px]">거래처</th>
-              <th className="cell-style w-[130px]">부서</th>
-              <th className="cell-style w-[130px]">출고자</th>
-              <th className="cell-style w-[130px]">재고변동</th>
-              <th className="cell-style w-[130px]">수량</th>
-              <th className="cell-style w-[200px]">출고일</th>
+              <th className="cell-style w-[10%]">사진</th>
+              <th className="cell-style w-[17%]">제품명</th>
+              <th className="cell-style w-[15%]">보관위치</th>
+              <th className="cell-style w-[15%]">거래처</th>
+              <th className="cell-style w-[10%]">부서</th>
+              <th className="cell-style w-[10%]">출고자</th>
+              <th className="cell-style w-[10%]">재고변동</th>
+              <th className="cell-style w-[8%]">수량</th>
+              <th className="cell-style w-[15%]">출고일</th>
             </tr>
             </thead>
             <StatusTableBody products={products} />

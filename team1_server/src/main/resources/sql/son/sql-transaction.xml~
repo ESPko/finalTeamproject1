@@ -43,7 +43,7 @@
     where idx = #{idx}
   </select>
   
-  <update id="updateItemVendorAfterNameByBeforeName" parameterType="map">
+  <update id="updateItemAfterNameByBeforeName" parameterType="map">
     update item
     set vendor_name = #{afterName}
     where vendor_name = #{beforeName}

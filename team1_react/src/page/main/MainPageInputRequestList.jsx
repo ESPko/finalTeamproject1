@@ -4,9 +4,9 @@ import axiosInstance from '../../api/axiosInstance.jsx';
 function MainPageInputRequestList() {
   const [recentRequests, setRecentRequests] = useState([])
 
-  const approvedCount = recentRequests.filter(r => r.approve === 1).length;
+  const approvedCount = recentRequests.filter(r => r.approve === 1 || r.approve === 3).length;
   const waitingCount = recentRequests.filter(r => r.approve === 0).length;
-  const rejectedCount = recentRequests.filter(r => r.approve !== 0 && r.approve !== 1).length;
+  const rejectedCount = recentRequests.filter(r => r.approve === 2).length;
 
   // 목록 불러오기
   useEffect(() => {
@@ -33,18 +33,18 @@ function MainPageInputRequestList() {
           <a href="/test3">
             <div className="text-lg font-bold text-gray-800 hover:scale-110">입고 신청 내역</div></a>
           <div className="text-sm text-gray-400">{recentRequests.length > 0
-              ? new Date(recentRequests[0].time).toLocaleDateString('ko-KR')
-              : '---'}</div>
+            ? new Date(recentRequests[0].time).toLocaleDateString('ko-KR')
+            : '---'}</div>
         </div>
 
         <div className="space-y-2 mb-4 text-sm">
           <div className="flex justify-between">
-            <span>신청 완료</span>
+            <span>승인 완료</span>
             <span className="text-green-500 font-bold">{approvedCount}</span>
           </div>
           <div className="flex justify-between">
-            <span>신청 대기</span>
-            <span className="text-yellow-500 font-bold">{waitingCount}</span>
+            <span>승인 대기</span>
+            <span className="text-gray-500 font-bold">{waitingCount}</span>
           </div>
           <div className="flex justify-between">
             <span>신청 거절</span>
@@ -73,11 +73,16 @@ function MainPageInputRequestList() {
                   rr.approve === 1
                     ? "bg-green-100 text-green-600"
                     : rr.approve === 0
-                      ? "bg-yellow-100 text-yellow-600"
-                      : "bg-red-100 text-red-600"
+                      ? "bg-gray-100 text-gray-600"
+                      : rr.approve === 2
+                        ? "bg-red-100 text-red-600"
+                        : "bg-green-100 text-green-600"
                 }`}
               >
-                {rr.approve === 1 ? "승인" : rr.approve === 0 ? "대기" : "거절"}
+                {rr.approve === 1 ? "승인 완료"
+                  : rr.approve === 0 ? "승인 대기"
+                    :rr.approve === 2 ?  "승인 거절"
+                      :"승인 완료"}
               </span>
                   </td>
                 </tr>

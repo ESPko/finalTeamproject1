@@ -7,9 +7,15 @@ public interface TransactionMapper
 {
   void insertTransaction (TransactionDTO transactionDTO);
   
-  int selectItemQuantity (int itemIdx);
+  int selectItemQuantityByIdx (int itemIdx);
   
   int selectItemIdxByImage (ItemDTO itemDTO);
   
   void updateItemQrByIdx (ItemDTO itemDTO);
+  
+  String selectWarehouseNameByIdx (int idx);
+  
+  void updateItemWarehouseAfterNameByBeforeName (String beforeName, String afterName);
+  
+  void updateItemVendorAfterNameByBeforeName (String beforeName, String afterName);
 }

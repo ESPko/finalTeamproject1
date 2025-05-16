@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import axiosInstance from '../../api/axiosInstance.jsx';
 
-function ProductAdd ({ onClose, onSuccess })
-{
+function ProductAdd({ onClose, onSuccess }) {
   const [name, setName] = useState('');
   const [category, setCategory] = useState('');
   const [vendorName, setVendorName] = useState('');
@@ -19,13 +18,10 @@ function ProductAdd ({ onClose, onSuccess })
   
   useEffect(() => {
     const fetchWarehouse = async () => {
-      try
-      {
+      try {
         const response = await axiosInstance.get('/warehouse/name');
         setWarehouseList(response.data);
-      }
-      catch (err)
-      {
+      } catch (err) {
         console.log('창고 목록을 가져오는 데 실패했습니다:', err);
       }
     };
@@ -34,13 +30,10 @@ function ProductAdd ({ onClose, onSuccess })
   
   useEffect(() => {
     const fetchVendor = async () => {
-      try
-      {
+      try {
         const response = await axiosInstance.get('/vendor/name');
         setVendorList(response.data);
-      }
-      catch (err)
-      {
+      } catch (err) {
         console.log('매입회사 목록을 가져오는 데 실패했습니다:', err);
       }
     };
@@ -49,8 +42,7 @@ function ProductAdd ({ onClose, onSuccess })
   
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    if (file)
-    {
+    if (file) {
       const imageUrl = URL.createObjectURL(file);
       setImageSrc(imageUrl);
       setImage(file);
@@ -59,8 +51,7 @@ function ProductAdd ({ onClose, onSuccess })
   
   const handleUpload = async () => {
     if (isUploading) return; // 🔸 중복 클릭 방지
-    if (!image)
-    {
+    if (!image) {
       alert('이미지를 먼저 선택하세요.');
       return;
     }
@@ -76,8 +67,7 @@ function ProductAdd ({ onClose, onSuccess })
     formData.append('price', price);
     formData.append('standard', standard);
     
-    try
-    {
+    try {
       const response = await axiosInstance.post('/item/add', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -86,13 +76,9 @@ function ProductAdd ({ onClose, onSuccess })
       onSuccess();
       onClose();
       setImageSrc(response.data.imageUrl);
-    }
-    catch (error)
-    {
+    } catch (error) {
       console.error('이미지 업로드 실패:', error);
-    }
-    finally
-    {
+    } finally {
       setIsUploading(false); // 🔸 업로드 종료
     }
   };

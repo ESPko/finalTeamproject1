@@ -3,11 +3,11 @@ import Topline from '../../components/layout/Topline.jsx';
 import Modal from '../../Modal/Modal.jsx';
 import LocationAdd from './LocationAdd.jsx';
 import LocationDetail from './LocationDetail.jsx';
-import axiosInstance  from '../../api/axiosInstance.jsx';
+import axiosInstance from '../../api/axiosInstance.jsx';
 import { SearchIcon } from 'lucide-react';
 
-
-function LocationInfo() {
+function LocationInfo ()
+{
   // 서버에서 받아온 위치 목록 상태
   const [locationInfo, setLocationInfo] = useState([]);
   // 필터링된 위치 목록 상태
@@ -22,7 +22,7 @@ function LocationInfo() {
   const [itemCounts, setItemCounts] = useState({});
   const [updatedLocation, setUpdatedLocation] = useState(null);
   const [newLocation, setNewLocation] = useState(null);
-
+  
   // 서버에서 데이터 가져오기
   useEffect(() => {
     axiosInstance.get('/warehouse/warehouseList')
@@ -31,16 +31,19 @@ function LocationInfo() {
         setFilteredLocationInfo(res.data); // 초기 상태에서는 필터링하지 않은 전체 목록
         // 각 창고에 대한 상품 갯수도 함께 가져오기
         res.data.forEach(location => {
-          if (location.name) {  // localName이 존재하는 경우에만 요청
+          if (location.name)
+          {  // localName이 존재하는 경우에만 요청
             axiosInstance.get(`/warehouse/warehouseItemCount?warehouseName=${location.name}`)
               .then(response => {
                 setItemCounts(prevState => ({
                   ...prevState,
-                  [location.name]: response.data
+                  [location.name]: response.data,
                 }));
               })
               .catch(error => console.error('상품 갯수 불러오기 오류:', error));
-          } else {
+          }
+          else
+          {
             console.warn('창고 이름이 없습니다:', location);
           }
         });
@@ -49,7 +52,7 @@ function LocationInfo() {
         console.error('창고 목록 불러오기 오류:', err);
       });
   }, []);
-
+  
   // 검색어에 따라 위치 목록 필터링하는 함수
   useEffect(() => {
     const filtered = locationInfo.filter(location => {
@@ -62,7 +65,7 @@ function LocationInfo() {
     });
     setFilteredLocationInfo(filtered);
   }, [searchQuery, locationInfo]); // 검색어 또는 위치 목록이 변경되면 필터링
-
+  
   // 위치 목록 갱신 함수
   const handleAddLocation = () => {
     axiosInstance.get('/warehouse/warehouseList')
@@ -74,21 +77,23 @@ function LocationInfo() {
         console.error('창고 위치 목록 불러오기 오류:', err);
       });
   };
-
+  
   const locationClick = (location) => {
     setSelectedLocation(location);
     setUpdatedLocation(location);
     setLocalDetail(true);
   };
-
+  
   // 비품 수를 확인한 후 삭제 처리 함수
   const handleDeleteWarehouse = (location) => {
     axiosInstance.get(`/item/getWarehouseItemCount?warehouseName=${location.name}`)
       .then(response => {
         const itemCount = response.data;
-        if (itemCount > 0) {
+        if (itemCount > 0)
+        {
           // 비품이 존재하는 경우
-          if (window.confirm('해당 창고에 비품이 존재합니다. 창고를 삭제하시면 관련 비품도 함께 삭제됩니다. 계속하시겠습니까?')) {
+          if (window.confirm('해당 창고에 비품이 존재합니다. 창고를 삭제하시면 관련 비품도 함께 삭제됩니다. 계속하시겠습니까?'))
+          {
             axiosInstance.put(`/item/hideItemsByWarehouse?warehouseName=${location.name}`)
               .then(() => {
                 console.log('비품 상태 숨기기 성공');
@@ -98,18 +103,23 @@ function LocationInfo() {
                 console.error('비품 숨기기 오류:', error);
                 alert('비품 상태 숨기기 실패');
               });
-          } else {
+          }
+          else
+          {
             console.log('비품 숨기기 취소');
           }
-        } else {
-          if (window.confirm('해당 창고를 삭제하시겠습니까?')) {
+        }
+        else
+        {
+          if (window.confirm('해당 창고를 삭제하시겠습니까?'))
+          {
             deleteWarehouse(location);
           }
         }
       })
       .catch(error => console.error('비품 수 조회 오류:', error));
   };
-
+  
   // 창고 삭제 함수
   const deleteWarehouse = (location) => {
     axiosInstance.delete(`/warehouse/${location.idx}`)
@@ -123,8 +133,7 @@ function LocationInfo() {
         alert('창고 정보 삭제 실패');
       });
   };
-
-
+  
   return (
     <div className="flex-1 p-6 overflow-y-auto">
       <div className="bg-white rounded shadow p-4 min-x-[100vh] min-h-[80vh]"
@@ -135,7 +144,7 @@ function LocationInfo() {
             actions={
               <button
                 onClick={() => setLocalAdd(true)}
-                className="bg-blue-500 shadow font-semibold text-white w-[86px] h-[36px] rounded"
+                className="bg-blue-500 text-white font-semibold px-4 py-2 rounded"
               >
                 창고 추가
               </button>
@@ -157,27 +166,36 @@ function LocationInfo() {
                   />
                 </div>
               </div>
-
+              
               {/* 테이블 */}
-              <div className="overflow-auto w-max pretty-scrollbar flex-auto m-3 mt-4 text-center">
-                <table className="w-full table-fiex border-collapse">
+              <div className="overflow-x-auto pretty-scrollbar mt-4 text-center">
+                <table className="w-full table-fixed border-collapse">
                   <thead className="bg-white">
-                  <tr className="bg-white sticky top-0 z-30 border-b border-gray-200 text-center">
-                    <th className="py-2 px-4 w-[200px]">이름</th>
-                    <th className="py-2 px-4 w-[400px]">주소</th>
-                    <th className="py-2 px-4 w-[200px]">재고 수량</th>
-                    <th className="py-2 px-4 w-[440px]">메모</th>
-                    <th className="py-2 px-4 w-[250px] text-right"></th>
+                  <tr className="sticky top-0 z-30 border-b border-gray-200 text-center">
+                    <th className="py-2 px-4 w-[15%]">이름</th>
+                    <th className="py-2 px-4 w-[35%]">주소</th>
+                    <th className="py-2 px-4 w-[10%]">재고 수량</th>
+                    <th className="py-2 px-4 w-[25%]">메모</th>
+                    <th className="py-2 px-4 w-[15%] text-right"></th>
                   </tr>
                   </thead>
                   <tbody>
                   {filteredLocationInfo.map((location) => (
                     <tr key={location.idx} className="border-b border-gray-100 text-center text-gray-500">
-                      <td className="py-2 px-4 w-[200px]">{location.name}</td>
-                      <td className="py-2 px-4 w-[400px]">{location.location}</td>
-                      <td className="py-2 px-4 w-[200px] text-black">{itemCounts[location.name]}</td>
-                      <td className="py-2 px-4 w-[440px]">{location.memo}</td>
-                      <td className="py-2 px-4 w-[250px] text-right space-x-2">
+                      <td className="py-2 px-4 w-[15%] truncate overflow-hidden whitespace-nowrap" title={location.name}>
+                        {location.name}
+                      </td>
+                      <td className="py-2 px-4 w-[35%] truncate overflow-hidden whitespace-nowrap" title={location.location}>
+                        {location.location}
+                      </td>
+                      <td className="py-2 px-4 w-[10%] text-black truncate overflow-hidden whitespace-nowrap">
+                        {itemCounts[location.name]}
+                      </td>
+                      <td className="py-2 px-4 w-[25%] truncate overflow-hidden whitespace-nowrap" title={location.memo}>
+                        {location.memo}
+                      </td>
+                      <td className="py-2 px-4 w-[15%] text-right space-x-2">
+                        
                         <button
                           onClick={() => locationClick(location)}
                           className="px-2 py-1 border border-gray-200 shadow text-gray-400 font-semibold rounded text-sm hover:bg-gray-200"
@@ -186,7 +204,8 @@ function LocationInfo() {
                         </button>
                         <button
                           onClick={() => {
-                            if (window.confirm('정말 삭제하시겠습니까?')) {
+                            if (window.confirm('정말 삭제하시겠습니까?'))
+                            {
                               handleDeleteWarehouse(location); // 삭제 처리 함수 호출
                             }
                           }}
@@ -202,7 +221,7 @@ function LocationInfo() {
               </div>
             </div>
           </Topline>
-
+          
           {/*위치 추가 모달*/}
           <Modal isOpen={localAdd}
                  onClose={() => setLocalAdd(false)}
@@ -236,7 +255,7 @@ function LocationInfo() {
                  }>
             <LocationAdd onAddLocation={setNewLocation} />
           </Modal>
-
+          
           {/*위치 수정 모달*/}
           <Modal
             isOpen={localDetail}

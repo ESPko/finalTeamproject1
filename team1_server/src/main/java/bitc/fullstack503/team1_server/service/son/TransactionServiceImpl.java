@@ -35,4 +35,28 @@ public class TransactionServiceImpl implements TransactionService
   {
     transactionMapper.updateItemQrByIdx (itemDTO);
   }
+  
+  @Override
+  public String selectWarehouseNameByIdx (int idx)
+  {
+    return transactionMapper.selectWarehouseNameByIdx (idx);
+  }
+  
+  @Override
+  public void updateItemWarehouseAfterNameByBeforeName (String beforeName, String afterName)
+  {
+    transactionMapper.updateItemWarehouseAfterNameByBeforeName (beforeName, afterName);
+  }
+  
+  @Override
+  public String selectVendorNameByIdx (int idx)
+  {
+    return transactionMapper.selectVendorNameByIdx (idx);
+  }
+  
+  @Override
+  public void updateItemVendorAfterNameByBeforeName (String beforeName, String afterName)
+  {
+    transactionMapper.updateItemVendorAfterNameByBeforeName (beforeName, afterName);
+  }
 }

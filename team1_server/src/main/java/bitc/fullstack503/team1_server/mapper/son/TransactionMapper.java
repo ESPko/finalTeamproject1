@@ -12,4 +12,12 @@ public interface TransactionMapper
   int selectItemIdxByImage (ItemDTO itemDTO);
   
   void updateItemQrByIdx (ItemDTO itemDTO);
+  
+  String selectWarehouseNameByIdx (int idx);
+  
+  void updateItemWarehouseAfterNameByBeforeName (String beforeName, String afterName);
+  
+  String selectVendorNameByIdx (int idx);
+  
+  void updateItemVendorAfterNameByBeforeName (String beforeName, String afterName);
 }
