@@ -9,14 +9,16 @@ function LocationAdd({  onAddLocation }) {
 
 
   useEffect(() => {
-    if (onAddLocation){
+    if (locationName && address) {
+    if (onAddLocation) {
       onAddLocation({
         ...locationInfo,
         name: locationName,
         location: address,
         memo: memo,
-      })
+      });
     }
+  }
   },[locationName, address, memo])
 
 

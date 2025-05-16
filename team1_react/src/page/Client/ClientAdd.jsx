@@ -14,7 +14,23 @@ function ClientAdd({ onClose, onSuccess }) {
     setClient({ ...client, [e.target.name]: e.target.value });
   };
 
+  // 유효성 검사 함수
+  const validateForm = () => {
+    // 필수 항목이 비어 있는지 확인
+    if (!client.name || !client.phone || !client.email || !client.location) {
+      alert('필수 내용이 누락되었습니다');  // 필수 항목이 비어 있으면 알림 띄움
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = () => {
+    // 유효성 검사
+    if (!validateForm()) {
+      return;  // 유효성 검사에 실패하면 추가되지 않음
+    }
+
+    // 유효성 검사 통과 시 서버에 데이터 전송
     axiosInstance.post('/vendor/vendorAdd', client)
       .then(() => {
         alert('매입처가 추가되었습니다.');
@@ -29,7 +45,7 @@ function ClientAdd({ onClose, onSuccess }) {
 
   return (
     <div>
-    <div className="space-y-6">
+      <div className="space-y-6">
         {/* 이름 */}
         <div>
           <label className="block font-medium mb-1">
@@ -48,7 +64,8 @@ function ClientAdd({ onClose, onSuccess }) {
         {/* 전화번호 + 이메일 */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block font-medium mb-1">전화번호</label>
+            <label className="block font-medium mb-1">전화번호
+              <span className="text-red-500">*</span></label>
             <input
               type="text"
               name="phone"
@@ -59,7 +76,8 @@ function ClientAdd({ onClose, onSuccess }) {
             />
           </div>
           <div>
-            <label className="block font-medium mb-1">이메일</label>
+            <label className="block font-medium mb-1">이메일
+              <span className="text-red-500">*</span></label>
             <input
               type="email"
               name="email"
@@ -73,7 +91,8 @@ function ClientAdd({ onClose, onSuccess }) {
 
         {/* 주소 */}
         <div>
-          <label className="block font-medium mb-1">주소</label>
+          <label className="block font-medium mb-1">주소
+            <span className="text-red-500">*</span></label>
           <input
             type="text"
             name="location"
@@ -95,7 +114,7 @@ function ClientAdd({ onClose, onSuccess }) {
             className="w-full border border-gray-300 rounded-md px-3 py-2 h-28 resize-none"
           />
         </div>
-    </div>
+      </div>
 
       <div className="flex justify-end space-x-2 px-4 py-2 border-t">
         <button onClick={handleSubmit} className="bg-blue-600 text-white px-4 py-2 rounded">추가</button>

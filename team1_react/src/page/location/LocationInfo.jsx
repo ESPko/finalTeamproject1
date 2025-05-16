@@ -65,13 +65,27 @@ function LocationInfo ()
     });
     setFilteredLocationInfo(filtered);
   }, [searchQuery, locationInfo]); // 검색어 또는 위치 목록이 변경되면 필터링
-  
+
   // 위치 목록 갱신 함수
-  const handleAddLocation = () => {
+  const handleLocation = () => {
     axiosInstance.get('/warehouse/warehouseList')
       .then((res) => {
-        setLocationInfo(res.data); // 위치 목록 갱신
-        setFilteredLocationInfo(res.data); // 갱신 후 필터링된 목록도 다시 업데이트
+        setLocationInfo(res.data);  // 위치 목록 갱신
+        setFilteredLocationInfo(res.data);  // 갱신 후 필터링된 목록도 다시 업데이트
+
+        // 새로 추가된 창고에 대해서도 재고 수량을 가져오기
+        res.data.forEach(location => {
+          if (location.name) {
+            axiosInstance.get(`/warehouse/warehouseItemCount?warehouseName=${location.name}`)
+              .then(response => {
+                setItemCounts(prevState => ({
+                  ...prevState,
+                  [location.name]: response.data,
+                }));
+              })
+              .catch(error => console.error('상품 갯수 불러오기 오류:', error));
+          }
+        });
       })
       .catch((err) => {
         console.error('창고 위치 목록 불러오기 오류:', err);
@@ -133,6 +147,9 @@ function LocationInfo ()
         alert('창고 정보 삭제 실패');
       });
   };
+
+
+
   
   return (
     <div className="flex-1 p-6 overflow-y-auto">
@@ -204,10 +221,7 @@ function LocationInfo ()
                         </button>
                         <button
                           onClick={() => {
-                            if (window.confirm('정말 삭제하시겠습니까?'))
-                            {
                               handleDeleteWarehouse(location); // 삭제 처리 함수 호출
-                            }
                           }}
                           className="px-2 py-1 border border-gray-200 shadow font-semibold text-gray-400 rounded text-sm hover:bg-gray-200"
                         >
@@ -230,11 +244,17 @@ function LocationInfo ()
                    <>
                      <button
                        onClick={() => {
+                         if (!newLocation || !newLocation.name || !newLocation.location) {
+                           alert('필수내용이 누락되었습니다.');
+                           return; // 누락된 내용이 있으면 추가하지 않음
+                         }
+
+                         // 서버에 새로운 위치 추가 요청
                          axiosInstance.post(`/warehouse/addLocation`, newLocation)
                            .then((response) => {
                              alert(response.data);
-                             setLocalAdd(false);
-                             handleAddLocation();
+                             setLocalAdd(false); // 위치 추가 모달 닫기
+                             handleLocation(); // 위치 목록 갱신
                            })
                            .catch((error) => {
                              console.error('창고 추가 실패:', error);
@@ -269,7 +289,7 @@ function LocationInfo ()
                       .then((response) => {
                         alert(response.data);
                         setLocalDetail(false);  // 수정 모달 닫기
-                        handleAddLocation();  // 위치 목록 갱신
+                        handleLocation();  // 위치 목록 갱신
                       })
                       .catch((error) => {
                         console.error('창고 수정 실패:', error);
