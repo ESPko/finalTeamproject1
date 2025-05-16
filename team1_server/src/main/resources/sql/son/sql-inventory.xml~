@@ -30,12 +30,12 @@
     <if test="(request.selectedLocations != null and request.selectedLocations.size > 0)
             and (request.selectedCorrespondents != null and request.selectedCorrespondents.size > 0)">
       AND (
-      w.name IN
+      i.warehouse_name IN
       <foreach collection="request.selectedLocations" item="loc" open="(" separator="," close=")">
         #{loc}
       </foreach>
       AND
-      v.name IN
+      i.vendor_name IN
       <foreach collection="request.selectedCorrespondents" item="cor" open="(" separator="," close=")">
         #{cor}
       </foreach>
@@ -45,7 +45,7 @@
     <!-- 위치만 있는 경우 -->
     <if test="(request.selectedLocations != null and request.selectedLocations.size > 0)
             and (request.selectedCorrespondents == null or request.selectedCorrespondents.size == 0)">
-      AND w.name IN
+      AND i.warehouse_name IN
       <foreach collection="request.selectedLocations" item="loc" open="(" separator="," close=")">
         #{loc}
       </foreach>
@@ -54,7 +54,7 @@
     <!-- 거래처만 있는 경우 -->
     <if test="(request.selectedCorrespondents != null and request.selectedCorrespondents.size > 0)
             and (request.selectedLocations == null or request.selectedLocations.size == 0)">
-      AND v.name IN
+      AND i.vendor_name IN
       <foreach collection="request.selectedCorrespondents" item="cor" open="(" separator="," close=")">
         #{cor}
       </foreach>

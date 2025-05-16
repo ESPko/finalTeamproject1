@@ -10,7 +10,7 @@
     i.vendor_name AS vendorName,
     SUM(CASE WHEN t.transaction = 0 THEN (t.after - t.before) ELSE 0 END) AS inbound,
     SUM(CASE WHEN t.transaction = 1 THEN (t.before - t.after) ELSE 0 END) AS outbound,
-    SUM(CASE WHEN t.transaction = 2 THEN ABS(t.after - t.before) ELSE 0 END) AS adjusted,
+    SUM(CASE WHEN t.transaction = 2 THEN (t.after - t.before) ELSE 0 END) AS adjusted,
     i.quantity AS totalQuantity,
     i.idx as idx
     FROM item i
