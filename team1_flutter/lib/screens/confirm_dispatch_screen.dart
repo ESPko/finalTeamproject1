@@ -180,7 +180,7 @@ class _ConfirmDispatchDialogState extends State<ConfirmDispatchDialog> {
                 context: context,
                 builder: (_) => AlertDialog(
                   title: const Text('오류'),
-                  content: Text('출고 실패: $e'),
+                  content: Text('출고 실패'),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(),

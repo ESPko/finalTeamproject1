@@ -27,32 +27,13 @@ void main() async {
   final token = await messaging.getToken();
   print('📲 FCM Token: $token');
   // Firebase Firestore로 토큰 전송
-  sendTokenToFirestore(token);
 
   // 토큰 갱신 감지
   FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
     print('🔄 New FCM Token: $newToken');
-    sendTokenToFirestore(newToken);
   });
 
   runApp(const InventoryApp());
-}
-
-/// Firebase Firestore에 FCM 토큰 저장
-Future<void> sendTokenToFirestore(String? token) async {
-  if (token == null) return;
-
-  try {
-    // Firebase Firestore에 토큰 저장
-    await FirebaseFirestore.instance.collection('fcm_tokens').doc(token).set({
-      'token': token,
-      'timestamp': FieldValue.serverTimestamp(), // 저장된 시간 기록
-    });
-
-    print('토큰 Firestore에 성공적으로 저장됨');
-  } catch (e) {
-    print('Firestore에 토큰 저장 중 에러 발생: $e');
-  }
 }
 
 class InventoryApp extends StatelessWidget {
