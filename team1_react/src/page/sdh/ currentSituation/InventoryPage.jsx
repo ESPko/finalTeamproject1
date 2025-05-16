@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo } from 'react';
 import Topline from '../../../components/layout/Topline.jsx';
 import InventoryNavigation from '../../../components/sdh/navi/InventoryNavigation.jsx'; // 원본 컴포넌트
 import InventoryTableBody from '../../../components/sdh/inventory/InventoryTableBody.jsx';
-import axiosInstance from '../../../api/axiosInstance'; // ✅ axiosInstance 사용
+import axiosInstance from '../../../api/axiosInstance'; // axiosInstance 사용
 
 function InventoryPage ()
 {

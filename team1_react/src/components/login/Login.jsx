@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Eye, EyeOff } from 'lucide-react';
-import Header from '../layout/Header.jsx';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../api/axiosInstance.jsx';
 import { useAuth } from '../../contexts/AuthContext.jsx';
@@ -11,7 +10,7 @@ export default function Login() {
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false); // ✅ 추가
+  const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
@@ -29,23 +28,28 @@ export default function Login() {
 
       const { token, user } = response.data;
 
-      login(user, token, rememberMe); // ✅ 수정
+      login(user, token, rememberMe);
       console.log('Login success:', user);
 
       navigate(`/`);
     } catch (error) {
       console.error('Login failed:', error);
-      setError("아이디 또는 비밀번호가 올바르지 않습니다.");
+      // 백엔드에서 받은 메시지를 그대로 보여줌
+      setError(error.response?.data || "아이디 또는 비밀번호가 올바르지 않습니다.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <>
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#e0ecf7] to-[#f9fcff]">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#e0ecf7] to-[#f9fcff]">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault(); // 기본 제출 막기
+          handleLogin(); // 로그인 실행
+        }}
+      >
         <div className="relative bg-white shadow-lg rounded-lg p-8 w-96">
-          {/* Title */}
           <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-blue-900/70 text-white text-sm font-bold px-8 py-2 rounded-sm shadow-md">
             MEMBER LOGIN
           </div>
@@ -61,6 +65,7 @@ export default function Login() {
               className="bg-transparent w-full outline-none text-sm"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              autoFocus
             />
           </div>
 
@@ -72,10 +77,11 @@ export default function Login() {
             <input
               type={showPassword ? "text" : "password"}
               placeholder="********"
-              className="bg-transparent w-full outline-none text-sm pr-8"
+              className="bg-transparent w-full outline-none text-sm pr-8 leading-none"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+
             <button
               type="button"
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
@@ -96,8 +102,12 @@ export default function Login() {
             자동 로그인 유지
           </label>
 
-          {/* Error */}
-          {error && <div className="text-red-500 text-xs mb-4 text-center animate-shake">{error}</div>}
+          {/* Error Message */}
+          {error && (
+            <div className="text-red-500 text-xs mb-4 text-center animate-shake">
+              {error}
+            </div>
+          )}
 
           {/* Login Button */}
           <button
@@ -115,7 +125,8 @@ export default function Login() {
             )}
           </button>
         </div>
-      </div>
-    </>
+      </form>
+
+    </div>
   );
 }

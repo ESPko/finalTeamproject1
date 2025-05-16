@@ -22,35 +22,35 @@ public class LoginserviceImpl implements LoginService {
   @Autowired
   private RefreshTokenMapper refreshTokenMapper;
 
-
   @Override
   public LoginResponse login(LoginRequest request) {
     UserDTO user = loginMapper.findByUsername(request.getId());
+
     if (user != null && user.getPass().equals(request.getPass())) {
+
+      // position이 0이고 부서가 "구매부"가 아닐 경우 로그인 거부
+      if (user.getPosition() == 0 && !"구매부".equals(user.getDepartment())) {
+        throw new RuntimeException("접근 권한이 없습니다");
+      }
+
       String accessToken = jwtUtil.generateAccessToken(user.getId());
       String refreshToken = jwtUtil.generateRefreshToken(user.getId());
 
-      // ✅ Refresh Token 저장
+      // Refresh Token 저장
       RefreshTokenDTO refreshTokenDTO = new RefreshTokenDTO();
       refreshTokenDTO.setUserIdx(user.getIdx());
       refreshTokenDTO.setRefreshToken(refreshToken);
       refreshTokenDTO.setExpiryDate(jwtUtil.getRefreshTokenExpiryDate());
       refreshTokenMapper.saveOrUpdate(refreshTokenDTO);
 
-      // ✅ 응답 객체에 리프레시 토큰도 추가 (필요시 프론트에 전달 가능)
-      LoginResponse response = new LoginResponse(accessToken, user);
-      return response;
+      return new LoginResponse(accessToken, user);
     }
 
-    throw new RuntimeException("Invalid credentials");
+    throw new RuntimeException("아이디 또는 비밀번호가 올바르지 않습니다");
   }
 
-  //    직원 관리 페이지 부장만 접근 가능하게 하기 위한 부분
-//    승인 목록 페이지 부장만 승인, 거절 버튼 눌러 값 변경 할 수 있게 하기 위한 부분
   @Override
   public UserDTO getUserById(String id) {
     return loginMapper.findByUsername(id);
   }
-
-
 }

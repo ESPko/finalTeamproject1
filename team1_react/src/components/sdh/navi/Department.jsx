@@ -7,7 +7,7 @@ function Department({ selected, setSelected }) {
   const [departments, setDepartments] = useState([]);
   const dropdownRef = useRef(null);
 
-  // ✅ 서버에서 부서 리스트 가져오기 (axiosInstance 사용)
+  // 서버에서 부서 리스트 가져오기 (axiosInstance 사용)
   useEffect(() => {
     axiosInstance.get('/api/departments')
       .then(res => {
@@ -19,14 +19,14 @@ function Department({ selected, setSelected }) {
       });
   }, []);
 
-  // ✅ 검색어 필터링된 부서 목록
+  // 검색어 필터링된 부서 목록
   const filteredDepartments = useMemo(() => {
     return departments.filter(dept =>
       dept.toLowerCase().includes(search.toLowerCase())
     );
   }, [search, departments]);
 
-  // ✅ 외부 클릭 시 드롭다운 닫기
+  // 외부 클릭 시 드롭다운 닫기
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -37,7 +37,7 @@ function Department({ selected, setSelected }) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // ✅ 선택 토글
+  // 선택 토글
   const toggleDepartment = (dept) => {
     setSelected(prev =>
       prev.includes(dept)

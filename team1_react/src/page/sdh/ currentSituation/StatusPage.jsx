@@ -2,7 +2,7 @@ import Topline from '../../../components/layout/Topline.jsx';
 import { useEffect, useState, useMemo } from 'react';
 import StatusNavigation from '../../../components/sdh/navi/StatusNavigation.jsx';
 import StatusTableBody from '../../../components/sdh/inventory/StatusTableBody.jsx';
-import axiosInstance from '../../../api/axiosInstance'; // ✅ axiosInstance import 추가
+import axiosInstance from '../../../api/axiosInstance'; // axiosInstance import 추가
 
 function StatusPage ()
 {
@@ -40,7 +40,7 @@ function StatusPage ()
       
       try
       {
-        const response = await axiosInstance.post('/api/status/search', requestBody); // ✅ axiosInstance 사용
+        const response = await axiosInstance.post('/api/status/search', requestBody); // axiosInstance 사용
         setProducts(response.data);
       }
       catch (error)

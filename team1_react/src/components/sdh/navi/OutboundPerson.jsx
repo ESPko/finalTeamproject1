@@ -7,7 +7,7 @@ function OutboundPerson({ selected, setSelected }) {
   const [outboundPersons, setOutboundPersons] = useState([]);
   const dropdownRef = useRef(null);
 
-  // ✅ 출고자 데이터 불러오기
+  // 출고자 데이터 불러오기
   useEffect(() => {
     const fetchOutboundPersons = async () => {
       try {
@@ -21,14 +21,14 @@ function OutboundPerson({ selected, setSelected }) {
     fetchOutboundPersons();
   }, []);
 
-  // ✅ 검색 필터
+  // 검색 필터
   const filteredOutboundPersons = useMemo(() => {
     return outboundPersons.filter(person =>
       person.toLowerCase().includes(search.toLowerCase())
     );
   }, [search, outboundPersons]);
 
-  // ✅ 외부 클릭 시 드롭다운 닫기
+  // 외부 클릭 시 드롭다운 닫기
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -39,7 +39,7 @@ function OutboundPerson({ selected, setSelected }) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // ✅ 출고자 선택/해제
+  // 출고자 선택/해제
   const togglePerson = (person) => {
     setSelected(prev =>
       prev.includes(person)

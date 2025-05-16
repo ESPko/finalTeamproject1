@@ -7,7 +7,7 @@ function Correspondent({ selected, setSelected }) {
   const [vendors, setVendors] = useState([]);
   const dropdownRef = useRef(null);
 
-  // ✅ 거래처 목록 불러오기 (axiosInstance 사용)
+  // 거래처 목록 불러오기 (axiosInstance 사용)
   useEffect(() => {
     const fetchVendors = async () => {
       try {
@@ -21,14 +21,14 @@ function Correspondent({ selected, setSelected }) {
     fetchVendors();
   }, []);
 
-  // ✅ 검색 필터링
+  // 검색 필터링
   const filtered = useMemo(() => {
     return vendors.filter(item =>
       item.toLowerCase().includes(search.toLowerCase())
     );
   }, [search, vendors]);
 
-  // ✅ 외부 클릭 시 드롭다운 닫기
+  // 외부 클릭 시 드롭다운 닫기
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -39,7 +39,7 @@ function Correspondent({ selected, setSelected }) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // ✅ 거래처 선택/해제
+  // 거래처 선택/해제
   const toggle = (item) => {
     setSelected(prev =>
       prev.includes(item)
