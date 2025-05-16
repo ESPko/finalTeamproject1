@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { ResponsivePie } from "@nivo/pie";
 import axiosInstance from '../../api/axiosInstance.jsx';
+import { Package, ArrowDownCircle, ArrowUpCircle } from "lucide-react";
+
 
 function DashboardChart() {
+  // 총 재고 수
   const [totalAfter, setTotalAfter] = useState(0);
+  // 총 입고 수량
   const [totalInput, setTotalInput] = useState(0);
+  // 총 출고 수량
   const [totalOutput, setTotalOutput] = useState(0);
-  const [time, setTime] = useState("");
+  const [time, setTime] = useState("")
 
   const pieData = [
     { id: "입고", value: totalInput, color: "hsl(141, 70%, 50%)" },
@@ -14,6 +19,7 @@ function DashboardChart() {
   ];
 
   useEffect(() => {
+    // 시간 변경을 위한 부분
     const updateTime = () => {
       const now = new Date();
       const formatted = now.toLocaleString('ko-KR', {
@@ -27,45 +33,59 @@ function DashboardChart() {
       setTime(formatted);
     };
 
-    updateTime();
-    const timeInterval = setInterval(updateTime, 1000);
+    updateTime(); // 처음 한 번 실행
+    const timeInterval = setInterval(updateTime, 1000); // 1초마다 시간 업데이트
 
+    // 재고 정보 불러오는 부분
     const fetchStockData = () => {
       axiosInstance.get("/todayStock")
         .then(res => {
           const data = res.data;
+          // 총 재고
           setTotalAfter(data.totalAfter);
+          // 총 입고
           setTotalInput(data.totalInput);
+          // 총 출고
           setTotalOutput(data.totalOutput);
         })
         .catch(err => {
-          console.error("데이터 불러오기 실패 : ", err);
-        });
-    };
-
+          console.error("데이터 불러오기 실패 : ", err)
+        })
+    }
     fetchStockData();
+    const stockInterval = setInterval(fetchStockData, 1000);
 
-    return () => clearInterval(timeInterval);
+    return () => {
+      clearInterval(timeInterval);
+      clearInterval(stockInterval);
+    };
   }, []);
 
-  const CenteredMetric = ({ centerX, centerY }) => (
-    <text
-      x={centerX}
-      y={centerY}
-      textAnchor="middle"
-      dominantBaseline="central"
-      style={{
-        fontSize: '20px',
-        fontWeight: 'bold',
-        fill: '#374151',
-      }}
-    >
-      총 {totalAfter}
-    </text>
-  );
+
+
+  const CenteredMetric = ({ centerX, centerY }) => {
+    return (
+      <text
+        x={centerX}
+        y={centerY}
+        textAnchor="middle"
+        dominantBaseline="central"
+        style={{
+          fontSize: '20px',
+          fontWeight: 'bold',
+          fill: '#374151',
+        }}
+      >
+        총 {totalAfter}
+      </text>
+    );
+  };
+
+
 
   return (
     <div>
+      {/* 재고 현황 */}
       <div className="bg-white rounded-2xl shadow p-4 h-full">
         <div className="flex justify-between items-center mb-4">
           <div className="text-lg font-bold text-gray-800">오늘 재고 현황</div>
@@ -80,7 +100,7 @@ function DashboardChart() {
             padAngle={2}
             cornerRadius={8}
             activeOuterRadiusOffset={8}
-            colors={['#60A5FA', '#F87171']}
+            colors={['#60A5FA', '#F87171']} // 입고-파랑, 출고-빨강
             borderWidth={2}
             borderColor={{ from: 'color', modifiers: [['darker', 0.3]] }}
             enableArcLinkLabels={false}
@@ -89,12 +109,28 @@ function DashboardChart() {
             layers={['arcs', 'arcLabels', 'arcLinkLabels', 'legends', CenteredMetric]}
           />
         </div>
+        {/* 통계 정보 (가로 정렬) */}
+        <div className="flex justify-around items-center text-center pt-2">
+          {/* 총 재고 */}
+          <div className="flex flex-col items-center space-y-1">
+            <Package className="text-blue-600 w-6 h-6" />
+            <span className="text-sm text-gray-500">총 재고</span>
+            <span className="text-lg font-bold text-gray-800">1642</span>
+          </div>
 
-        {/* 세련된 재고 요약 - 아이콘, 배경 없이 가로 정렬 */}
-        <div className="mt-6 flex justify-around text-base font-semibold text-gray-700">
-          <div className="text-gray-800">총 재고 <span className="text-black">{totalAfter}</span></div>
-          <div className="text-blue-600">입고 <span className="text-black">{totalInput}</span></div>
-          <div className="text-red-500">출고 <span className="text-black">{totalOutput}</span></div>
+          {/* 입고 */}
+          <div className="flex flex-col items-center space-y-1">
+            <ArrowDownCircle className="text-green-600 w-6 h-6" />
+            <span className="text-sm text-gray-500">입고</span>
+            <span className="text-lg font-bold text-gray-800">1000</span>
+          </div>
+
+          {/* 출고 */}
+          <div className="flex flex-col items-center space-y-1">
+            <ArrowUpCircle className="text-red-500 w-6 h-6" />
+            <span className="text-sm text-gray-500">출고</span>
+            <span className="text-lg font-bold text-gray-800">1963</span>
+          </div>
         </div>
       </div>
     </div>
