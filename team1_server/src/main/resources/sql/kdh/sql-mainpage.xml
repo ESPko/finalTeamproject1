@@ -9,6 +9,7 @@
     <select id="inputRequestList" resultType="bitc.fullstack503.team1_server.dto.ItemDTO">
         select idx, name, date_format(time, '%Y-%m-%d') as time, approve
         from item
+        where approve = 0
         order by time desc;
     </select>
 </mapper>
