@@ -114,6 +114,7 @@ function DashboardChart ()
             <span className="mr-2 text-red-500">📤 출고</span>
             <span className="font-bold text-red-600">{totalOutput}</span>
           </div>
+          {/*<div className="text-xs text-gray-400 mt-2">어제: 총 재고 9, 입고 +2, 출고 2</div>*/}
         </div>
       </div>
     </div>

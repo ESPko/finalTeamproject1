@@ -45,7 +45,7 @@ function EquipmentDetail ({ product, updateProduct })
   };
   
   // idx 값을 사용하여 QR 코드 URL 생성
-  const qrCodeUrl = `http://3.39.53.78/api/items/${product.idx}/dispatch-quantity`;
+  const qrCodeUrl = `http://10.100.203.16:8080/api/items/${product.idx}/dispatch-quantity`;
   
   // 이미지 클릭 시 파일 선택창 열기
   const handleImageClick = () => {
