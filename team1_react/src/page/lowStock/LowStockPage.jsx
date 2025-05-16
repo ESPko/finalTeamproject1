@@ -170,6 +170,8 @@ function LowStockPage() {
                     )}
                   </div>
 
+
+
                 </div>
               ))}
             </div>
