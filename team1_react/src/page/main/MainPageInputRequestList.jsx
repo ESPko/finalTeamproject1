@@ -27,11 +27,11 @@ function MainPageInputRequestList() {
 
   return (
     <div>
-      <div className="bg-white rounded-2xl shadow p-4 flex flex-col h-full">
+      <div className="bg-white rounded-2xl shadow p-4 flex flex-col ">
         <div className="flex justify-between items-center mb-4">
           {/*입고 신청 내역 글자 클릭 시 승인 목록 페이지로 이동*/}
           <a href="/test3">
-            <div className="text-lg font-bold text-gray-800 hover:scale-110">입고 신청 내역</div></a>
+            <div className="text-lg font-bold text-gray-800 hover:scale-110"> 승인 신청 내역</div></a>
           <div className="text-sm text-gray-400">{recentRequests.length > 0
             ? new Date(recentRequests[0].time).toLocaleDateString('ko-KR')
             : '---'}</div>
@@ -63,7 +63,7 @@ function MainPageInputRequestList() {
               </tr>
               </thead>
               <tbody>
-              {recentRequests.slice(0,10).map((rr) => (
+              {recentRequests.slice(0,5).map((rr) => (
                 <tr key={rr.idx} className="border-b hover:bg-gray-50">
                   <td className="py-1">{rr.name}</td>
                   <td className="py-1">{rr.time ? new Date(rr.time).toLocaleDateString('ko-KR') : ''}</td>
