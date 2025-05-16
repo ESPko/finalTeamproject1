@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import axiosInstance from '../../api/axiosInstance.jsx';
 
-function ProductAdd ({ onClose, onSuccess })
-{
+function ProductAdd({ onClose, onSuccess }) {
   const [name, setName] = useState('');
   const [category, setCategory] = useState('');
   const [vendorName, setVendorName] = useState('');
@@ -12,61 +11,63 @@ function ProductAdd ({ onClose, onSuccess })
   const [image, setImage] = useState(null);
   const [imageSrc, setImageSrc] = useState(null);
   const [isUploading, setIsUploading] = useState(false); // 🔸 중복 방지
-  
+
   const categories = ['필기구', '사무용품', '생활용품', '가전', '기타'];
   const [warehouseList, setWarehouseList] = useState([]);
   const [vendorList, setVendorList] = useState([]);
-  
+
+  // 창고 목록 가져오기
   useEffect(() => {
     const fetchWarehouse = async () => {
-      try
-      {
+      try {
         const response = await axiosInstance.get('/warehouse/name');
         setWarehouseList(response.data);
-      }
-      catch (err)
-      {
+      } catch (err) {
         console.log('창고 목록을 가져오는 데 실패했습니다:', err);
       }
     };
     fetchWarehouse();
   }, []);
-  
+
+  // 매입회사 목록 가져오기
   useEffect(() => {
     const fetchVendor = async () => {
-      try
-      {
+      try {
         const response = await axiosInstance.get('/vendor/name');
         setVendorList(response.data);
-      }
-      catch (err)
-      {
+      } catch (err) {
         console.log('매입회사 목록을 가져오는 데 실패했습니다:', err);
       }
     };
     fetchVendor();
   }, []);
-  
+
+  // 이미지 변경 처리
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    if (file)
-    {
+    if (file) {
       const imageUrl = URL.createObjectURL(file);
       setImageSrc(imageUrl);
       setImage(file);
     }
   };
-  
+
+  // 업로드 함수
   const handleUpload = async () => {
     if (isUploading) return; // 🔸 중복 클릭 방지
-    if (!image)
-    {
+    if (!image) {
       alert('이미지를 먼저 선택하세요.');
       return;
     }
-    
+
+    // 필수 항목 체크
+    if (!name || !category || !vendorName || !warehouseName || !price || !standard) {
+      alert('모든 내용을 입력해주세요.');
+      return;
+    }
+
     setIsUploading(true); // 🔸 업로드 시작
-    
+
     const formData = new FormData();
     formData.append('image', image);
     formData.append('name', name);
@@ -75,9 +76,8 @@ function ProductAdd ({ onClose, onSuccess })
     formData.append('warehouseName', warehouseName);
     formData.append('price', price);
     formData.append('standard', standard);
-    
-    try
-    {
+
+    try {
       const response = await axiosInstance.post('/item/add', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -86,17 +86,13 @@ function ProductAdd ({ onClose, onSuccess })
       onSuccess();
       onClose();
       setImageSrc(response.data.imageUrl);
-    }
-    catch (error)
-    {
+    } catch (error) {
       console.error('이미지 업로드 실패:', error);
-    }
-    finally
-    {
+    } finally {
       setIsUploading(false); // 🔸 업로드 종료
     }
   };
-  
+
   return (
     <div className="space-y-5">
       {/* 제품 정보 */}
@@ -115,7 +111,7 @@ function ProductAdd ({ onClose, onSuccess })
                 placeholder="비품명"
               />
             </div>
-            
+
             {/* 카테고리 */}
             <div className="flex items-center w-full max-w-md">
               <label className="w-20 text-sm font-medium text-gray-700 whitespace-nowrap">카테고리</label>
@@ -126,11 +122,13 @@ function ProductAdd ({ onClose, onSuccess })
               >
                 <option>선택하세요</option>
                 {categories.map((cat, index) => (
-                  <option key={index} value={cat}>{cat}</option>
+                  <option key={index} value={cat}>
+                    {cat}
+                  </option>
                 ))}
               </select>
             </div>
-            
+
             {/* 창고 */}
             <div className="flex items-center w-full max-w-md">
               <label className="w-20 text-sm font-medium text-gray-700 whitespace-nowrap">창고</label>
@@ -141,16 +139,21 @@ function ProductAdd ({ onClose, onSuccess })
               >
                 <option>선택하세요</option>
                 {warehouseList.map((warehouse) => (
-                  <option key={warehouse.idx} value={warehouse.name}>{warehouse.name}</option>
+                  <option key={warehouse.idx} value={warehouse.name}>
+                    {warehouse.name}
+                  </option>
                 ))}
               </select>
             </div>
           </div>
-          
+
           {/* 오른쪽 이미지 */}
           <div className="md:col-span-1 flex justify-end items-start mt-4 w-full">
             <div className="flex flex-col items-center space-y-2">
-              <label htmlFor="file-input" className="w-24 h-24 bg-gray-100 border-none flex items-center justify-center text-2xl text-gray-400 cursor-pointer">
+              <label
+                htmlFor="file-input"
+                className="w-24 h-24 bg-gray-100 border-none flex items-center justify-center text-2xl text-gray-400 cursor-pointer"
+              >
                 {!imageSrc ? '📷' : <img src={imageSrc} alt="미리보기" className="w-24 h-24 rounded-none" />}
               </label>
               <input
@@ -164,13 +167,13 @@ function ProductAdd ({ onClose, onSuccess })
           </div>
         </div>
       </section>
-      
+
       {/* 매입 정보 */}
       <section>
         <div className="flex items-center justify-between mb-4 border-b border-gray-300">
           <h6 className="text-lg font-semibold">매입 정보</h6>
         </div>
-        
+
         <div className="space-y-3">
           {/* 매입회사 */}
           <div className="flex items-center w-full max-w-md">
@@ -182,11 +185,13 @@ function ProductAdd ({ onClose, onSuccess })
             >
               <option>선택하세요</option>
               {vendorList.map((vendor) => (
-                <option key={vendor.idx} value={vendor.name}>{vendor.name}</option>
+                <option key={vendor.idx} value={vendor.name}>
+                  {vendor.name}
+                </option>
               ))}
             </select>
           </div>
-          
+
           {/* 매입가 */}
           <div className="flex items-center w-full max-w-md">
             <label className="w-20 text-sm font-medium text-gray-700 whitespace-nowrap">매입가</label>
@@ -200,7 +205,7 @@ function ProductAdd ({ onClose, onSuccess })
           </div>
         </div>
       </section>
-      
+
       {/* 초기 수량 */}
       <section>
         <h6 className="text-lg font-semibold mb-4 border-b border-gray-300">수량 설정</h6>
@@ -218,7 +223,7 @@ function ProductAdd ({ onClose, onSuccess })
           </div>
         </div>
       </section>
-      
+
       <div className="flex justify-end">
         <button
           className={`px-4 py-2 rounded text-white ${isUploading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600'}`}

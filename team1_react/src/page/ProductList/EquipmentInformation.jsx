@@ -252,7 +252,7 @@ function EquipmentInformation ()
                 <thead>
                 <tr className="bg-white sticky top-0 z-30 border-b border-gray-200 h-[52px]">
                   <th className="bg-white w-[10%]">사진</th>
-                  <th className="bg-white border-r w-[16.6%] border-gray-200">비품명</th>
+                  <th className="bg-white border-r w-[16.6%]  border-gray-200">비품명</th>
                   {visibleColumns.category && <th className="w-[15%]">카테고리</th>}
                   {visibleColumns.vendorName && <th className="w-[15.8%]">매입회사</th>}
                   {visibleColumns.price && <th className="w-[12.5%]">매입가</th>}
@@ -264,7 +264,8 @@ function EquipmentInformation ()
                 <tbody>
                 {filteredProducts.map((product, idx) => (
                   <tr key={idx} onClick={() => handleRowClick(product)} className="border-b border-gray-100 cursor-pointer text-gray-600">
-                    <td className="w-[120px] bg-white flex justify-center items-center">
+                    <td className="w-[10%] bg-white truncate ">
+                      <div className="min-w-[60px] flex items-center justify-center   ">
                       {product.image ? (
                         <img
                           src={product.image}
@@ -273,11 +274,12 @@ function EquipmentInformation ()
                         />
                       ) : (
                         <div
-                          className="w-[60px] h-[60px] bg-gray-100 border border-dashed rounded-lg flex items-center justify-center text-2xl text-gray-400"
+                          className="w-[60px] h-[60px] bg-gray-100 border border-dashed rounded-lg   text-2xl text-gray-400"
                         >
                           📷
                         </div>
                       )}
+                      </div>
                     </td>
                     
                     <td className="w-[16.6%] bg-white border-r border-gray-300 truncate" title={product.name}>{product.name}</td>
