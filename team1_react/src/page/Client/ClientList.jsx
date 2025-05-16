@@ -20,7 +20,6 @@ function ClientList ()
   const fetchClients = () => {
     axiosInstance.get('/vendor/vendorList')
       .then(response => {
-        console.log('매입처 목록:', response.data); // 응답 데이터 확인
         setClients(response.data);
         setFilteredClients(response.data); // 초기 데이터 로드 후 필터된 클라이언트 설정
       })

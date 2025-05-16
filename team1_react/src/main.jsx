@@ -46,10 +46,10 @@ createRoot(document.getElementById('root')).render(
             <Route path="test8" element={<InventoryPage />} />
             <Route path="test9" element={<StatusPage />} />
             <Route path="test10" element={<MemberManagement />} />
+            <Route path="*" element={<ErrorPage />} />
           </Route>
           
           {/* Not Found */}
-          <Route path="*" element={<ErrorPage />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

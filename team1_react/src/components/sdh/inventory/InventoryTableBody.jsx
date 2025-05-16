@@ -18,7 +18,7 @@ function InventoryTableBody ({ products })
   return (
     <tbody>
     {products.map((product) => (
-      <tr key={product.id || product.name} className="border-b border-gray-200 text-center">
+      <tr key={product.image} className="border-b border-gray-200 text-center">
         <td className="py-2 px-2 w-[120px]">
           <img
             src={product.image}
