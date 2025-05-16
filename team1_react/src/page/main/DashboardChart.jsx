@@ -81,7 +81,7 @@ function DashboardChart() {
     return (
     <div>
       {/* 재고 현황 */}
-      <div className="bg-white rounded-2xl shadow p-4 h-full">
+      <div className="p-4 h-full">
         <div className="flex justify-between items-center mb-4">
           <div className="text-lg font-bold text-gray-800">오늘 재고 현황</div>
           <div className="text-sm text-gray-400">{time}</div>
