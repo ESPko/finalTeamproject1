@@ -2,12 +2,13 @@ import Topline from '../../../components/layout/Topline.jsx';
 import { useEffect, useState, useMemo } from 'react';
 import StatusNavigation from '../../../components/sdh/navi/StatusNavigation.jsx';
 import StatusTableBody from '../../../components/sdh/inventory/StatusTableBody.jsx';
-import axiosInstance from '../../../api/axiosInstance'; // ✅ axiosInstance import 추가
+import axiosInstance from '../../../api/axiosInstance';
 
 function StatusPage ()
 {
   const [selectedDepartments, setSelectedDepartments] = useState([]);
   const [selectedOutboundPerson, setSelectedOutboundPerson] = useState([]);
+  const [transactionTypeList, setTransactionTypeList] = useState([]);
   const [startDate, setStartDate] = useState(() => {
     const date = new Date();
     date.setDate(date.getDate() - 6);
@@ -34,13 +35,14 @@ function StatusPage ()
         tags,
         selectedDepartments,
         selectedOutboundPerson,
+        transactionTypeList, // 단일 값 → 배열로
         startDate: formattedStart,
         endDate: formattedEnd,
       };
       
       try
       {
-        const response = await axiosInstance.post('/api/status/search', requestBody); // ✅ axiosInstance 사용
+        const response = await axiosInstance.post('/api/status/search', requestBody);
         setProducts(response.data);
       }
       catch (error)
@@ -49,17 +51,8 @@ function StatusPage ()
       }
     };
     
-    if (
-      tags.length ||
-      selectedDepartments.length ||
-      selectedOutboundPerson.length ||
-      startDate ||
-      endDate
-    )
-    {
-      fetchProducts();
-    }
-  }, [tags, selectedDepartments, selectedOutboundPerson, startDate, endDate, formatDate]);
+    fetchProducts();
+  }, [tags, selectedDepartments, selectedOutboundPerson, startDate, endDate, transactionType, formatDate]);
   
   return (
     <div className="flex-1 p-6 overflow-y-auto">
@@ -76,18 +69,21 @@ function StatusPage ()
             setEndDate={setEndDate}
             tags={tags}
             setTags={setTags}
+            transactionType={transactionType}
+            setTransactionType={setTransactionType}
           />
           <table className="table-fixed border-collapse w-full">
             <thead className="bg-white top-0 z-30">
             <tr className="border-b border-gray-300">
               <th className="cell-style w-[10%]">사진</th>
-              <th className="cell-style w-[17%]">제품명</th>
-              <th className="cell-style w-[15%] truncate max-w-[15%]">보관위치</th>
-              <th className="cell-style w-[15%]">거래처</th>
+              <th className="cell-style w-[13%]">제품명</th>
+              <th className="cell-style w-[13%]">보관위치</th>
+              <th className="cell-style w-[13%]">거래처</th>
               <th className="cell-style w-[10%]">부서</th>
               <th className="cell-style w-[10%]">출고자</th>
               <th className="cell-style w-[10%]">재고변동</th>
-              <th className="cell-style w-[8%]">수량</th>
+              <th className="cell-style w-[6%]">수량</th>
+              <th className="cell-style w-[10%]">총 가격</th>
               <th className="cell-style w-[15%]">출고일</th>
             </tr>
             </thead>

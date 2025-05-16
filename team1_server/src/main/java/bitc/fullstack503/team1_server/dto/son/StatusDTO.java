@@ -14,6 +14,7 @@ public class StatusDTO
   private String outboundPerson;
   private int beforeQuantity;
   private int afterQuantity;
+  private int price;
   @JsonFormat (pattern = "yyyy-MM-dd HH:mm")
   private LocalDateTime date;
   private int transaction;

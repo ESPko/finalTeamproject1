@@ -1,7 +1,8 @@
 import CalendarNavi from './CalendarNavi.jsx';
 import SearchInput from './SearchInput.jsx';
-import OutboundPerson from './OutboundPerson.jsx';
 import Department from './Department.jsx';
+import OutboundPerson from './OutboundPerson.jsx';
+import TransactionSelector from './TransactionSelector.jsx';
 
 function StatusNavigation ({
   selectedDepartments, setSelectedDepartments,
@@ -9,6 +10,7 @@ function StatusNavigation ({
   startDate, setStartDate,
   endDate, setEndDate,
   tags, setTags,
+  transactionType, setTransactionType, // ⬅️ 추가
 })
 {
   const navigationItems = [
@@ -34,6 +36,10 @@ function StatusNavigation ({
     {
       component: OutboundPerson,
       props: { selected: selectedOutboundPerson, setSelected: setSelectedOutboundPerson },
+    },
+    {
+      component: TransactionSelector, // ⬅️ 트랜잭션 선택 셀렉터
+      props: { transactionType, setTransactionType },
     },
   ];
   

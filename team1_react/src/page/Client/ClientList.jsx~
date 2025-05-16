@@ -135,7 +135,7 @@ function ClientList ()
               </div>
               
               {/* 테이블 */}
-              <div className="overflow-x-auto pretty-scrollbar flex-auto mt-4 text-center">
+              <div className="overflow-x-auto pretty-scrollbar mt-4 text-center">
                 <table className="w-full table-fixed border-collapse">
                   <thead className="bg-white">
                   <tr className="sticky top-0 z-30 border-b border-gray-200 text-center">

@@ -10,5 +10,5 @@ public class StatusRequestDTO
   private List<String> selectedOutboundPerson;
   private String startDate;
   private String endDate;
+  private Integer transactionType;
 }
-

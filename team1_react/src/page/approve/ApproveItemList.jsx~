@@ -1,7 +1,6 @@
 import { useAuth } from '../../contexts/AuthContext.jsx';
 
-function ApproveItemList ({ approveProduct, changeApprove })
-{
+function ApproveItemList({ approveProduct, changeApprove }) {
   const { user } = useAuth();
   const isDisabled = user?.position !== 2;
   

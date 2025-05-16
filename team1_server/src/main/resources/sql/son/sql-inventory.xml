@@ -85,6 +85,7 @@
     u.nick_name AS outboundPerson,
     t.before AS beforeQuantity,
     t.after AS afterQuantity,
+    i.price AS price,
     t.time AS date,
     t.transaction as transaction
     FROM item i
@@ -133,6 +134,10 @@
       <foreach collection="request.selectedOutboundPerson" item="person" open="(" separator="," close=")">
         #{person}
       </foreach>
+    </if>
+    
+    <if test="request.transactionType != null">
+      AND t.transaction = #{request.transactionType}
     </if>
     
     ORDER BY t.time DESC
