@@ -1,7 +1,8 @@
 import { useEffect, useState} from 'react';
 import Topline from '../../components/layout/Topline.jsx';
 import LowStockSearch from './LowStockSearch';
-import axiosInstance from '../../api/axiosInstance'; // axiosInstance 사용
+import axiosInstance from '../../api/axiosInstance';
+import Swal from 'sweetalert2'; // axiosInstance 사용
 
 function LowStockPage() {
   const [lowStockItems, setLowStockItems] = useState([]);
@@ -58,13 +59,20 @@ function LowStockPage() {
 
   // 발주 완료 버튼 클릭 시
   const handleApply = async (idx) => {
-    const confirmed = window.confirm('입고 대기 상태로 변경 하시겠습니까?');
+    // 기존 window.confirm 대신 Swal.confirm으로 변경
+    const result = await Swal.fire({
+      title: '입고 대기 상태로 변경 하시겠습니까?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: '예',
+      cancelButtonText: '아니오',
+      confirmButtonColor: '#60a5fa',  // 버튼 색상 지정
+    });
 
-    if (confirmed) {
+    if (result.isConfirmed) {
       try {
-        // 서버에 approve 컬럼 업데이트 요청
         const response = await axiosInstance.put(`/api/lowstock/${idx}/approve`, {
-          approve: 3, // approve 값을 3으로 설정
+          approve: 3,
         });
 
         if (response.status === 200) {
@@ -73,12 +81,8 @@ function LowStockPage() {
             [idx]: true,
           };
           setOrderedItems(updated);
-
-          // 로컬스토리지에 저장
           localStorage.setItem('orderedItems', JSON.stringify(updated));
 
-
-          // approve 상태를 3으로 반영
           const updatedFiltered = filteredItems.map((item) =>
             item.idx === idx ? { ...item, approve: 3 } : item
           );
@@ -89,12 +93,26 @@ function LowStockPage() {
           );
           setLowStockItems(updatedLowStock);
 
+          // 성공 메시지도 Swal로 변경
+          Swal.fire({
+            icon: 'success',
+            title: '입고 대기 상태로 변경되었습니다.',
+            confirmButtonColor: '#60a5fa',
+          });
         } else {
-          alert("입고 대기 상태로 변경하는데 실패했습니다.");
+          Swal.fire({
+            icon: 'error',
+            title: '입고 대기 상태로 변경하는데 실패했습니다.',
+            confirmButtonColor: '#60a5fa',
+          });
         }
       } catch (error) {
         console.error('입고 대기 상태로 변경 중 오류가 발생했습니다.', error);
-        alert('입고 대기 상태로 변경하는데 오류가 발생했습니다.');
+        Swal.fire({
+          icon: 'error',
+          title: '입고 대기 상태로 변경하는데 오류가 발생했습니다.',
+          confirmButtonColor: '#60a5fa',
+        });
       }
     }
   };
@@ -118,7 +136,7 @@ function LowStockPage() {
               <div className="h-[52px] items-center grid grid-cols-12 border-b border-b-gray-300">
                 <div className="col-span-3">비품명</div>
                 <div className="col-span-2">위치</div>
-                <div className="col-span-2">기본 안전 재고</div>
+                <div className="col-span-2">적정 재고</div>
                 <div className="col-span-2">현재 재고</div>
                 <div className="col-span-1">부족 재고</div>
                 <div className="col-span-1 flex justify-center">상태</div>

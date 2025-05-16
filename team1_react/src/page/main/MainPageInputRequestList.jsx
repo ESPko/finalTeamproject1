@@ -31,11 +31,11 @@ function MainPageInputRequestList() {
 
   return (
     <div>
-      {/*해당 카드 선택 시 승인 신청 내역으로 이동/ hover 시 사이즈 약간 커짐 + 그림자 효과 + 마우스 커서 손가락 모양으로 변경*/}
-      <div className="bg-white rounded-2xl shadow p-4 flex flex-col hover:scale-105 hover:shadow-lg hover:cursor-pointer" onClick={() => navigate('/test3')}>
+      <div className=" p-4 flex flex-col">
         <div className="flex justify-between items-center mb-4">
           {/*입고 신청 내역 글자 클릭 시 승인 목록 페이지로 이동*/}
-            <div className="text-lg font-bold text-gray-800 "> 승인 신청 내역</div>
+          <a href="/test3">
+            <div className="text-lg font-bold text-gray-800 hover:scale-110"> 승인 신청 내역</div></a>
           <div className="text-sm text-gray-400">{recentRequests.length > 0
             ? new Date(recentRequests[0].time).toLocaleDateString('ko-KR')
             : '---'}</div>
