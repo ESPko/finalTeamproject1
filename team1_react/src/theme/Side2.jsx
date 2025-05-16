@@ -1,4 +1,5 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext.jsx';
 
 const menuItems = [
   { label: "비품목록", path: "/test1" },
@@ -10,10 +11,11 @@ const menuItems = [
   { label: "매입처", path: "/test7" },
   { label: "창고별 분석", path: "/test8" },
   { label: "직원별 분석", path: "/test9" },
-  { label: "직원관리", path: "/test10" },
+  // { label: "직원관리", path: "/test10" },
 ];
 
 function Side2() {
+  const { user } = useAuth();
   const location = useLocation();
   return (
     <div className="flex flex-1">
@@ -30,9 +32,14 @@ function Side2() {
         </div>
         <nav className="flex-1">
           <ul className="space-y-1 p-0">
-            {menuItems.map(({ label, path }) => {
+            {menuItems.map(({ label, path, requirePosition }) => {
               const isActive = location.pathname === path;
 
+              // user.position 조건 검사
+              if (requirePosition && user.position !== requirePosition)
+              {
+                return null;
+              }
               return (
                 <li key={label}>
                   <Link
@@ -47,6 +54,21 @@ function Side2() {
                 </li>
               );
             })}
+            {/* position이 2일 때만 보이는 항목 */}
+            {user?.position === 2 && (
+              <li>
+                <Link
+                  to="/test10"
+                  className={`block py-2.5 px-6 font-semibold ${
+                    location.pathname === "/test10"
+                      ? 'bg-[#a599ed] shadow  text-black rounded-sm'
+                      : '!text-gray-600  hover:bg-[#e6e6fa] hover:text-white'
+                  }`}
+                >
+                  직원관리
+                </Link>
+              </li>
+            )}
           </ul>
         </nav>
       </aside>

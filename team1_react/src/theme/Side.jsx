@@ -11,8 +11,8 @@ const menuItems = [
   { label: "매입처", path: "/test7" },
   { label: "창고별 분석", path: "/test8" },
   { label: "직원별 분석", path: "/test9" },
-  { label: "직원관리", path: "/test10" },
-  { label: "axios", path: "/axios" },
+  // { label: "직원관리", path: "/test10" },
+  // { label: "axios", path: "/axios" },
 ];
 
 function Side ()
