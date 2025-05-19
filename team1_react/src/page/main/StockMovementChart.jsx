@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { ResponsiveLine } from '@nivo/line';
 import axiosInstance from '../../api/axiosInstance.jsx';
 
+
 function StockMovementChart() {
   const [data, setData] = useState([]);
 
@@ -21,21 +22,29 @@ function StockMovementChart() {
   const startDate = formatDate(startOfMonth);
   const endDate = formatDate(endOfMonth);
 
+
   useEffect(() => {
     axiosInstance
       .get(`/stock-movements?startDate=${startDate}&endDate=${endDate}`)
       .then((response) => {
         console.log('Full API Response:', response); // 전체 응답을 확인
-        const stockData = response.data.data;  // 여기서 'data'를 추출한다고 가정
+        console.log('response.data:', response.data); // 수정: response.data를 바로 확인
+
+        const stockData = response.data; // response.data는 바로 배열
 
         if (stockData && Array.isArray(stockData)) {
+          // 날짜 순서대로 정렬
+          stockData.sort((a, b) => new Date(a.date) - new Date(b.date));  // 날짜 오름차순 정렬
+
           const 입고Data = stockData.map(d => ({
-            x: new Date(d.time).toISOString().substring(0, 10),
-            y: d.입고,
+            x: new Date(d.date).toISOString().substring(0, 10), // 'time' -> 'date'로 변경
+            y: d.stockIn,
           }));
+
+          // 출고의 절댓값을 사용
           const 출고Data = stockData.map(d => ({
-            x: new Date(d.time).toISOString().substring(0, 10),
-            y: d.출고,
+            x: new Date(d.date).toISOString().substring(0, 10), // 'time' -> 'date'로 변경
+            y: Math.abs(d.stockOut), // 출고는 음수일 경우 절댓값으로 처리
           }));
 
           setData([
@@ -51,16 +60,24 @@ function StockMovementChart() {
       });
   }, [startDate, endDate]);
 
+  const formattedStartDate = formatDate(startOfMonth);
+  const formattedEndDate = formatDate(endOfMonth);
+
   return (
-    <div>
-      <div className="text-lg font-bold">월간 입출고 현황</div>
+    <div >
+      <div className="flex justify-between items-center mb-4">
+        <div className="text-lg font-bold text-gray-800">월간 입출고 현황</div>
+        <div className="text-sm text-gray-400">
+          {formattedStartDate} ~ {formattedEndDate}
+        </div>
+      </div>
 
       <div className="flex space-x-4">
-        <div className="h-56 w-1/2">
+        <div className=" h-60 w-1/2">
           <ResponsiveLine
             data={data.filter(d => d.id === '입고')}
-            margin={{ top: 20, right: 20, bottom: 40, left: 70 }}
-            xScale={{ type: 'point' }}
+            margin={{ top: 40, right: 60, bottom: 40, left: 70 }} // 오른쪽 여백 증가
+            xScale={{ type: 'point' }} // 다시 point로 변경
             yScale={{ type: 'linear', min: 0, max: 'auto' }}
             axisBottom={{
               tickSize: 5,
@@ -86,11 +103,11 @@ function StockMovementChart() {
           />
         </div>
 
-        <div className="h-56 w-1/2">
+        <div className="h-60 w-1/2">
           <ResponsiveLine
             data={data.filter(d => d.id === '출고')}
-            margin={{ top: 20, right: 20, bottom: 40, left: 70 }}
-            xScale={{ type: 'point' }}
+            margin={{ top: 40, right: 80, bottom: 40, left: 70 }} // 오른쪽 여백 증가
+            xScale={{ type: 'point' }} // 날짜와 점을 정확히 맞추기 위해 point 사용
             yScale={{ type: 'linear', min: 0, max: 'auto' }}
             axisBottom={{
               tickSize: 5,
@@ -115,16 +132,6 @@ function StockMovementChart() {
             areaOpacity={0.4}
           />
         </div>
-      </div>
-
-      {/* 더보기 버튼 */}
-      <div className="mt-4 text-center flex justify-end pr-2">
-        <button
-          onClick={() => window.location.href = '/test9'}
-          className="px-4 py-2 text-sm text-blue-600 font-semibold hover:underline"
-        >
-          더보기 &gt;
-        </button>
       </div>
     </div>
   );

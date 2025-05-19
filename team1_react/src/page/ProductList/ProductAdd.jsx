@@ -66,6 +66,12 @@ function ProductAdd({ onClose, onSuccess }) {
       return;
     }
 
+    // 비품 승인 요청 확인
+    const isConfirmed = window.confirm('추가적으로 비품 승인요청 하시겠습니까?');
+    if (!isConfirmed) {
+      return; // 확인을 누르지 않으면 아무 것도 하지 않음
+    }
+
     setIsUploading(true); // 🔸 업로드 시작
 
     const formData = new FormData();
@@ -224,13 +230,22 @@ function ProductAdd({ onClose, onSuccess }) {
         </div>
       </section>
 
-      <div className="flex justify-end">
+      <div className="flex justify-end space-x-4">
+        {/* 승인 요청 버튼 */}
         <button
           className={`px-4 py-2 rounded text-white ${isUploading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600'}`}
           onClick={handleUpload}
           disabled={isUploading}
         >
           {isUploading ? '업로드 중...' : '승인요청'}
+        </button>
+
+        {/* 취소 버튼 */}
+        <button
+          className="px-4 py-2 rounded text-gray-700 bg-gray-200"
+          onClick={onClose}
+        >
+          취소
         </button>
       </div>
     </div>

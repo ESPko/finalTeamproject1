@@ -199,29 +199,62 @@ function LocationInfo() {
           <>
             <button
               onClick={() => {
-                axiosInstance.post(`/warehouse/addLocation`, newLocation)
-                  .then((response) => {
-                    Swal.fire({
-                      icon: 'success',
-                      text: response.data,
-                      confirmButtonColor: '#60a5fa'
-                    });
-                    setLocalAdd(false);
-                    handleAddLocation();
-                  })
-                  .catch((error) => {
-                    console.error('창고 추가 실패:', error);
-                    Swal.fire({
-                      icon: 'error',
-                      text: '창고 추가 실패',
-                      confirmButtonColor: '#60a5fa'
-                    });
+                // newLocation 값이 없을 경우 경고 메시지 띄우기
+                if (!newLocation || !newLocation.name || !newLocation.location) {
+                  Swal.fire({
+                    icon: 'error',
+                    text: '필수 내용이 누락되었습니다',
+                    confirmButtonColor: '#60a5fa'
                   });
+                  return; // 값이 없으면 추가를 진행하지 않음
+                }
+
+                // 값이 있을 경우 '창고 위치를 추가하시겠습니까?' 확인 창 띄우기
+                Swal.fire({
+                  title: '창고 위치를 추가하시겠습니까?',
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonText: '예',
+                  cancelButtonText: '아니오',
+                  confirmButtonColor: '#60a5fa',
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    // 확인을 클릭한 경우 창고 추가 요청
+                    axiosInstance.post(`/warehouse/addLocation`, newLocation)
+                      .then((response) => {
+                        Swal.fire({
+                          icon: 'success',
+                          text: response.data,
+                          confirmButtonColor: '#60a5fa'
+                        });
+                        setLocalAdd(false);
+                        handleAddLocation();
+                      })
+                      .catch((error) => {
+                        // 에러 응답에서 HTTP 상태 코드가 400인 경우 경고 메시지 표시
+                        if (error.response && error.response.status === 400) {
+                          Swal.fire({
+                            icon: 'warning',
+                            text: error.response.data, // '이미 존재하는 위치입니다.' 메시지를 표시
+                            confirmButtonColor: '#60a5fa'
+                          });
+                        } else {
+                          Swal.fire({
+                            icon: 'error',
+                            text: '창고 추가 실패',
+                            confirmButtonColor: '#60a5fa'
+                          });
+                        }
+                      });
+                  }
+                });
               }}
               className="bg-blue-600 text-white px-4 py-2 rounded"
             >
               추가
             </button>
+
+
             <button onClick={() => setLocalAdd(false)} className="bg-gray-200 text-gray-700 px-4 py-2 rounded">
               취소
             </button>
@@ -235,24 +268,35 @@ function LocationInfo() {
           <>
             <button
               onClick={() => {
-                axiosInstance.put(`/warehouse/updateLocation/${updatedLocation.idx}`, updatedLocation)
-                  .then((response) => {
-                    Swal.fire({
-                      icon: 'success',
-                      text: response.data,
-                      confirmButtonColor: '#60a5fa'
-                    });
-                    setLocalDetail(false);
-                    handleAddLocation();
-                  })
-                  .catch((error) => {
-                    console.error('창고 수정 실패:', error);
-                    Swal.fire({
-                      icon: 'error',
-                      text: '창고 정보 수정 실패',
-                      confirmButtonColor: '#60a5fa'
-                    });
-                  });
+                Swal.fire({
+                  title: '창고 위치를 수정하시겠습니까?',
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonText: '예',
+                  cancelButtonText: '아니오',
+                  confirmButtonColor: '#60a5fa',
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    axiosInstance.put(`/warehouse/updateLocation/${updatedLocation.idx}`, updatedLocation)
+                      .then((response) => {
+                        Swal.fire({
+                          icon: 'success',
+                          text: response.data,
+                          confirmButtonColor: '#60a5fa'
+                        });
+                        setLocalDetail(false);
+                        handleAddLocation();
+                      })
+                      .catch((error) => {
+                        console.error('창고 수정 실패:', error);
+                        Swal.fire({
+                          icon: 'error',
+                          text: '창고 정보 수정 실패',
+                          confirmButtonColor: '#60a5fa'
+                        });
+                      });
+                  }
+                });
               }}
               className="bg-blue-600 text-white px-4 py-2 rounded"
             >

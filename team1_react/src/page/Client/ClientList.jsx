@@ -221,12 +221,18 @@ function ClientList ()
                 <button
                   className="bg-blue-600 text-white px-4 py-2 rounded"
                   onClick={() => {
-                    axiosInstance.put(`/vendor/${updatedClient.idx}`, updatedClient)
-                      .then(() => {
-                        alert('매입처 정보가 수정되었습니다.');
-                        setClientDetailModal(false);
-                        fetchClients();
-                      });
+                    if (window.confirm('내용을 수정하시겠습니까?')) {
+                      axiosInstance.put(`/vendor/${updatedClient.idx}`, updatedClient)
+                        .then(() => {
+                          alert('매입처 정보가 수정되었습니다.');
+                          setClientDetailModal(false);
+                          fetchClients();
+                        })
+                        .catch((error) => {
+                          alert('수정 중 오류가 발생했습니다.');
+                          console.error(error);
+                        });
+                    }
                   }}
                 >
                   수정
@@ -236,6 +242,12 @@ function ClientList ()
                   onClick={() => handleDeletVendor(selectedClient)}
                 >
                   삭제
+                </button>
+                <button
+                  className="bg-gray-300 text-gray-700 px-4 py-2 rounded"
+                  onClick={() => setClientDetailModal(false)}  // 모달 닫기
+                >
+                  취소
                 </button>
               </>
             }

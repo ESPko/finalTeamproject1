@@ -3,6 +3,8 @@ import bitc.fullstack503.team1_server.dto.VendorDTO;
 import bitc.fullstack503.team1_server.service.VendorService;
 import bitc.fullstack503.team1_server.service.son.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,12 +35,12 @@ public class VendorController
       transactionService.updateItemVendorAfterNameByBeforeName (beforeName, afterName);
     }
   }
-  
-  @PostMapping ("/vendorAdd")
-  public void insertVendor (@RequestBody VendorDTO vendorDTO)
-  {
-    vendorService.insertVendor (vendorDTO);
-  }
+
+    @PostMapping ("/vendorAdd")
+    public void insertVendor (@RequestBody VendorDTO vendorDTO)
+    {
+        vendorService.insertVendor (vendorDTO);
+    }
   
   @DeleteMapping ("/{idx}")
   public void deleteVendor (@PathVariable int idx)

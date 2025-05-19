@@ -1,6 +1,6 @@
 package bitc.fullstack503.team1_server.controller;
 
-import bitc.fullstack503.team1_server.dto.TransactionDTO;
+import bitc.fullstack503.team1_server.dto.min.StockMovementDTO;
 import bitc.fullstack503.team1_server.service.StockMovementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +17,7 @@ public class StockMovementController {
 
     // 날짜 범위에 맞는 입출고 데이터를 반환
     @GetMapping("/stock-movements")
-    public List<TransactionDTO> getStockMovements(@RequestParam String startDate, @RequestParam String endDate) {
+    public List<StockMovementDTO> getStockMovements(@RequestParam String startDate, @RequestParam String endDate) {
         return stockMovementService.getStockMovements(startDate, endDate);
     }
 }
