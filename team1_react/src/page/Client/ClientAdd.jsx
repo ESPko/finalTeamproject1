@@ -28,31 +28,65 @@ function ClientAdd({ onClose, onSuccess }) {
     return true;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    // 유효성 검사 통과하지 못하면 리턴
     if (!validateForm()) {
       return;
     }
 
-    axiosInstance.post('/vendor/vendorAdd', client)
-      .then(() => {
-        Swal.fire({
-          icon: 'success',
-          title: '매입처가 추가되었습니다.',
-          confirmButtonText: '확인'
-        });
-        onSuccess();
-        onClose();
-      })
-      .catch((err) => {
-        console.error(err);
-        Swal.fire({
-          icon: 'error',
-          title: '추가 중 오류가 발생했습니다.',
-          text: '잠시 후 다시 시도해 주세요.',
-          confirmButtonText: '확인'
-        });
+    // 전화번호가 숫자가 아닌 경우
+    if (isNaN(client.phone) || client.phone.trim() === '') {
+      Swal.fire({
+        icon: 'warning',
+        title: '전화번호는 숫자만 입력 가능합니다.',
+        text: '전화번호를 올바르게 입력해 주세요.',
       });
+      return;
+    }
+
+    // 이메일에 '@'가 포함되어 있는지 확인
+    if (!client.email.includes('@')) {
+      Swal.fire({
+        icon: 'warning',
+        title: '유효하지 않은 이메일 주소입니다.',
+        text: '이메일 주소에 "@"를 포함해 주세요.',
+      });
+      return;
+    }
+
+    // '입력하신 매입처를 추가하시겠습니까?' 확인 창 띄우기
+    const result = await Swal.fire({
+      icon: 'question',
+      title: '입력하신 매입처를 추가하시겠습니까?',
+      showCancelButton: true,
+      confirmButtonText: '추가',
+      cancelButtonText: '취소',
+    });
+
+    // 사용자가 '추가'를 클릭했을 때만 실제 API 호출
+    if (result.isConfirmed) {
+      axiosInstance.post('/vendor/vendorAdd', client)
+        .then(() => {
+          Swal.fire({
+            icon: 'success',
+            title: '매입처가 추가되었습니다.',
+            confirmButtonText: '확인'
+          });
+          onSuccess();
+          onClose();
+        })
+        .catch((err) => {
+          console.error(err);
+          Swal.fire({
+            icon: 'error',
+            title: '추가 중 오류가 발생했습니다.',
+            text: '잠시 후 다시 시도해 주세요.',
+            confirmButtonText: '확인'
+          });
+        });
+    }
   };
+
 
   return (
     <div>

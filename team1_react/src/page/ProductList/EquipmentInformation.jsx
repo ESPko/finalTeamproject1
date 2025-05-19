@@ -90,8 +90,8 @@ function EquipmentInformation () {
 
   // 비품 수정 요청
   const handleUpdateProduct = async () => {
+    // 유효성 검사: 이미지가 없으면 경고 메시지
     if (!updateProduct.image) {
-      // alert('이미지를 먼저 선택하세요.');
       await Swal.fire({
         icon: 'warning',
         title: '이미지를 먼저 선택하세요.',
@@ -99,41 +99,52 @@ function EquipmentInformation () {
       return;
     }
 
-    const formData = new FormData();
-    formData.append('name', updateProduct.name);
-    formData.append('category', updateProduct.category);
-    formData.append('vendorName', updateProduct.vendorName);
-    formData.append('warehouseName', updateProduct.warehouseName);
-    formData.append('quantity', updateProduct.quantity);
-    formData.append('price', updateProduct.price);
-    formData.append('standard', updateProduct.standard);
-    formData.append('image', updateProduct.image);
-    formData.append('userId', user.id);
+    // '해당 내용으로 수정하시겠습니까?' 확인 창 띄우기
+    const result = await Swal.fire({
+      icon: 'question',
+      title: '내용으로 수정하시겠습니까?',
+      showCancelButton: true,
+      confirmButtonText: '확인',
+      cancelButtonText: '취소',
+    });
 
-    try {
-      await axiosInstance.put(`/item/update/${updateProduct.idx}`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-      // alert('비품이 수정되었습니다.');
-      await Swal.fire({
-        icon: 'success',
-        title: '비품이 수정되었습니다.',
-      });
-      setDetailModalOpen(false);
-      fetchItems();
-    } catch (err) {
-      console.error('비품 수정 실패:', err);
-      if (err.response) {
-        console.error('서버 응답 오류:', err.response.data);
+    // 사용자가 '확인'을 클릭한 경우
+    if (result.isConfirmed) {
+      const formData = new FormData();
+      formData.append('name', updateProduct.name);
+      formData.append('category', updateProduct.category);
+      formData.append('vendorName', updateProduct.vendorName);
+      formData.append('warehouseName', updateProduct.warehouseName);
+      formData.append('quantity', updateProduct.quantity);
+      formData.append('price', updateProduct.price);
+      formData.append('standard', updateProduct.standard);
+      formData.append('image', updateProduct.image);
+      formData.append('userId', user.id);
+
+      try {
+        await axiosInstance.put(`/item/update/${updateProduct.idx}`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+        await Swal.fire({
+          icon: 'success',
+          title: '비품이 수정되었습니다.',
+        });
+        setDetailModalOpen(false);
+        fetchItems();
+      } catch (err) {
+        console.error('비품 수정 실패:', err);
+        if (err.response) {
+          console.error('서버 응답 오류:', err.response.data);
+        }
+        await Swal.fire({
+          icon: 'error',
+          title: '비품 수정에 실패했습니다.',
+          text: err.response?.data || '',
+        });
       }
-      // alert('비품 수정에 실패했습니다.');
-      await Swal.fire({
-        icon: 'error',
-        title: '비품 수정에 실패했습니다.',
-        text: err.response?.data || '',
-      });
     }
   };
+
 
   const handleDeleteItem = async (product) => {
     const result = await Swal.fire({
@@ -319,8 +330,9 @@ function EquipmentInformation () {
                 
                 <button
                   onClick={() => handleDeleteItem(selectedProduct)}
-                  className="bg-gray-200 text-gray-700 px-4 py-2 rounded"
+                  className="bg-red-500 text-white px-4 py-2 rounded"
                 >삭제</button>
+
                 <button
                   onClick={() => setDetailModalOpen(false)} // 모달 닫기
                   className="bg-gray-200 text-gray-700 px-4 py-2 rounded"
