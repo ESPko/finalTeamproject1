@@ -3,7 +3,9 @@
 
 <mapper namespace="bitc.fullstack503.team1_server.mapper.kdh.MainPageMapper">
     <select id="getTodayStock" resultType="bitc.fullstack503.team1_server.dto.TransactionDTO">
-        select *from transaction
+            SELECT *
+            FROM transaction
+            WHERE DATE(time) = CURDATE()
     </select>
 
     <select id="inputRequestList" resultType="bitc.fullstack503.team1_server.dto.ItemDTO">

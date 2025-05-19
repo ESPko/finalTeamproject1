@@ -2,7 +2,7 @@ package bitc.fullstack503.team1_server.controller.park;
 
 import bitc.fullstack503.team1_server.dto.ItemDTO;
 import bitc.fullstack503.team1_server.dto.ShipmentDetailResponse;
-import bitc.fullstack503.team1_server.security.JwtTokenProvider;
+import bitc.fullstack503.team1_server.security.JwtUtil;
 import bitc.fullstack503.team1_server.service.park.FlutterService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -68,8 +68,7 @@ public class FlutterController {
   }
 
   @Autowired
-  private JwtTokenProvider jwtTokenProvider; // JWT 토큰 파싱 유틸리티
-
+private JwtUtil jwtUtil;
   // 출고 기록 조회
   @GetMapping("/getShipmentDetails")
   public List<ShipmentDetailResponse> getShipmentDetails(@RequestHeader("Authorization") String authHeader) {
@@ -78,7 +77,7 @@ public class FlutterController {
 
     // JWT 토큰 처리 및 사용자 이름 추출
     String token = authHeader.substring(7); // "Bearer " 제거
-    String userName = jwtTokenProvider.getUserNameFromToken(token);
+    String userName = jwtUtil.extractUsername(token);
 
     // 사용자 이름을 기반으로 출고 내역을 조회
     List<ShipmentDetailResponse> shipmentDetails = flutterService.getShipmentDetails(userName);
