@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 function MainPageInputRequestList() {
   const [recentRequests, setRecentRequests] = useState([])
-  
+
   const waitingCount = recentRequests.filter(r => r.approve === 0).length;
 
   // 페이지 이동을 위한 부분
