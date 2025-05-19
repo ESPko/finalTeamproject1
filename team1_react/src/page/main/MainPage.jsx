@@ -31,12 +31,12 @@ const Dashboard = () =>{
       </div>
 
       {/* 재고 변동 */}
-      <div className="h-[400px] bg-white rounded-2xl shadow hover:scale-105 hover:shadow-lg hover:cursor-pointer" onClick={() => navigate('/test4')}>
+      <div className="h-[400px] bg-white rounded-2xl shadow duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:cursor-pointer" onClick={() => navigate('/test4')}>
         <MainLowStockPage />
       </div>
 
       {/* 입출고 수 */}
-      <div className="bg-white rounded-2xl shadow p-4  h-[400px] hover:scale-105 hover:shadow-lg hover:cursor-pointer" onClick={() => navigate('/test9')}>
+      <div className="bg-white rounded-2xl shadow p-4  h-[400px] duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:cursor-pointer" onClick={() => navigate('/test9')}>
         <StockMovementChart/>
       </div>
     </main>
