@@ -54,7 +54,7 @@ function Side ()
                   {label}
                 </Link>
               </li>
-            )}
+            ))}
           </ul>
         </nav>
       </aside>
