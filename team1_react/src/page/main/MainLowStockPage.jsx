@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import axiosInstance from '../../api/axiosInstance';
+import { useNavigate } from 'react-router-dom';
 
 function MainLowStockPage() {
+  const navigate = useNavigate(); // ← 이 부분 추가
   const [lowStockItems, setLowStockItems] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('all'); // 'all', 'order', 'arrival'
 
@@ -40,8 +42,9 @@ function MainLowStockPage() {
     <div className=" p-6 flex flex-col">
       {/* 헤더 */}
       <div className="flex justify-between items-center mb-6 cursor-pointer">
-        <a href="/test4">
-          <h2 className="text-lg font-bold text-gray-800 hover:scale-110">부족 재고</h2></a>
+        <div onClick={() => navigate('/test4')}> {/* ← 여기 수정 */}
+          <h2 className="text-lg font-bold text-gray-800 hover:scale-110">부족 재고</h2>
+        </div>
         <div className="text-sm text-gray-400">{getTodayDate()}</div>
       </div>
 
@@ -92,7 +95,7 @@ function MainLowStockPage() {
         })}
         <div className="mt-4 flex justify-end pr-2">
           <button
-            onClick={() => window.location.href = '/test4'}
+            onClick={() => navigate('/test4')} // ← 여기도 수정
             className="text-sm text-blue-600 font-semibold hover:underline"
           >
             더보기 &gt;
