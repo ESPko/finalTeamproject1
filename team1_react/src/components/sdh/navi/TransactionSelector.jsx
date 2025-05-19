@@ -35,10 +35,10 @@ function TransactionSelector ({ transactionType, setTransactionType })
     <div className="relative inline-block text-left" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(prev => !prev)}
-        className={`h-[40px] px-4 rounded border ${
+        className={`h-[40px] px-4 rounded border shadow-sm ${
           transactionType !== null
             ? 'bg-blue-100 text-blue-600 border-blue-300'
-            : 'bg-gray-200 text-gray-800 border-gray-300'
+            : 'text-gray-800 border-gray-300'
         }`}
       >
         {currentLabel}
