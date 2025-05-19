@@ -1,25 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { ResponsivePie } from '@nivo/pie';
+import { ResponsivePie } from "@nivo/pie";
 import axiosInstance from '../../api/axiosInstance.jsx';
+import { Package, ArrowDownCircle, ArrowUpCircle } from "lucide-react";
 
-function DashboardChart ()
-{
+
+function DashboardChart() {
   // 총 재고 수
   const [totalAfter, setTotalAfter] = useState(0);
   // 총 입고 수량
   const [totalInput, setTotalInput] = useState(0);
   // 총 출고 수량
   const [totalOutput, setTotalOutput] = useState(0);
-  const [time, setTime] = useState('');
-  
+  const [time, setTime] = useState("")
+
   const pieData = [
-    { id: '입고', value: totalInput, color: 'hsl(141, 70%, 50%)' },
-    { id: '출고', value: totalOutput, color: 'hsl(0, 70%, 50%)' },
+    { id: "입고", value: totalInput, color: "hsl(141, 70%, 50%)" },
+    { id: "출고", value: totalOutput, color: "hsl(0, 70%, 50%)" },
   ];
-  const getTodayDate = () => {
-    const today = new Date();
-    return today.toISOString().slice(0, 10);
-  };
 
   useEffect(() => {
     // 시간 변경을 위한 부분
@@ -31,17 +28,17 @@ function DashboardChart ()
         day: '2-digit',
         hour: '2-digit',
         minute: '2-digit',
-        second: '2-digit',
+        second: '2-digit'
       });
       setTime(formatted);
     };
-    
+
     updateTime(); // 처음 한 번 실행
     const timeInterval = setInterval(updateTime, 1000); // 1초마다 시간 업데이트
-    
+
     // 재고 정보 불러오는 부분
     const fetchStockData = () => {
-      axiosInstance.get('/todayStock')
+      axiosInstance.get("/todayStock")
         .then(res => {
           const data = res.data;
           // 총 재고
@@ -52,15 +49,20 @@ function DashboardChart ()
           setTotalOutput(data.totalOutput);
         })
         .catch(err => {
-          console.error('데이터 불러오기 실패 : ', err);
-        });
-    };
+          console.error("데이터 불러오기 실패 : ", err)
+        })
+    }
     fetchStockData();
+    const stockInterval = setInterval(fetchStockData, 1000);
+
     return () => {
       clearInterval(timeInterval);
+      clearInterval(stockInterval);
     };
   }, []);
-  
+
+
+
   const CenteredMetric = ({ centerX, centerY }) => {
     return (
       <text
@@ -78,16 +80,18 @@ function DashboardChart ()
       </text>
     );
   };
-  
+
+
+
   return (
     <div>
       {/* 재고 현황 */}
-      <div className="p-4 h-full">
+      <div className="bg-white rounded-2xl p-4 h-full">
         <div className="flex justify-between items-center mb-4">
           <div className="text-lg font-bold text-gray-800">오늘 재고 현황</div>
           <div className="text-sm text-gray-400">{time}</div>
         </div>
-        
+
         <div className="h-56">
           <ResponsivePie
             data={pieData}
@@ -105,18 +109,27 @@ function DashboardChart ()
             layers={['arcs', 'arcLabels', 'arcLinkLabels', 'legends', CenteredMetric]}
           />
         </div>
-        <div className="mt-4 space-y-1 text-sm">
-          <div className="flex items-center">
-            <span className="mr-2 text-green-500">📦 재고</span>
-            <span className="font-bold text-green-600">{totalAfter} </span>
+        {/* 통계 정보 (가로 정렬) */}
+        <div className="flex justify-around items-center text-center pt-2">
+          {/* 총 재고 */}
+          <div className="flex flex-col items-center space-y-1">
+            <Package className="text-green-600 w-6 h-6" />
+            <span className="text-sm text-gray-500">총 재고</span>
+            <span className="text-lg font-bold text-gray-800">1642</span>
           </div>
-          <div className="flex items-center">
-            <span className="mr-2 text-blue-500">📥 입고</span>
-            <span className="font-bold text-blue-600">{totalInput}</span>
+
+          {/* 입고 */}
+          <div className="flex flex-col items-center space-y-1">
+            <ArrowDownCircle className="text-blue-600 w-6 h-6" />
+            <span className="text-sm text-gray-500">입고</span>
+            <span className="text-lg font-bold text-gray-800">1000</span>
           </div>
-          <div className="flex items-center">
-            <span className="mr-2 text-red-500">📤 출고</span>
-            <span className="font-bold text-red-600">{totalOutput}</span>
+
+          {/* 출고 */}
+          <div className="flex flex-col items-center space-y-1">
+            <ArrowUpCircle className="text-red-500 w-6 h-6" />
+            <span className="text-sm text-gray-500">출고</span>
+            <span className="text-lg font-bold text-gray-800">1963</span>
           </div>
         </div>
       </div>

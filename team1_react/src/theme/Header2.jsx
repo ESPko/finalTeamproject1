@@ -12,8 +12,8 @@ function Header2({toggleLayout }) {
 
   return (
     <header className="flex items-center justify-between border-b border-gray-100 bg-[#ffffff] h-16 px-6">
-      <Link to="/" className="!text-[#9379db] text-2xl font-bold tracking-wide">
-        JAEGOHAE
+      <Link to="/" className="!text-[#9379db] text-3xl font-bold tracking-wide">
+        Boxel
       </Link>
       <div className="flex items-center space-x-4">
         <HeaderIcons2 onToggleTheme={toggleLayout} />
