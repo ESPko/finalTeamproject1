@@ -73,14 +73,21 @@ function ProductAdd({ onClose, onSuccess }) {
       return;
     }
 
-    setIsUploading(true);
-    // 비품 승인 요청 확인
-    const isConfirmed = window.confirm('추가적으로 비품 승인요청 하시겠습니까?');
-    if (!isConfirmed) {
-      return; // 확인을 누르지 않으면 아무 것도 하지 않음
+    // 🔸 SweetAlert로 확인창 표시
+    const result = await Swal.fire({
+      title: '비품 승인요청 하시겠습니까?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: '예',
+      cancelButtonText: '아니오',
+    });
+
+    if (!result.isConfirmed) {
+      setIsUploading(false);
+      return; // 사용자가 '아니오'를 누르면 종료
     }
 
-    setIsUploading(true); // 🔸 업로드 시작
+    setIsUploading(true); // 업로드 시작
 
     const formData = new FormData();
     formData.append('image', image);
@@ -113,9 +120,10 @@ function ProductAdd({ onClose, onSuccess }) {
       });
       console.error('이미지 업로드 실패:', error);
     } finally {
-      setIsUploading(false); // 🔸 업로드 종료
+      setIsUploading(false); // 업로드 종료
     }
   };
+
 
   return (
     <div className="space-y-5">

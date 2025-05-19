@@ -30,7 +30,7 @@ const Dashboard = () =>{
         <MainPageInputRequestList />
       </div>
 
-      {/* 재고 변동 */}
+      {/* 부족 재고 */}
       <div className="h-[400px] bg-white rounded-2xl shadow hover:scale-105 hover:shadow-lg hover:cursor-pointer" onClick={() => navigate('/test4')}>
         <MainLowStockPage />
       </div>
