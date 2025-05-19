@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="bitc.fullstack503.team1_server.mapper.StockMovementMapper">
+    <select id="getStockMovementsByDateRange" resultType="bitc.fullstack503.team1_server.dto.TransactionDTO">
+        SELECT
+            DATE(time) AS date,
+            SUM(CASE WHEN transaction = 0 THEN after - `before` ELSE 0 END) AS 입고,
+            SUM(CASE WHEN transaction = 1 THEN after - `before` ELSE 0 END) AS 출고
+        FROM transaction
+        WHERE time BETWEEN #{startDate} AND #{endDate}
+        GROUP BY DATE(time)
+        ORDER BY date;
+    </select>
+
+</mapper>
