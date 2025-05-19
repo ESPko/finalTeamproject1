@@ -5,6 +5,7 @@ import { SearchIcon } from 'lucide-react';
 import Modal from '../../Modal/Modal.jsx';
 import ClientAdd from './ClientAdd.jsx';
 import ClientDetail from './ClientDetail.jsx';
+import Swal from 'sweetalert2';
 
 function ClientList ()
 {
@@ -59,48 +60,59 @@ function ClientList ()
   };
   
   // ClientList.js (삭제 로직)
-  
-  const handleDeletVendor = (client) => {
-    console.log('매입회사 이름:', client.name);
-    axiosInstance.get(`/item/getVendorItemCount?vendorName=${client.name}`)
-      .then(response => {
-        const itemCount = response.data; // 비품 수
-        console.log(itemCount);
-        if (itemCount > 0)
-        {
-          // 비품이 존재하면 숨기겠다는 확인 메시지
-          if (window.confirm('해당 매입처에 비품이 존재합니다. 삭제하시겠습니까?'))
-          {
-            // 창고 삭제
-            deleteVendor(client);
-          }
+
+  const handleDeletVendor = async (client) => {
+    try {
+      const response = await axiosInstance.get(`/item/getVendorItemCount?vendorName=${client.name}`);
+      const itemCount = response.data;
+
+      if (itemCount > 0) {
+        const result = await Swal.fire({
+          icon: 'warning',
+          title: '비품이 존재합니다',
+          text: '해당 매입처에 비품이 존재합니다. 삭제하시겠습니까?',
+          showCancelButton: true,
+          confirmButtonText: '삭제',
+          cancelButtonText: '취소',
+        });
+
+        if (result.isConfirmed) {
+          deleteVendor(client);
         }
-        else
-        {
-          // 비품이 없다면 바로 창고 삭제
-          if (window.confirm('해당 매입처를 삭제하시겠습니까?'))
-          {
-            deleteVendor(client);
-          }
+      } else {
+        const result = await Swal.fire({
+          icon: 'warning',
+          title: '정말 삭제하시겠습니까?',
+          text: '해당 매입처를 삭제하시겠습니까?',
+          showCancelButton: true,
+          confirmButtonText: '삭제',
+          cancelButtonText: '취소',
+        });
+
+        if (result.isConfirmed) {
+          deleteVendor(client);
         }
-      })
-      .catch(error => console.error('비품 수 조회 오류:', error));
+      }
+    } catch (error) {
+      console.error('비품 수 조회 오류:', error);
+      Swal.fire('오류', '비품 수를 불러오는 중 오류가 발생했습니다.', 'error');
+    }
   };
-  
+
+
   // 창고 삭제 함수
-  const deleteVendor = (client) => {
-    axiosInstance.delete(`/vendor/${client.idx}`)
-      .then(() => {
-        alert('매입처 삭제 완료되었습니다.');
-        setClientDetailModal(false); // 모달 닫기
-        fetchClients(); // 클라이언트 목록 갱신
-      })
-      .catch(error => {
-        alert('매입처 삭제 중 오류가 발생했습니다.');
-        console.error(error);
-      });
+  const deleteVendor = async (client) => {
+    try {
+      await axiosInstance.delete(`/vendor/${client.idx}`);
+      await Swal.fire('삭제 완료', '매입처가 성공적으로 삭제되었습니다.', 'success');
+      setClientDetailModal(false);
+      fetchClients();
+    } catch (error) {
+      Swal.fire('오류', '매입처 삭제 중 오류가 발생했습니다.', 'error');
+      console.error(error);
+    }
   };
-  
+
   return (
     <div className="flex-1 p-6 overflow-y-auto">
       <div className="bg-white rounded shadow p-4 min-x-[100vh] min-h-[80vh]" style={{ padding: '0px 40px 80px 40px' }}>
@@ -220,14 +232,18 @@ function ClientList ()
               <>
                 <button
                   className="bg-blue-600 text-white px-4 py-2 rounded"
-                  onClick={() => {
-                    axiosInstance.put(`/vendor/${updatedClient.idx}`, updatedClient)
-                      .then(() => {
-                        alert('매입처 정보가 수정되었습니다.');
-                        setClientDetailModal(false);
-                        fetchClients();
-                      });
+                  onClick={async () => {
+                    try {
+                      await axiosInstance.put(`/vendor/${updatedClient.idx}`, updatedClient);
+                      await Swal.fire('수정 완료', '매입처 정보가 수정되었습니다.', 'success');
+                      setClientDetailModal(false);
+                      fetchClients();
+                    } catch (error) {
+                      console.error(error);
+                      Swal.fire('오류', '매입처 수정 중 문제가 발생했습니다.', 'error');
+                    }
                   }}
+
                 >
                   수정
                 </button>

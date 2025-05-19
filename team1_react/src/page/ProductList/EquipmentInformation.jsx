@@ -7,13 +7,13 @@ import Topline from '../../components/layout/Topline.jsx';
 import { SearchIcon } from 'lucide-react';
 import axiosInstance from '../../api/axiosInstance.jsx';
 import { useAuth } from '../../contexts/AuthContext.jsx';
+import Swal from 'sweetalert2';  // 추가
 
-function EquipmentInformation ()
-{
+function EquipmentInformation () {
   const { user } = useAuth();
   const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]); // 필터링된 제품 목록
-  const [searchTerm, setSearchTerm] = useState(''); // 검색어 상태
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const [showSettings, setShowSettings] = useState(false);
   const [visibleColumns, setVisibleColumns] = useState({
     category: true,
@@ -23,65 +23,55 @@ function EquipmentInformation ()
     quantity: true,
     warehouseName: true,
   });
-  
+
   const toggleColumn = (key) => {
     setVisibleColumns((prev) => ({
       ...prev,
       [key]: !prev[key],
     }));
   };
-  
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [detailModalOpen, setDetailModalOpen] = useState(false);
   const [updateProduct, setUpdateProduct] = useState(null);
-  
+
   const handleRowClick = (product) => {
     setSelectedProduct(product);
     setDetailModalOpen(true);
   };
-  
+
   const fetchItems = () => {
     axiosInstance.get('/item/itemList')
       .then((res) => {
         const data = res.data;
-        if (Array.isArray(data))
-        {
+        if (Array.isArray(data)) {
           setProducts(data);
-          setFilteredProducts(data); // 초기 로딩 시, 필터링된 목록도 설정
-        }
-        else if (Array.isArray(data.data))
-        {
-          setProducts(data.data); // 백엔드 응답이 { data: [...] } 형태일 경우
-          setFilteredProducts(data.data); // 필터링된 목록 설정
-        }
-        else
-        {
+          setFilteredProducts(data);
+        } else if (Array.isArray(data.data)) {
+          setProducts(data.data);
+          setFilteredProducts(data.data);
+        } else {
           console.error('예상하지 못한 응답 형식:', data);
           setProducts([]);
-          setFilteredProducts([]); // 초기화
+          setFilteredProducts([]);
         }
       })
       .catch((err) => {
         console.error('비품 목록 불러오기 실패:', err);
         setProducts([]);
-        setFilteredProducts([]); // 오류 발생 시 초기화
+        setFilteredProducts([]);
       });
   };
-  
-  // 서버에서 비품 목록 불러오기
+
   useEffect(() => {
     fetchItems();
   }, []);
-  
-  // 검색어에 맞춰 비품 목록 필터링
+
   useEffect(() => {
-    if (searchTerm === '')
-    {
-      setFilteredProducts(products); // 검색어가 비어 있으면 전체 제품 표시
-    }
-    else
-    {
+    if (searchTerm === '') {
+      setFilteredProducts(products);
+    } else {
       const lowercasedSearchTerm = searchTerm.toLowerCase();
       const filtered = products.filter((product) => {
         return (
@@ -94,19 +84,21 @@ function EquipmentInformation ()
           product.warehouseName.toLowerCase().includes(lowercasedSearchTerm)
         );
       });
-      setFilteredProducts(filtered); // 필터링된 목록 설정
+      setFilteredProducts(filtered);
     }
   }, [searchTerm, products]);
-  
+
   // 비품 수정 요청
   const handleUpdateProduct = async () => {
-    if (!updateProduct.image)
-    {
-      alert('이미지를 먼저 선택하세요.');
+    if (!updateProduct.image) {
+      // alert('이미지를 먼저 선택하세요.');
+      await Swal.fire({
+        icon: 'warning',
+        title: '이미지를 먼저 선택하세요.',
+      });
       return;
     }
-    
-    // FormData로 업데이트 데이터 생성
+
     const formData = new FormData();
     formData.append('name', updateProduct.name);
     formData.append('category', updateProduct.category);
@@ -117,65 +109,62 @@ function EquipmentInformation ()
     formData.append('standard', updateProduct.standard);
     formData.append('image', updateProduct.image);
     formData.append('userId', user.id);
-    
-    try
-    {
-      // axios.put(`http://localhost:8080/item/update`, null, {
-      axiosInstance.put(`/item/update/${updateProduct.idx}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-        .then(() => {
-          alert('비품이 수정되었습니다.');
-          setDetailModalOpen(false);
-          fetchItems(); // 비품 목록 다시 가져오기
-        })
-        .catch((err) => {
-          console.error('비품 수정 실패:', err);
-          if (err.response)
-          {
-            console.error('서버 응답 오류:', err.response.data); // 서버에서 반환하는 오류 메시지
-          }
-          alert('비품 수정에 실패했습니다.');
-        });
-    }
-    catch (err)
-    {
+
+    try {
+      await axiosInstance.put(`/item/update/${updateProduct.idx}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      // alert('비품이 수정되었습니다.');
+      await Swal.fire({
+        icon: 'success',
+        title: '비품이 수정되었습니다.',
+      });
+      setDetailModalOpen(false);
+      fetchItems();
+    } catch (err) {
       console.error('비품 수정 실패:', err);
-      if (err.response)
-      {
-        console.error('서버 응답 오류:', err.response.data); // 서버에서 반환하는 오류 메시지
+      if (err.response) {
+        console.error('서버 응답 오류:', err.response.data);
       }
-      alert('비품 수정에 실패했습니다.');
+      // alert('비품 수정에 실패했습니다.');
+      await Swal.fire({
+        icon: 'error',
+        title: '비품 수정에 실패했습니다.',
+        text: err.response?.data || '',
+      });
     }
   };
-  
-  const handleDeleteItem = (product) => {
-    // 삭제 확인 메시지
-    const confirmDelete = window.confirm('이 비품을 삭제하시겠습니까?');
-    
-    if (confirmDelete)
-    {
-      // 사용자가 "OK"를 클릭하면 삭제 진행
-      axiosInstance.put(`/item/${product.idx}`)
-        .then(() => {
-          alert('비품이 삭제되었습니다.');
-          setDetailModalOpen(false);
-          fetchItems(); // 비품 목록 다시 가져오기
-        })
-        .catch((err) => {
-          alert('삭제 중 오류가 발생했습니다.');
-          console.log(err);
+
+  const handleDeleteItem = async (product) => {
+    const result = await Swal.fire({
+      title: '이 비품을 삭제하시겠습니까?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: '삭제',
+      cancelButtonText: '취소',
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await axiosInstance.put(`/item/${product.idx}`);
+        await Swal.fire({
+          icon: 'success',
+          title: '비품이 삭제되었습니다.',
         });
-    }
-    else
-    {
-      // 사용자가 "취소"를 클릭하면 아무 작업도 하지 않음
+        setDetailModalOpen(false);
+        fetchItems();
+      } catch (err) {
+        console.error(err);
+        await Swal.fire({
+          icon: 'error',
+          title: '삭제 중 오류가 발생했습니다.',
+        });
+      }
+    } else {
       console.log('비품삭제가 취소되었습니다.');
     }
   };
-  
+
   return (
     <div className="flex-1 p-6 overflow-y-auto">
       <div className="bg-white rounded shadow p-4 min-x-[100vh] min-h-[80vh]" style={{ padding: '0px 40px 80px' }}>

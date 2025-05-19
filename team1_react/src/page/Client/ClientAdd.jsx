@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axiosInstance from '../../api/axiosInstance.jsx';
+import Swal from 'sweetalert2';
 
 function ClientAdd({ onClose, onSuccess }) {
   const [client, setClient] = useState({
@@ -16,30 +17,40 @@ function ClientAdd({ onClose, onSuccess }) {
 
   // 유효성 검사 함수
   const validateForm = () => {
-    // 필수 항목이 비어 있는지 확인
     if (!client.name || !client.phone || !client.email || !client.location) {
-      alert('필수 내용이 누락되었습니다');  // 필수 항목이 비어 있으면 알림 띄움
+      Swal.fire({
+        icon: 'warning',
+        title: '필수 내용이 누락되었습니다',
+        text: '모든 필수 항목을 입력해 주세요.',
+      });
       return false;
     }
     return true;
   };
 
   const handleSubmit = () => {
-    // 유효성 검사
     if (!validateForm()) {
-      return;  // 유효성 검사에 실패하면 추가되지 않음
+      return;
     }
 
-    // 유효성 검사 통과 시 서버에 데이터 전송
     axiosInstance.post('/vendor/vendorAdd', client)
       .then(() => {
-        alert('매입처가 추가되었습니다.');
-        onSuccess();  // 리스트 리로드
-        onClose();    // 모달 닫기
+        Swal.fire({
+          icon: 'success',
+          title: '매입처가 추가되었습니다.',
+          confirmButtonText: '확인'
+        });
+        onSuccess();
+        onClose();
       })
       .catch((err) => {
         console.error(err);
-        alert('추가 중 오류가 발생했습니다.');
+        Swal.fire({
+          icon: 'error',
+          title: '추가 중 오류가 발생했습니다.',
+          text: '잠시 후 다시 시도해 주세요.',
+          confirmButtonText: '확인'
+        });
       });
   };
 
@@ -64,8 +75,9 @@ function ClientAdd({ onClose, onSuccess }) {
         {/* 전화번호 + 이메일 */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block font-medium mb-1">전화번호
-              <span className="text-red-500">*</span></label>
+            <label className="block font-medium mb-1">
+              전화번호<span className="text-red-500">*</span>
+            </label>
             <input
               type="text"
               name="phone"
@@ -76,8 +88,9 @@ function ClientAdd({ onClose, onSuccess }) {
             />
           </div>
           <div>
-            <label className="block font-medium mb-1">이메일
-              <span className="text-red-500">*</span></label>
+            <label className="block font-medium mb-1">
+              이메일<span className="text-red-500">*</span>
+            </label>
             <input
               type="email"
               name="email"
@@ -91,8 +104,9 @@ function ClientAdd({ onClose, onSuccess }) {
 
         {/* 주소 */}
         <div>
-          <label className="block font-medium mb-1">주소
-            <span className="text-red-500">*</span></label>
+          <label className="block font-medium mb-1">
+            주소<span className="text-red-500">*</span>
+          </label>
           <input
             type="text"
             name="location"
@@ -117,10 +131,19 @@ function ClientAdd({ onClose, onSuccess }) {
       </div>
 
       <div className="flex justify-end space-x-2 px-4 py-2 border-t">
-        <button onClick={handleSubmit} className="bg-blue-600 text-white px-4 py-2 rounded">추가</button>
-        <button onClick={onClose} className="bg-gray-200 text-gray-700 px-4 py-2 rounded">취소</button>
+        <button
+          onClick={handleSubmit}
+          className="bg-blue-600 text-white px-4 py-2 rounded"
+        >
+          추가
+        </button>
+        <button
+          onClick={onClose}
+          className="bg-gray-200 text-gray-700 px-4 py-2 rounded"
+        >
+          취소
+        </button>
       </div>
-
     </div>
   );
 }
