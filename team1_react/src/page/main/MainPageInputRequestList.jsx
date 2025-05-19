@@ -4,10 +4,8 @@ import { useNavigate } from 'react-router-dom';
 
 function MainPageInputRequestList() {
   const [recentRequests, setRecentRequests] = useState([])
-
-  const approvedCount = recentRequests.filter(r => r.approve === 1 || r.approve === 3).length;
+  
   const waitingCount = recentRequests.filter(r => r.approve === 0).length;
-  const rejectedCount = recentRequests.filter(r => r.approve === 2).length;
 
   // 페이지 이동을 위한 부분
   const navigate = useNavigate();
@@ -16,7 +14,7 @@ function MainPageInputRequestList() {
   useEffect(() => {
     axiosInstance.get('/inputRequestList')
       .then(res => {
-        const mappedData = res.data.map((rr, index) => ({
+        const mappedData = res.data.map((rr) => ({
           idx: rr.idx,
           name:rr.name,
           time: rr.time,
@@ -43,16 +41,8 @@ function MainPageInputRequestList() {
 
         <div className="space-y-2 mb-4 text-sm">
           <div className="flex justify-between">
-            <span>승인 완료</span>
-            <span className="text-green-500 font-bold">{approvedCount}</span>
-          </div>
-          <div className="flex justify-between">
             <span>승인 대기</span>
             <span className="text-gray-500 font-bold">{waitingCount}</span>
-          </div>
-          <div className="flex justify-between">
-            <span>신청 거절</span>
-            <span className="text-red-500 font-bold">{rejectedCount}</span>
           </div>
         </div>
         <div className="mt-2">
