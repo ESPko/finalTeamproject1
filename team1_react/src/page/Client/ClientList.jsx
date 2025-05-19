@@ -233,20 +233,32 @@ function ClientList ()
                 <button
                   className="bg-blue-600 text-white px-4 py-2 rounded"
                   onClick={async () => {
-                    try {
-                      await axiosInstance.put(`/vendor/${updatedClient.idx}`, updatedClient);
-                      await Swal.fire('수정 완료', '매입처 정보가 수정되었습니다.', 'success');
-                      setClientDetailModal(false);
-                      fetchClients();
-                    } catch (error) {
-                      console.error(error);
-                      Swal.fire('오류', '매입처 수정 중 문제가 발생했습니다.', 'error');
+                    // 수정 확인 메시지
+                    const result = await Swal.fire({
+                      icon: 'question',
+                      title: '해당 정보를 수정하시겠습니까?',
+                      showCancelButton: true,
+                      confirmButtonText: '수정',
+                      cancelButtonText: '취소',
+                    });
+
+                    if (result.isConfirmed) {
+                      // 사용자가 '수정'을 클릭한 경우에만 수정 진행
+                      try {
+                        await axiosInstance.put(`/vendor/${updatedClient.idx}`, updatedClient);
+                        await Swal.fire('수정 완료', '매입처 정보가 수정되었습니다.', 'success');
+                        setClientDetailModal(false);
+                        fetchClients();
+                      } catch (error) {
+                        console.error(error);
+                        Swal.fire('오류', '매입처 수정 중 문제가 발생했습니다.', 'error');
+                      }
                     }
                   }}
-
                 >
                   수정
                 </button>
+
                 <button
                   className="bg-red-600 text-white px-4 py-2 rounded"
                   onClick={() => handleDeletVendor(selectedClient)}

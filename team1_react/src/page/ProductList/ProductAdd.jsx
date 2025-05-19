@@ -73,6 +73,16 @@ function ProductAdd({ onClose, onSuccess }) {
       return;
     }
 
+    // 매입가와 적정 재고가 숫자인지 확인
+    if (isNaN(price) || isNaN(standard)) {
+      Swal.fire({
+        icon: 'warning',
+        title: '내용에 맞게 작성해주세요',
+        text: '매입가와 적정 재고는 숫자로만 입력 가능합니다.',
+      });
+      return;
+    }
+
     // 🔸 SweetAlert로 확인창 표시
     const result = await Swal.fire({
       title: '비품 승인요청 하시겠습니까?',
@@ -123,6 +133,7 @@ function ProductAdd({ onClose, onSuccess }) {
       setIsUploading(false); // 업로드 종료
     }
   };
+
 
 
   return (

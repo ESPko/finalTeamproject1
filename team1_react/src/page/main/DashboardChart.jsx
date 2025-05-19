@@ -17,6 +17,10 @@ function DashboardChart() {
     { id: "입고", value: totalInput, color: "hsl(141, 70%, 50%)" },
     { id: "출고", value: totalOutput, color: "hsl(0, 70%, 50%)" },
   ];
+  const getTodayDate = () => {
+    const today = new Date();
+    return today.toISOString().slice(0, 10);
+  };
 
   useEffect(() => {
     // 시간 변경을 위한 부분
@@ -80,9 +84,7 @@ function DashboardChart() {
       </text>
     );
   };
-
-
-
+  
   return (
     <div>
       {/* 재고 현황 */}
@@ -91,7 +93,7 @@ function DashboardChart() {
           <div className="text-lg font-bold text-gray-800">오늘 재고 현황</div>
           <div className="text-sm text-gray-400">{time}</div>
         </div>
-
+        
         <div className="h-56">
           <ResponsivePie
             data={pieData}
@@ -109,27 +111,18 @@ function DashboardChart() {
             layers={['arcs', 'arcLabels', 'arcLinkLabels', 'legends', CenteredMetric]}
           />
         </div>
-        {/* 통계 정보 (가로 정렬) */}
-        <div className="flex justify-around items-center text-center pt-2">
-          {/* 총 재고 */}
-          <div className="flex flex-col items-center space-y-1">
-            <Package className="text-green-600 w-6 h-6" />
-            <span className="text-sm text-gray-500">총 재고</span>
-            <span className="text-lg font-bold text-gray-800">1642</span>
+        <div className="mt-4 space-y-1 text-sm">
+          <div className="flex items-center">
+            <span className="mr-2 text-green-500">📦 재고</span>
+            <span className="font-bold text-green-600">{totalAfter} </span>
           </div>
-
-          {/* 입고 */}
-          <div className="flex flex-col items-center space-y-1">
-            <ArrowDownCircle className="text-blue-600 w-6 h-6" />
-            <span className="text-sm text-gray-500">입고</span>
-            <span className="text-lg font-bold text-gray-800">1000</span>
+          <div className="flex items-center">
+            <span className="mr-2 text-blue-500">📥 입고</span>
+            <span className="font-bold text-blue-600">{totalInput}</span>
           </div>
-
-          {/* 출고 */}
-          <div className="flex flex-col items-center space-y-1">
-            <ArrowUpCircle className="text-red-500 w-6 h-6" />
-            <span className="text-sm text-gray-500">출고</span>
-            <span className="text-lg font-bold text-gray-800">1963</span>
+          <div className="flex items-center">
+            <span className="mr-2 text-red-500">📤 출고</span>
+            <span className="font-bold text-red-600">{totalOutput}</span>
           </div>
         </div>
       </div>
