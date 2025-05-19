@@ -25,7 +25,9 @@ const Dashboard = () =>{
       </div>
 
       {/* 입고 신청 내역 */}
-      <div className="h-[420px] bg-white rounded-2xl shadow">
+      {/* 재고 변동 */}
+      <div className="h-[420px] bg-white rounded-2xl shadow hover:scale-105"
+           onClick={() => navigate('/test3')}>
         <MainPageInputRequestList />
       </div>
 
