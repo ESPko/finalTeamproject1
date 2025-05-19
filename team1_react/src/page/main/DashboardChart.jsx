@@ -11,11 +11,15 @@ function DashboardChart ()
   // 총 출고 수량
   const [totalOutput, setTotalOutput] = useState(0);
   const [time, setTime] = useState('');
-
+  
   const pieData = [
     { id: '입고', value: totalInput, color: 'hsl(141, 70%, 50%)' },
     { id: '출고', value: totalOutput, color: 'hsl(0, 70%, 50%)' },
   ];
+  const getTodayDate = () => {
+    const today = new Date();
+    return today.toISOString().slice(0, 10);
+  };
 
   useEffect(() => {
     // 시간 변경을 위한 부분
@@ -31,10 +35,10 @@ function DashboardChart ()
       });
       setTime(formatted);
     };
-
+    
     updateTime(); // 처음 한 번 실행
     const timeInterval = setInterval(updateTime, 1000); // 1초마다 시간 업데이트
-
+    
     // 재고 정보 불러오는 부분
     const fetchStockData = () => {
       axiosInstance.get('/todayStock')
@@ -56,7 +60,7 @@ function DashboardChart ()
       clearInterval(timeInterval);
     };
   }, []);
-
+  
   const CenteredMetric = ({ centerX, centerY }) => {
     return (
       <text
@@ -74,7 +78,7 @@ function DashboardChart ()
       </text>
     );
   };
-
+  
   return (
     <div>
       {/* 재고 현황 */}
@@ -83,7 +87,7 @@ function DashboardChart ()
           <div className="text-lg font-bold text-gray-800">오늘 재고 현황</div>
           <div className="text-sm text-gray-400">{time}</div>
         </div>
-
+        
         <div className="h-56">
           <ResponsivePie
             data={pieData}
@@ -114,7 +118,6 @@ function DashboardChart ()
             <span className="mr-2 text-red-500">📤 출고</span>
             <span className="font-bold text-red-600">{totalOutput}</span>
           </div>
-          {/*<div className="text-xs text-gray-400 mt-2">어제: 총 재고 9, 입고 +2, 출고 2</div>*/}
         </div>
       </div>
     </div>

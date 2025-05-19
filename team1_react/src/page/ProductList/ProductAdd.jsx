@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axiosInstance from '../../api/axiosInstance.jsx';
+import Swal from 'sweetalert2';
 
 function ProductAdd({ onClose, onSuccess }) {
   const [name, setName] = useState('');
@@ -54,18 +55,25 @@ function ProductAdd({ onClose, onSuccess }) {
 
   // 업로드 함수
   const handleUpload = async () => {
-    if (isUploading) return; // 🔸 중복 클릭 방지
+    if (isUploading) return; // 중복 클릭 방지
+
     if (!image) {
-      alert('이미지를 먼저 선택하세요.');
+      Swal.fire({
+        icon: 'warning',
+        title: '이미지를 먼저 선택하세요.',
+      });
       return;
     }
 
-    // 필수 항목 체크
     if (!name || !category || !vendorName || !warehouseName || !price || !standard) {
-      alert('모든 내용을 입력해주세요.');
+      Swal.fire({
+        icon: 'warning',
+        title: '모든 내용을 입력해주세요.',
+      });
       return;
     }
 
+    setIsUploading(true);
     // 비품 승인 요청 확인
     const isConfirmed = window.confirm('추가적으로 비품 승인요청 하시겠습니까?');
     if (!isConfirmed) {
@@ -89,10 +97,20 @@ function ProductAdd({ onClose, onSuccess }) {
           'Content-Type': 'multipart/form-data',
         },
       });
+      Swal.fire({
+        icon: 'success',
+        title: '업로드 성공',
+        text: '제품이 성공적으로 추가되었습니다.',
+      });
       onSuccess();
       onClose();
       setImageSrc(response.data.imageUrl);
     } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: '업로드 실패',
+        text: '이미지 업로드 중 오류가 발생했습니다.',
+      });
       console.error('이미지 업로드 실패:', error);
     } finally {
       setIsUploading(false); // 🔸 업로드 종료
