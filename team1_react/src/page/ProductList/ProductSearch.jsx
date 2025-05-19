@@ -146,7 +146,9 @@ function ProductSearch() {
 
                   <div className="w-1/2">
                     {/* 상세 보기 */}
+                    <div className="sticky top-0">
                     <ProductListDetail product={selectedProduct} />
+                    </div>
                   </div>
                 </div>
               </div>

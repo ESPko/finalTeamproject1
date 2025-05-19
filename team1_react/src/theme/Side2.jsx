@@ -19,23 +19,24 @@ function Side2 ()
 {
   const { user } = useAuth();
   const location = useLocation();
-  
+
   const isActive = (path) => location.pathname === path;
-  
+
   const getLinkClass = (active) =>
     `block py-2.5 px-6 font-semibold ${
       active
         ? 'bg-[#a599ed] shadow text-black rounded-sm'
         : '!text-gray-600 hover:bg-[#e6e6fa] hover:text-white'
     }`;
-  
+
   // 🔒 포지션 제한 처리
   const visibleMenu = menuItems.filter(
     ({ requirePosition }) => !requirePosition || user?.position === requirePosition,
   );
-  
+
   return (
     <div className="flex flex-1">
+
       {/* Sidebar */}
       <aside className="w-64 h-full drop-shadow-xl bg-[#f5f5fa] flex flex-col text-sm">
         <div className="flex flex-col items-center py-6">
@@ -58,7 +59,7 @@ function Side2 ()
           </ul>
         </nav>
       </aside>
-      
+
       {/* Content */}
       <Outlet />
     </div>
