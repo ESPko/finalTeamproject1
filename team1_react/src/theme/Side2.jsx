@@ -9,8 +9,8 @@ const menuItems = [
   { label: "비품", path: "/test5" },
   { label: "창고위치", path: "/test6" },
   { label: "매입처", path: "/test7" },
-  { label: "창고별 분석", path: "/test8" },
-  { label: "직원별 분석", path: "/test9" },
+  { label: "입출고 조회", path: "/test8" },
+  { label: "비품사용현황", path: "/test9" },
   { label: "직원관리", path: "/test10", requirePosition: 2 },
   // { label: "axios", path: "/axios" },
 ];
