@@ -80,7 +80,7 @@ function StatusPage ()
               <th className="cell-style w-[13%]">보관위치</th>
               <th className="cell-style w-[13%]">거래처</th>
               <th className="cell-style w-[10%]">부서</th>
-              <th className="cell-style w-[10%]">출고자</th>
+              <th className="cell-style w-[10%]">담당자</th>
               <th className="cell-style w-[10%]">재고변동</th>
               <th className="cell-style w-[6%]">수량</th>
               <th className="cell-style w-[10%]">총 가격</th>
