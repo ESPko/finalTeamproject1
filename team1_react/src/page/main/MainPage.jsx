@@ -26,7 +26,7 @@ const Dashboard = () =>{
       </div>
 
       {/* 입고 신청 내역 */}
-      <div className="h-[400px] bg-white rounded-2xl shadow">
+      <div className="h-[400px] bg-white rounded-2xl shadow hover:scale-105 hover:shadow-lg hover:cursor-pointer" onClick={() => navigate('/test3')}>
         <MainPageInputRequestList />
       </div>
 
