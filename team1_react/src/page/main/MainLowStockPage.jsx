@@ -43,7 +43,7 @@ function MainLowStockPage() {
       {/* 헤더 */}
       <div className="flex justify-between items-center mb-6 cursor-pointer">
         <div onClick={() => navigate('/test4')}> {/* ← 여기 수정 */}
-          <h2 className="text-lg font-bold text-gray-800 hover:scale-110">부족 재고</h2>
+          <h2 className="text-lg font-bold text-gray-800">부족 재고</h2>
         </div>
         <div className="text-sm text-gray-400">{getTodayDate()}</div>
       </div>

@@ -16,6 +16,10 @@ function DashboardChart ()
     { id: '입고', value: totalInput, color: 'hsl(141, 70%, 50%)' },
     { id: '출고', value: totalOutput, color: 'hsl(0, 70%, 50%)' },
   ];
+  const getTodayDate = () => {
+    const today = new Date();
+    return today.toISOString().slice(0, 10);
+  };
   
   useEffect(() => {
     // 시간 변경을 위한 부분
@@ -81,7 +85,7 @@ function DashboardChart ()
       <div className="p-4 h-full">
         <div className="flex justify-between items-center mb-4">
           <div className="text-lg font-bold text-gray-800">오늘 재고 현황</div>
-          <div className="text-sm text-gray-400">{time}</div>
+          <div className="text-sm text-gray-400">{getTodayDate()}</div>
         </div>
         
         <div className="h-56">

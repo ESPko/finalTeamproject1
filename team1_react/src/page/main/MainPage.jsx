@@ -19,7 +19,8 @@ const ioData = [
     return (
       <main className="flex-1 p-4 grid grid-cols-2 gap-4 text-base">
         {/* 재고 현황 */}
-        <div className="h-[420px] bg-white rounded-2xl shadow">
+        <div className="h-[420px] bg-white rounded-2xl shadow hover:scale-105"
+             onClick={() => navigate('/test8')}>
           <DashboardChart />
         </div>
 
