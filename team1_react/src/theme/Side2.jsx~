@@ -10,12 +10,12 @@ const menuItems = [
   { label: '창고위치', path: '/test6' },
   { label: '매입처', path: '/test7' },
   { label: '입출고 조회', path: '/test8' },
-  { label: '비품 사용 현황', path: '/test9' },
+  { label: '직원별 분석', path: '/test9' },
   { label: '직원관리', path: '/test10', requirePosition: 2 },
   { label: 'Error', path: '/axios' },
 ];
 
-function Side ()
+function Side2 ()
 {
   const { user } = useAuth();
   const location = useLocation();
@@ -25,26 +25,26 @@ function Side ()
   const getLinkClass = (active) =>
     `block py-2.5 px-6 font-semibold ${
       active
-        ? 'bg-[#48c9b0] text-white rounded-sm'
-        : 'text-white hover:bg-[#40445c] hover:text-white'
+        ? 'bg-[#a599ed] shadow text-black rounded-sm'
+        : '!text-gray-600 hover:bg-[#e6e6fa] hover:text-white'
     }`;
   
+  // 🔒 포지션 제한 처리
   const visibleMenu = menuItems.filter(
-    (item) =>
-      !item.requirePosition || user?.position === item.requirePosition,
+    ({ requirePosition }) => !requirePosition || user?.position === requirePosition,
   );
   
   return (
-    <div className="flex flex-1 overflow-hidden">
+    <div className="flex flex-1">
       {/* Sidebar */}
-      <aside className="w-64 bg-[#323548] flex flex-col text-sm">
+      <aside className="w-64 h-full drop-shadow-xl bg-[#f5f5fa] flex flex-col text-sm">
         <div className="flex flex-col items-center py-6">
           <img
             src="/logo.png"
             alt="Profile"
-            className="w-24 h-24 rounded-full mb-2"
+            className="w-24 h-24 rounded-full mb-2 shadow"
           />
-          <div className="text-white font-semibold">재고해조</div>
+          <div className="text-gray-600 font-semibold">재고 해조</div>
         </div>
         <nav className="flex-1">
           <ul className="space-y-1 p-0">
@@ -65,4 +65,4 @@ function Side ()
   );
 }
 
-export default Side;
+export default Side2;
