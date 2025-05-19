@@ -7,6 +7,7 @@ import bitc.fullstack503.team1_server.dto.UserDTO;
 import bitc.fullstack503.team1_server.mapper.kms.LoginMapper;
 import bitc.fullstack503.team1_server.mapper.kms.RefreshTokenMapper;
 import bitc.fullstack503.team1_server.security.JwtUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,13 +24,16 @@ public class LoginserviceImpl implements LoginService {
   private RefreshTokenMapper refreshTokenMapper;
 
   @Override
-  public LoginResponse login(LoginRequest request) {
+  public LoginResponse login(LoginRequest request, HttpServletRequest httpRequest) {
     UserDTO user = loginMapper.findByUsername(request.getId());
 
     if (user != null && user.getPass().equals(request.getPass())) {
 
-      // position이 0이고 부서가 "구매부"가 아닐 경우 로그인 거부
-      if (user.getPosition() == 0 && !"구매부".equals(user.getDepartment())) {
+      String clientType = httpRequest.getHeader("Client-Type");
+      boolean isFlutter = "flutter".equalsIgnoreCase(clientType);
+
+      // React 전용 정책: position == 0 && 부서 != 구매부 로그인 제한
+      if (!isFlutter && user.getPosition() == 0 && !"구매부".equals(user.getDepartment())) {
         throw new RuntimeException("접근 권한이 없습니다");
       }
 

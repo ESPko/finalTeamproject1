@@ -52,7 +52,6 @@ public class JwtUtil {
         }
     }
 
-
     //    직원 관리 페이지 부장만 접근 가능하게 하기 위한 부분
     //    승인 목록 페이지 부장만 승인, 거절 버튼 눌러 값 변경 할 수 있게 하기 위한 부분
     public String extractUsername(String token) {

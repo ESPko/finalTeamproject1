@@ -11,17 +11,18 @@ class ApiService {
 
   final Dio dio = Dio();
 
-  // ✅ 로그인 기능
+// ✅ 로그인 기능 (플러터 - Client-Type 헤더 포함)
   Future<Map<String, dynamic>> login(String email, String password) async {
     try {
       final response = await dio.post(
         '$baseUrl/api/login',
         data: jsonEncode({
-          'id': email,      // 서버가 기대하는 필드명이 'id', 'pass'인지 확인 필요
+          'id': email,      // 서버에서 'id'와 'pass' 필드 사용하는지 확인 OK
           'pass': password,
         }),
         options: Options(headers: {
           'Content-Type': 'application/json',
+          'Client-Type': 'flutter', // 👈 이게 핵심!
         }),
       );
 

@@ -187,10 +187,10 @@ function EquipmentDetail ({ product, updateProduct })
         </section>
       </div>
       {/* 오른쪽 이미지 + QR */}
-      <div className="flex flex-col items-end space-y-2">
+      <div className="flex flex-col items-end space-y-2 cursor-pointer" onClick={handleImageClick}>
         <div
-          className="w-24 h-24 bg-gray-100 border border-dashed rounded-lg flex items-center justify-center text-2xl text-gray-400 cursor-pointer"
-          onClick={handleImageClick} // 이미지 클릭 시 input 열기
+          className="w-24 h-24 bg-gray-100 border border-dashed rounded-lg flex items-center justify-center text-2xl text-gray-400"
+           // 이미지 클릭 시 input 열기
         >
           {imageSrc ? (
             <img

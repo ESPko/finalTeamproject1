@@ -8,6 +8,7 @@ import bitc.fullstack503.team1_server.mapper.kms.LoginMapper;
 import bitc.fullstack503.team1_server.mapper.kms.RefreshTokenMapper;
 import bitc.fullstack503.team1_server.security.JwtUtil;
 import bitc.fullstack503.team1_server.service.kms.LoginService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,10 +36,10 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpServletRequest httpRequest) {
         try {
 
-            LoginResponse response = loginService.login(request);
+            LoginResponse response = loginService.login(request, httpRequest);
 
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
