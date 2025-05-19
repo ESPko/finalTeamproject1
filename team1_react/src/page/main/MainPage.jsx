@@ -7,6 +7,13 @@ import MainLowStockPage from './MainLowStockPage.jsx';
 import { useNavigate } from 'react-router-dom';
 
 
+const ioData = [
+  { date: "01-01", 입고: 6, 출고: 2 },
+  { date: "02-01", 입고: 4, 출고: 4 },
+  { date: "03-01", 입고: 6, 출고: 3 },
+  { date: "04-01", 입고: 3, 출고: 5 },
+];
+
   const Dashboard = () =>{
     const navigate = useNavigate(); // ← 이 부분 추가
     return (
