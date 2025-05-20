@@ -120,21 +120,21 @@ function DashboardChart() {
           <div className="flex flex-col items-center space-y-1">
             <Package className="text-green-600 w-6 h-6" />
             <span className="text-sm text-gray-500">총 재고</span>
-            <span className="text-lg font-bold text-gray-800">1642</span>
+            <span className="text-lg font-bold text-gray-800">{totalAfter}</span>
           </div>
 
           {/* 입고 */}
           <div className="flex flex-col items-center space-y-1">
             <ArrowDownCircle className="text-blue-600 w-6 h-6" />
             <span className="text-sm text-gray-500">입고</span>
-            <span className="text-lg font-bold text-gray-800">1000</span>
+            <span className="text-lg font-bold text-gray-800">{totalInput}</span>
           </div>
 
           {/* 출고 */}
           <div className="flex flex-col items-center space-y-1">
             <ArrowUpCircle className="text-red-500 w-6 h-6" />
             <span className="text-sm text-gray-500">출고</span>
-            <span className="text-lg font-bold text-gray-800">1963</span>
+            <span className="text-lg font-bold text-gray-800">{totalOutput}</span>
           </div>
         </div>
       </div>
