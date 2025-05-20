@@ -29,7 +29,7 @@ function AddMemberModal ({ isOpen, onClose, onAdd })
           </button>
         </div>
         <div className={'px-6'}>
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between pt-3">
             <div className="mb-4">
               <div className="font-semibold mb-2">부서</div>
               <select
@@ -44,7 +44,7 @@ function AddMemberModal ({ isOpen, onClose, onAdd })
                 <option value="생산부">생산부</option>
               </select>
             </div>
-            <div className="mb-4 mt-5">
+            <div className="mb-4">
               <div className="font-semibold mb-2">직급</div>
               <select
                 value={role}
