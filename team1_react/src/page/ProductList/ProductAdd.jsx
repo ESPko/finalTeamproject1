@@ -135,7 +135,6 @@ function ProductAdd({ onClose, onSuccess }) {
   };
 
 
-
   return (
     <div className="space-y-5">
       {/* 제품 정보 */}
@@ -266,24 +265,25 @@ function ProductAdd({ onClose, onSuccess }) {
           </div>
         </div>
       </section>
+      <div className={'border-t -mx-4'}>
+        <div className="flex justify-end space-x-4 mx-4 mt-2">
+          {/* 승인 요청 버튼 */}
+          <button
+            className={`px-4 py-2 rounded text-white ${isUploading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600'}`}
+            onClick={handleUpload}
+            disabled={isUploading}
+          >
+            {isUploading ? '업로드 중...' : '승인요청'}
+          </button>
 
-      <div className="flex justify-end space-x-4">
-        {/* 승인 요청 버튼 */}
-        <button
-          className={`px-4 py-2 rounded text-white ${isUploading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600'}`}
-          onClick={handleUpload}
-          disabled={isUploading}
-        >
-          {isUploading ? '업로드 중...' : '승인요청'}
-        </button>
-
-        {/* 취소 버튼 */}
-        <button
-          className="px-4 py-2 rounded text-gray-700 bg-gray-200"
-          onClick={onClose}
-        >
-          취소
-        </button>
+          {/* 취소 버튼 */}
+          <button
+            className="px-4 py-2 rounded text-gray-700 bg-gray-200"
+            onClick={onClose}
+          >
+            취소
+          </button>
+        </div>
       </div>
     </div>
   );

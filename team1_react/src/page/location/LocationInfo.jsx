@@ -55,6 +55,18 @@ function LocationInfo() {
       .then((res) => {
         setLocationInfo(res.data);
         setFilteredLocationInfo(res.data);
+
+        // 💡 새로 받은 위치 리스트에 대해 재고 수량도 다시 요청
+        res.data.forEach(location => {
+          if (location.name) {
+            axiosInstance.get(`/warehouse/warehouseItemCount?warehouseName=${location.name}`)
+              .then(response => {
+                setItemCounts(prev => ({ ...prev, [location.name]: response.data }));
+              })
+              .catch(error => console.error('상품 갯수 불러오기 오류:', error));
+          }
+        });
+
       })
       .catch((err) => console.error('창고 위치 목록 불러오기 오류:', err));
   };

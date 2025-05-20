@@ -38,7 +38,8 @@ function ClientAdd({ onClose, onSuccess }) {
     if (isNaN(client.phone) || client.phone.trim() === '') {
       Swal.fire({
         icon: 'warning',
-        title: '전화번호는 숫자만 입력 가능합니다.',
+        title: '전화번호는 숫자만<br />입력 가능합니다.',
+
         text: '전화번호를 올바르게 입력해 주세요.',
       });
       return;
@@ -48,7 +49,7 @@ function ClientAdd({ onClose, onSuccess }) {
     if (!client.email.includes('@')) {
       Swal.fire({
         icon: 'warning',
-        title: '유효하지 않은 이메일 주소입니다.',
+        title: '유효하지 않은 <br /> 이메일 주소입니다.',
         text: '이메일 주소에 "@"를 포함해 주세요.',
       });
       return;
@@ -57,7 +58,7 @@ function ClientAdd({ onClose, onSuccess }) {
     // '입력하신 매입처를 추가하시겠습니까?' 확인 창 띄우기
     const result = await Swal.fire({
       icon: 'question',
-      title: '입력하신 매입처를 추가하시겠습니까?',
+      title: '입력하신 매입처를 <br /> 추가하시겠습니까?',
       showCancelButton: true,
       confirmButtonText: '추가',
       cancelButtonText: '취소',
@@ -164,7 +165,7 @@ function ClientAdd({ onClose, onSuccess }) {
         </div>
       </div>
 
-      <div className="flex justify-end space-x-2 px-4 py-2 border-t">
+      <div className="flex justify-end space-x-2 px-4 py-2 border-t -mx-4">
         <button
           onClick={handleSubmit}
           className="bg-blue-600 text-white px-4 py-2 rounded"
