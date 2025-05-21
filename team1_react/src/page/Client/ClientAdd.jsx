@@ -2,7 +2,8 @@ import { useState } from 'react';
 import axiosInstance from '../../api/axiosInstance.jsx';
 import Swal from 'sweetalert2';
 
-function ClientAdd({ onClose, onSuccess }) {
+function ClientAdd ({ onClose, onSuccess })
+{
   const [client, setClient] = useState({
     name: '',
     phone: '',
@@ -10,14 +11,15 @@ function ClientAdd({ onClose, onSuccess }) {
     location: '',
     memo: '',
   });
-
+  
   const handleChange = (e) => {
     setClient({ ...client, [e.target.name]: e.target.value });
   };
-
+  
   // 유효성 검사 함수
   const validateForm = () => {
-    if (!client.name || !client.phone || !client.email || !client.location) {
+    if (!client.name || !client.phone || !client.email || !client.location)
+    {
       Swal.fire({
         icon: 'warning',
         title: '필수 내용이 누락되었습니다',
@@ -27,26 +29,29 @@ function ClientAdd({ onClose, onSuccess }) {
     }
     return true;
   };
-
+  
   const handleSubmit = async () => {
     // 유효성 검사 통과하지 못하면 리턴
-    if (!validateForm()) {
+    if (!validateForm())
+    {
       return;
     }
-
+    
     // 전화번호가 숫자가 아닌 경우
-    if (isNaN(client.phone) || client.phone.trim() === '') {
+    if (isNaN(client.phone) || client.phone.trim() === '')
+    {
       Swal.fire({
         icon: 'warning',
         title: '전화번호는 숫자만<br />입력 가능합니다.',
-
+        
         text: '전화번호를 올바르게 입력해 주세요.',
       });
       return;
     }
-
+    
     // 이메일에 '@'가 포함되어 있는지 확인
-    if (!client.email.includes('@')) {
+    if (!client.email.includes('@'))
+    {
       Swal.fire({
         icon: 'warning',
         title: '유효하지 않은 <br /> 이메일 주소입니다.',
@@ -54,7 +59,7 @@ function ClientAdd({ onClose, onSuccess }) {
       });
       return;
     }
-
+    
     // '입력하신 매입처를 추가하시겠습니까?' 확인 창 띄우기
     const result = await Swal.fire({
       icon: 'question',
@@ -63,15 +68,16 @@ function ClientAdd({ onClose, onSuccess }) {
       confirmButtonText: '추가',
       cancelButtonText: '취소',
     });
-
+    
     // 사용자가 '추가'를 클릭했을 때만 실제 API 호출
-    if (result.isConfirmed) {
+    if (result.isConfirmed)
+    {
       axiosInstance.post('/vendor/vendorAdd', client)
         .then(() => {
           Swal.fire({
             icon: 'success',
             title: '매입처가 추가되었습니다.',
-            confirmButtonText: '확인'
+            confirmButtonText: '확인',
           });
           onSuccess();
           onClose();
@@ -82,13 +88,12 @@ function ClientAdd({ onClose, onSuccess }) {
             icon: 'error',
             title: '추가 중 오류가 발생했습니다.',
             text: '잠시 후 다시 시도해 주세요.',
-            confirmButtonText: '확인'
+            confirmButtonText: '확인',
           });
         });
     }
   };
-
-
+  
   return (
     <div>
       <div className="space-y-6">
@@ -106,7 +111,7 @@ function ClientAdd({ onClose, onSuccess }) {
             className="w-full border border-gray-300 rounded-md px-3 py-2"
           />
         </div>
-
+        
         {/* 전화번호 + 이메일 */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
@@ -136,7 +141,7 @@ function ClientAdd({ onClose, onSuccess }) {
             />
           </div>
         </div>
-
+        
         {/* 주소 */}
         <div>
           <label className="block font-medium mb-1">
@@ -151,7 +156,7 @@ function ClientAdd({ onClose, onSuccess }) {
             className="w-full border border-gray-300 rounded-md px-3 py-2"
           />
         </div>
-
+        
         {/* 메모 */}
         <div>
           <label className="block font-medium mb-1">메모</label>
@@ -164,8 +169,8 @@ function ClientAdd({ onClose, onSuccess }) {
           />
         </div>
       </div>
-
-      <div className="flex justify-end space-x-2 px-4 py-2 border-t -mx-4">
+      
+      <div className="flex justify-end space-x-2 px-4 py-2 border-t -mx-4 -mb-4">
         <button
           onClick={handleSubmit}
           className="bg-blue-600 text-white px-4 py-2 rounded"
@@ -179,7 +184,7 @@ function ClientAdd({ onClose, onSuccess }) {
           취소
         </button>
       </div>
-
+    
     </div>
   );
 }
