@@ -1,7 +1,11 @@
 package bitc.fullstack503.team1_server.configuration;
 
 import bitc.fullstack503.team1_server.security.JwtAuthenticationFilter;
+import org.apache.catalina.connector.Connector;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
+import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -47,11 +51,17 @@ public class SecurityConfig {
 
         // 와일드카드 패턴으로 다양한 로컬 주소 및 포트 허용
         configuration.setAllowedOriginPatterns(List.of(
-          "http://localhost:*",              // Flutter/React 개발용 (모든 포트)
-          "http://127.0.0.1:*",              // 추가적으로 로컬 호스트 IP 대응
-          "http://10.0.2.2:*",               // Android Emulator
-          "http://10.100.203.16:*",           // 실기기 접속용 서버 IP
-          "http://3.39.53.78:*"
+                "http://localhost:5173",           // React 개발 서버
+                "http://localhost:5174",           // React 개발 서버
+                "http://127.0.0.1:5173",           // 다른 로컬 접근
+                "http://10.0.2.2:5173",            // Android Emulator 접근 시
+                "http://10.100.203.16:5173",       // 실기기 접근
+                "http://3.39.53.78:5173",
+                "http://3.39.53.78:5174",
+                "http://3.39.53.78:8080",
+                "https://espko.github.io"
+                // 배포 서버
+// 배포 서버
         ));
 
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));

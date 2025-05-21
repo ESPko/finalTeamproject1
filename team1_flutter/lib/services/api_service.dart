@@ -6,8 +6,8 @@ import '../models/item_history.dart';
 import '../models/user.dart'; // User 모델을 임포트합니다.
 
 class ApiService {
-  // final String baseUrl = 'http://3.39.53.78:8080';
-  final String baseUrl = 'http://10.100.203.16:8080';
+  final String baseUrl = 'http://3.39.53.78:8080';
+  // final String baseUrl = 'http://10.100.203.16:8080';
 
   final Dio dio = Dio();
 
@@ -26,8 +26,6 @@ class ApiService {
         }),
       );
 
-      print('📡 로그인 응답 코드: ${response.statusCode}');
-      print('📨 로그인 응답 본문: ${response.data}');
 
       if (response.statusCode == 200) {
         final data = response.data;

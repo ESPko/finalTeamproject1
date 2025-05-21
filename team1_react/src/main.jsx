@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App.jsx';
 import Login from './components/login/Login.jsx';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, HashRouter, Route, Routes } from 'react-router-dom';
 import ErrorPage from './page/ErrorPage.jsx';
 import MainPage from './page/main/MainPage.jsx';
 import TestPage3 from './page/TestPage3.jsx';
@@ -21,7 +21,7 @@ import ProtectedRoute from './components/ProtectedRoute.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter>
+    <HashRouter>
       <AuthProvider>
         <Routes>
           {/* 로그인 페이지는 항상 공개 */}
@@ -52,7 +52,7 @@ createRoot(document.getElementById('root')).render(
           {/* Not Found */}
         </Routes>
       </AuthProvider>
-    </BrowserRouter>
+    </HashRouter>
   </StrictMode>,
 );
 

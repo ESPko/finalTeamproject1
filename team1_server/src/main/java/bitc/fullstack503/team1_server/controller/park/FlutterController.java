@@ -81,10 +81,6 @@ private JwtUtil jwtUtil;
 
     // 사용자 이름을 기반으로 출고 내역을 조회
     List<ShipmentDetailResponse> shipmentDetails = flutterService.getShipmentDetails(userName);
-
-    // 출고 내역이 제대로 반환되었는지 확인하는 로그 추가
-    System.out.println("출고 내역 조회 결과: " + shipmentDetails);
-
     return shipmentDetails;
   }
 
