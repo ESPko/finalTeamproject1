@@ -22,8 +22,8 @@ public class ItemServiceImpl implements ItemService {
     private ItemMapper itemMapper;
 
     private static final String BUCKET_NAME = "full503final";
-    private static final String SUPABASE_BASE_URL = "https://fcuivpeebbalbbturhuw.supabase.co/storage/v1/object";
-    private static final String BEARER_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjdWl2cGVlYmJhbGJidHVyaHV3Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0NzcyNDMyOCwiZXhwIjoyMDYzMzAwMzI4fQ.4h4oxZtATydK8uDoYbgsSc3999qug2Kjy9dWGep1GY8";
+    private static final String SUPABASE_BASE_URL = "https://dgllskanufkoatksuajq.supabase.co/storage/v1/object";
+    private static final String BEARER_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRnbGxza2FudWZrb2F0a3N1YWpxIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0NzcyMzY0OCwiZXhwIjoyMDYzMjk5NjQ4fQ.lyVsiAHNFBadUnWU_Ow2MCyAUKidLhcQPIUfr1mrkMA";
 
 
     @Override
