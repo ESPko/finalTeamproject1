@@ -31,7 +31,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-          .cors(Customizer.withDefaults())  // CORS 허용 설정
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                // CORS 허용 설정
           .csrf(AbstractHttpConfigurer::disable) // CSRF 비활성화 (JWT 인증 시스템에서는 일반적)
           .sessionManagement(session -> session
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 상태를 사용하지 않음
@@ -58,7 +59,9 @@ public class SecurityConfig {
                 "http://10.100.203.16:5173",       // 실기기 접근
                 "http://3.37.89.59:5173",
                 "http://3.37.89.59:5174",
-                "http://3.37.89.59:8080"
+                "http://3.37.89.59:8080",
+                "http://team1-project-boxel.s3-website.ap-northeast-2.amazonaws.com"
+
                 // 배포 서버
 // 배포 서버
         ));
