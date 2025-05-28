@@ -35,9 +35,8 @@ public class SecurityConfig {
           .csrf(AbstractHttpConfigurer::disable) // CSRF 비활성화 (JWT 인증 시스템에서는 일반적)
           .sessionManagement(session -> session
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 상태를 사용하지 않음
-          .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/api/login").permitAll() // 로그인 API는 모든 사용자가 접근 가능
-            .anyRequest().authenticated() // 그 외 모든 요청은 인증 필요
+                .authorizeHttpRequests(auth -> auth
+                        .anyRequest().permitAll()
           )
           .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); // JWT 필터 추가
 

@@ -30,10 +30,7 @@ public class LoginController {
     @Autowired
     private RefreshTokenMapper refreshTokenMapper;
 
-    @GetMapping({"", "/"})
-    public Object index() {
-        return "Test API Server 접속";
-    }
+
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpServletRequest httpRequest) {

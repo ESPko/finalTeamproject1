@@ -1,0 +1,89 @@
+import { ArrowRight } from 'lucide-react';
+
+function StatusTableBody ({ products })
+{
+  if (!products || products.length === 0)
+  {
+    return (
+      <tbody>
+      <tr>
+        <td colSpan="10" className="text-center py-10 text-gray-500">
+          해당 결과가 없습니다.
+        </td>
+      </tr>
+      </tbody>
+    );
+  }
+  
+  const getTransactionColorClass = (transaction) => {
+    switch (transaction)
+    {
+      case 0:
+        return 'text-blue-600';
+      case 1:
+        return 'text-red-600';
+      case 2:
+        return 'text-green-600';
+      default:
+        return 'text-gray-800';
+    }
+  };
+  
+  // 총합 계산
+  const totalPrice = products.reduce((sum, product) => {
+    const quantityDiff = product.afterQuantity - product.beforeQuantity;
+    return sum + product.price * Math.abs(quantityDiff);
+  }, 0);
+  
+  return (
+    <>
+      <tbody>
+      {products.map((product, index) => {
+        const key = product.id ?? `${product.name}-${index}`;
+        const quantityDifference = product.afterQuantity - product.beforeQuantity;
+        const price = product.price * Math.abs(quantityDifference);
+        const transactionColor = getTransactionColorClass(product.transaction);
+        
+        return (
+          <tr key={key} className="border-b border-gray-200 text-center">
+            <td className="py-2 px-2 w-[120px]">
+              <img
+                src={product.image}
+                alt={product.name}
+                className="w-[60px] h-[60px] object-cover mx-auto rounded"
+              />
+            </td>
+            <td className="cell-style">{product.name}</td>
+            <td className="cell-style truncate max-w-[15%]">{product.warehouseName}</td>
+            <td className="cell-style truncate max-w-[15%]">{product.vendorName}</td>
+            <td className="cell-style">{product.department}</td>
+            <td className="cell-style">{product.outboundPerson}</td>
+            <td className="cell-style">
+              {product.beforeQuantity}
+              <ArrowRight className="inline-block mx-1 text-gray-400 w-4 h-4" />
+              {product.afterQuantity}
+            </td>
+            <td className={`cell-style ${transactionColor}`}>
+              {quantityDifference}
+            </td>
+            <td className={`cell-style ${transactionColor}`}>
+              {price.toLocaleString()}원
+            </td>
+            <td className="cell-style">{product.date}</td>
+          </tr>
+        );
+      })}
+      </tbody>
+      
+      <tfoot>
+      <tr className="text-center font-semibold bg-gray-100">
+        <td colSpan="8" className="py-3 text-right pr-4">총 금액</td>
+        <td colSpan="2" className="cell-style text-red-600">{totalPrice.toLocaleString()}원</td>
+        <td></td>
+      </tr>
+      </tfoot>
+    </>
+  );
+}
+
+export default StatusTableBody;
