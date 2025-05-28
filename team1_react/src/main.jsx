@@ -13,11 +13,11 @@ import EquipmentInformation from './page/ProductList/EquipmentInformation.jsx';
 import ProductSearch from './page/ProductList/ProductSearch.jsx';
 import LocationInfo from './page/location/LocationInfo.jsx';
 import ClientList from './page/Client/ClientList.jsx';
-import InventoryPage from './page/sdh/ currentSituation/InventoryPage';
-import StatusPage from './page/sdh/ currentSituation/StatusPage.jsx';
 import { AuthProvider } from './contexts/AuthContext';
 import StoragePage from './page/storage/StoragePage.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
+import InventoryPage from './page/sdh/currentSituation/InventoryPage.jsx';
+import StatusPage from './page/sdh/currentSituation/StatusPage.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

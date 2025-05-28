@@ -11,8 +11,8 @@ import java.util.UUID;
 public class ImageController
 {
   private static final String BUCKET_NAME = "full503final";
-  private static final String SUPABASE_BASE_URL = "https://mcipbeidqigprecgqogj.supabase.co/storage/v1/object";
-  private static final String BEARER_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1jaXBiZWlkcWlncHJlY2dxb2dqIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0NjE0OTk4MiwiZXhwIjoyMDYxNzI1OTgyfQ.MkjOBw2oIHg86xLmAvrNHHRxng_xTb6Nqodst0jVfKY";
+  private static final String SUPABASE_BASE_URL = "https://fcuivpeebbalbbturhuw.supabase.co/storage/v1/object";
+  private static final String BEARER_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjdWl2cGVlYmJhbGJidHVyaHV3Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0NzcyNDMyOCwiZXhwIjoyMDYzMzAwMzI4fQ.4h4oxZtATydK8uDoYbgsSc3999qug2Kjy9dWGep1GY8";
   
   @PostMapping ("/upload")
   public ResponseEntity<Map<String, String>> uploadImage (@RequestParam ("image") MultipartFile image)

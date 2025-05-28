@@ -67,7 +67,7 @@ function TestPage1 ()
         });
 
         // 최신 데이터 다시 불러오기
-        const refreshedItem = await axiosInstance.get(`http://localhost:8080/api/items/${selectedItem.idx}`);
+        const refreshedItem = await axiosInstance.get(`/api/items/${selectedItem.idx}`);
         setSelectedItem(refreshedItem.data);
 
         // 상태 초기화
@@ -91,8 +91,7 @@ function TestPage1 ()
   const isButtonDisabled = !selectedItem || inputQuantity <= 0;
 
   return (
-    <div className="flex-1 p-6 overflow-y-auto">
-      <div className="bg-white rounded shadow p-4 min-x-[100vh] min-h-[80vh]" style={{ padding: '0px 40px 80px 40px' }}>
+    <div className="flex-1 p-6 overflow-y-auto">      <div className="bg-white rounded shadow p-4 min-x-[100vh] min-h-[80vh]" style={{ padding: '0px 40px 80px 40px' }}>
         <div>
           <Topline title="입고">
             <div>
